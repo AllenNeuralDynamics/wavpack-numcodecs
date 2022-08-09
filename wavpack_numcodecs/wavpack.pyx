@@ -55,20 +55,22 @@ def compress(source, int level, int num_samples, int num_chans, float bps, int d
     source : bytes-like
         Data to be compressed. Can be any object supporting the buffer
         protocol.
-    acceleration : int
-        Acceleration level. The larger the acceleration value, the faster the algorithm, but also
-        the lesser the compression.
+    level : int
+        Compression level. The larger the level, the slower the algorithm, but also
+        the higher the compression.
+    num_samples : int
+        Number of samples to compress.
+    num_chans : int
+        Number of channels to compress.
+    bps : float
+        Bytes per sample
+    dtype : int
+        Integer to indicat which dtype the data is ("int8": 0, "int16": 1, "int32": 2, "float32": 3)
 
     Returns
     -------
     dest : bytes
         Compressed data.
-
-    Notes
-    -----
-    The compressed output includes a 4-byte header storing the original size of the decompressed
-    data as a little-endian 32-bit integer.
-
     """
 
     cdef:
@@ -177,32 +179,34 @@ def decompress(source, dest=None):
 class WavPack(Codec):    
     codec_id = "wavpack"
     max_block_size = 131072
-    supported_dtypes = ["int8", "int16", "int32", "uint8", "uint16", "uint32", "float32"]
+    supported_dtypes = ["int8", "int16", "int32", "float32"]
     max_channels = 4096
     max_buffer_size = 0x7E000000
 
-    def __init__(self, level=1, bps=None, debug=False):
+    def __init__(self, level=1, bps=None):
         """
         Numcodecs Codec implementation for WavPack (https://www.wavpack.com/) codec.
 
-        2D buffers exceeding the supported number of channels (buffer's second dimension) and 
-        buffers > 2D are flattened before compression.
+        2D buffers exceeding the supported number of channels (buffer's second dimension) 
+        and buffers > 2D are flattened before compression.
 
 
         Parameters
         ----------
-        compression_mode : str, optional
-            The wavpack compression mode ("default", "f", "h", "hh"), by default "default"
+        level : int, optional
+            The wavpack compression level (from low to high: 1, 2, 3, 4), by default 1
         bps : float or None, optional
-            If the hybrid factor is given, the hybrid mode is used and compression is lossy. 
-            The hybrid factor is between 2.25 and 24 (it can be a decimal, e.g. 3.5) and it 
+            If the bps is not None or 0, the WavPack hybrid mode is used and compression is lossy. 
+            The bps is between 2.25 and 24 (it can be a decimal, e.g. 3.5) and it 
             is the average number of bits used to encode each sample, by default None
-        debug : bool
-            If True, prints debug commands
+
+        Returns
+        -------
+        Codec
+            The instantiated WavPack numcodecs codec
         """
         self.level = int(level)
         assert self.level in (1, 2, 3, 4)
-        self.debug = debug
 
         if bps is not None:
             if bps > 0:
@@ -239,8 +243,6 @@ class WavPack(Codec):
     def encode(self, buf):
         data = self._prepare_data(buf)
         dtype = str(data.dtype)
-        if self.debug:
-            print(f"Data shape: {data.shape}")
         nsamples, nchans = data.shape
         dtype_id = dtype_enum[dtype]
         return compress(data, self.level, nsamples, nchans, self.bps, dtype_id)

@@ -49,9 +49,9 @@ jobs:
       - name: Install dependencies
         run: |
           pip install Cython
-          pip install -e wavpack_cython
+          pip install .
           pip install zarr
           pip install pytest
       - name: Test with pytest 
         run: |
-          pytest -v wavpack_cython
+          pytest -v
