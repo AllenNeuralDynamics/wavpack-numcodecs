@@ -4,7 +4,6 @@ from Cython.Build import cythonize
 from Cython.Distutils import build_ext
 from pathlib import Path
 import platform
-from pathlib import Path
 import shutil
 import os
 
@@ -17,10 +16,10 @@ def open_requirements(fname):
 
 
 def get_build_extensions():
-    pkg_folder = Path(__file__).parent
-    wavpack_headers_folder = pkg_folder / "include"
-    sources = [str(pkg_folder / "wavpack_numcodecs" / "wavpack.pyx")]
-    include_dirs = [str(wavpack_headers_folder)]
+    # pkg_folder = Path(__file__).parent
+    # wavpack_headers_folder = "include"
+    sources = ["wavpack_numcodecs/wavpack.pyx"]
+    include_dirs = ["include"]
     runtime_library_dirs = []
     extra_link_args = []
 
@@ -33,10 +32,9 @@ def get_build_extensions():
         else:
             print("Using shipped libraries")
             extra_link_args = [f"-Llibraries/linux-x86_64"]
-            runtime_library_dirs = [str(pkg_folder / 'libraries' / 'linux-x86_64')]
+            runtime_library_dirs = ["libraries/linux-x86_64"]
             # hack
-            shutil.copy(str(pkg_folder / 'libraries' / 'linux-x86_64' / 'libwavpack.so'),
-                        str(pkg_folder / 'libraries' / 'linux-x86_64' / 'libwavpack.so.1'))
+            shutil.copy("libraries/linux-x86_64/libwavpack.so", "libraries/linux-x86_64/libwavpack.so.1")
     elif platform.system() == "Darwin":
         libraries = ["wavpack"]
         assert shutil.which("wavpack") is not None, ("wavpack need to be installed externally. "
@@ -47,12 +45,12 @@ def get_build_extensions():
         libraries = ["wavpackdll"]
         # add library folder to PATH and copy .dll in the src
         if "64" in platform.architecture()[0]:
-            os.environ["PATH"] += os.pathsep + str(Path("libraries") / "windows-x86_64")
-            lib_path = Path("libraries") / "windows-x86_64"
+            os.environ["PATH"] += os.pathsep + "libraries/windows-x86_64"
+            lib_path = "libraries/windows-x86_64"
         else:
-            lib_path = Path("libraries") / "windows-x86_32"
-        extra_link_args = [f"/LIBPATH:{str(lib_path)}"]
-        for libfile in lib_path.iterdir():
+            lib_path = "libraries/windows-x86_32"
+        extra_link_args = [f"/LIBPATH:{lib_path}"]
+        for libfile in Path(lib_path).iterdir():
             shutil.copy(libfile, "wavpack_numcodecs")
 
     extensions = [
@@ -97,5 +95,6 @@ setup(
     packages=find_packages(),
     ext_modules=cythonize(extensions),
     entry_points=entry_points,
-    cmdclass={'build_ext': build_ext}
+    cmdclass={'build_ext': build_ext},
+    include_package_data=True
 )
