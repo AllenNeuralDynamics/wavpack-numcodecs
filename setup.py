@@ -32,7 +32,7 @@ def get_build_extensions():
         else:
             print("Using shipped libraries")
             extra_link_args = [f"-Lwavpack_numcodecs/libraries/linux-x86_64"]
-            runtime_library_dirs = ["wavpack_numcodecs/libraries/linux-x86_64"]
+            runtime_library_dirs = ["$ORIGIN/libraries/linux-x86_64"]
             # hack
             shutil.copy("wavpack_numcodecs/libraries/linux-x86_64/libwavpack.so", 
                         "wavpack_numcodecs/libraries/linux-x86_64/libwavpack.so.1")
