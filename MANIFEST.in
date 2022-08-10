@@ -1,8 +1,7 @@
-include wavpack_numcodecs/encoder.c
-include wavpack_numcodecs/decoder.c
+recursive-include wavpack_numcodecs *.c
 recursive-include wavpack_numcodecs *.pyx
 recursive-include wavpack_numcodecs *.pxd
 recursive-include wavpack_numcodecs *.lib
 recursive-include wavpack_numcodecs *.dll
-recursive-include include *.h
-recursive-include libraries *
+recursive-include wavpack_numcodecs/include *.h
+recursive-include wavpack_numcodecs/libraries *

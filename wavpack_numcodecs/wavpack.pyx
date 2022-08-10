@@ -25,11 +25,11 @@ parent = Path(__file__).parent
 cdef extern from "wavpack/wavpack_local.h":
     const char* WavpackGetLibraryVersionString()
 
-cdef extern from "encoder.c":
+cdef extern from "src/encoder.c":
     size_t WavpackEncodeFile (void *source, size_t num_samples, size_t num_chans, int level, float bps, void *destin, 
                               size_t destin_bytes, int dtype)
 
-cdef extern from "decoder.c":
+cdef extern from "src/decoder.c":
     size_t WavpackDecodeFile (void *source, size_t source_bytes, int *num_chans, int *bytes_per_sample, void *destin, 
                               size_t destin_bytes)
 

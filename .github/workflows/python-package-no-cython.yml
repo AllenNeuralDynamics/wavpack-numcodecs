@@ -1,4 +1,4 @@
-name: Cython - Python Package using Conda
+name: Python Package without Cython
 
 on:
   pull_request:
@@ -48,7 +48,6 @@ jobs:
           cd ..
       - name: Install dependencies
         run: |
-          pip install Cython
           pip install .
           pip install zarr
           pip install pytest

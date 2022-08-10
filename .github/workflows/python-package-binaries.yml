@@ -1,4 +1,4 @@
-name: Cython - Python Package using pre-built
+name: Python Package using pre-built binaries
 
 on:
   pull_request:

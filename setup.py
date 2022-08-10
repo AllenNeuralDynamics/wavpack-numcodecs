@@ -1,11 +1,19 @@
 # -*- coding: utf-8 -*-
 from setuptools import setup, find_packages, Extension
-from Cython.Build import cythonize
-from Cython.Distutils import build_ext
 from pathlib import Path
 import platform
 import shutil
-import os
+
+
+try:
+    from Cython.Build import cythonize
+    from Cython.Distutils import build_ext
+except ImportError:
+    have_cython = False
+else:
+    have_cython = True
+
+print("HAVE_CYTHON", have_cython)
 
 
 def open_requirements(fname):
@@ -16,9 +24,6 @@ def open_requirements(fname):
 
 
 def get_build_extensions():
-    # pkg_folder = Path(__file__).parent
-    # wavpack_headers_folder = "include"
-    sources = ["wavpack_numcodecs/wavpack.pyx"]
     include_dirs = ["wavpack_numcodecs/include"]
     runtime_library_dirs = []
     extra_link_args = []
@@ -32,9 +37,9 @@ def get_build_extensions():
         else:
             print("Using shipped libraries")
             extra_link_args = [f"-Lwavpack_numcodecs/libraries/linux-x86_64"]
-            runtime_library_dirs = ["wavpack_numcodecs/libraries/linux-x86_64"]
+            runtime_library_dirs = ["$ORIGIN/libraries/linux-x86_64"]
             # hack
-            shutil.copy("wavpack_numcodecs/libraries/linux-x86_64/libwavpack.so", 
+            shutil.copy("wavpack_numcodecs/libraries/linux-x86_64/libwavpack.so",
                         "wavpack_numcodecs/libraries/linux-x86_64/libwavpack.so.1")
     elif platform.system() == "Darwin":
         libraries = ["wavpack"]
@@ -46,7 +51,6 @@ def get_build_extensions():
         libraries = ["wavpackdll"]
         # add library folder to PATH and copy .dll in the src
         if "64" in platform.architecture()[0]:
-            #os.environ["PATH"] += os.pathsep + "libraries/windows-x86_64"
             lib_path = "wavpack_numcodecs/libraries/windows-x86_64"
         else:
             lib_path = "wavpack_numcodecs/libraries/windows-x86_32"
@@ -54,18 +58,29 @@ def get_build_extensions():
         for libfile in Path(lib_path).iterdir():
             shutil.copy(libfile, "wavpack_numcodecs")
 
+    if have_cython:
+        sources_compat_ext = ['wavpack_numcodecs/compat_ext.pyx']
+        sources_wavpack_ext = ["wavpack_numcodecs/wavpack.pyx"]
+    else:
+        sources_compat_ext = ['wavpack_numcodecs/compat_ext.c']
+        sources_wavpack_ext = ["wavpack_numcodecs/wavpack.c"]
+
     extensions = [
         Extension('wavpack_numcodecs.compat_ext',
-                  sources=['wavpack_numcodecs/compat_ext.pyx'],
+                  sources=sources_compat_ext,
                   extra_compile_args=[]),
         Extension('wavpack_numcodecs.wavpack',
-                  sources=sources,
+                  sources=sources_wavpack_ext,
                   include_dirs=include_dirs,
                   libraries=libraries,
                   extra_link_args=extra_link_args,
                   runtime_library_dirs=runtime_library_dirs
                   ),
     ]
+
+    if have_cython:
+        extensions = cythonize(extensions)
+
     return extensions
 
 
@@ -77,6 +92,7 @@ long_description = open("README.md").read()
 install_requires = open_requirements('requirements.txt')
 entry_points = {"numcodecs.codecs": ["wavpack = wavpack_numcodecs:WavPack"]}
 extensions = get_build_extensions()
+cmdclass = {'build_ext': build_ext} if have_cython else {}
 
 setup(
     name="wavpack_numcodecs",
@@ -94,8 +110,8 @@ setup(
         "Operating System :: OS Independent",
     ],
     packages=find_packages(),
-    ext_modules=cythonize(extensions),
+    ext_modules=extensions,
     entry_points=entry_points,
-    cmdclass={'build_ext': build_ext},
+    cmdclass=cmdclass,
     include_package_data=True
 )
