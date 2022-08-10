@@ -1,0 +1,6 @@
+include wavpack_numcodecs/encoder.c
+include wavpack_numcodecs/decoder.c
+recursive-include wavpack_numcodecs *.pyx
+recursive-include wavpack_numcodecs *.pxd
+recursive-include include *.h
+recursive-include libraries *
