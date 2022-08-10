@@ -19,7 +19,7 @@ def get_build_extensions():
     # pkg_folder = Path(__file__).parent
     # wavpack_headers_folder = "include"
     sources = ["wavpack_numcodecs/wavpack.pyx"]
-    include_dirs = ["include"]
+    include_dirs = ["wavpack_numcodecs/include"]
     runtime_library_dirs = []
     extra_link_args = []
 
@@ -31,10 +31,11 @@ def get_build_extensions():
             runtime_library_dirs = ["/usr/local/lib/", "/usr/bin/"]
         else:
             print("Using shipped libraries")
-            extra_link_args = [f"-Llibraries/linux-x86_64"]
-            runtime_library_dirs = ["libraries/linux-x86_64"]
+            extra_link_args = [f"-Lwavpack_numcodecs/libraries/linux-x86_64"]
+            runtime_library_dirs = ["wavpack_numcodecs/libraries/linux-x86_64"]
             # hack
-            shutil.copy("libraries/linux-x86_64/libwavpack.so", "libraries/linux-x86_64/libwavpack.so.1")
+            shutil.copy("wavpack_numcodecs/libraries/linux-x86_64/libwavpack.so", 
+                        "wavpack_numcodecs/libraries/linux-x86_64/libwavpack.so.1")
     elif platform.system() == "Darwin":
         libraries = ["wavpack"]
         assert shutil.which("wavpack") is not None, ("wavpack need to be installed externally. "
@@ -45,10 +46,10 @@ def get_build_extensions():
         libraries = ["wavpackdll"]
         # add library folder to PATH and copy .dll in the src
         if "64" in platform.architecture()[0]:
-            os.environ["PATH"] += os.pathsep + "libraries/windows-x86_64"
-            lib_path = "libraries/windows-x86_64"
+            #os.environ["PATH"] += os.pathsep + "libraries/windows-x86_64"
+            lib_path = "wavpack_numcodecs/libraries/windows-x86_64"
         else:
-            lib_path = "libraries/windows-x86_32"
+            lib_path = "wavpack_numcodecs/libraries/windows-x86_32"
         extra_link_args = [f"/LIBPATH:{lib_path}"]
         for libfile in Path(lib_path).iterdir():
             shutil.copy(libfile, "wavpack_numcodecs")
