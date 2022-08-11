@@ -1,3 +1,4 @@
+include requirements.txt
 recursive-include wavpack_numcodecs *.c
 recursive-include wavpack_numcodecs *.pyx
 recursive-include wavpack_numcodecs *.pxd
