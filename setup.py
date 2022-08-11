@@ -97,7 +97,7 @@ cmdclass = {'build_ext': build_ext} if have_cython else {}
 setup(
     name="wavpack_numcodecs",
     version=version,
-    author="Alessio Buccino",
+    author="Alessio Buccino, David Bryant",
     author_email="alessiop.buccino@gmail.com",
     description="Numcodecs implementation of WavPack audio codec.",
     long_description=long_description,
