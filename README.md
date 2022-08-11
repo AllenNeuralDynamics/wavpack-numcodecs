@@ -1,4 +1,4 @@
-# WavPack - numcodecs Cython version
+# WavPack - numcodecs implementation
 
 [Numcodecs](https://numcodecs.readthedocs.io/en/latest/index.html) wrapper to the 
 [WavPack](https://www.wavpack.com/index.html) audio codec.
@@ -8,12 +8,18 @@ This implementation enables one to use WavPack as a compressor in
 
 ## Installation
 
-Currently, only installation from source is supported:
+Install via `pip`:
+
+```
+pip install wavpack-numcodecs
+```
+
+Or from sources:
 
 ```
 git clone https://github.com/AllenNeuralDynamics/wavpack-numcodecs.git
 cd wavpack_numcodecs
-python setyp.py build_ext -i install (develop)
+pip install .
 ```
 
 ## Usage
