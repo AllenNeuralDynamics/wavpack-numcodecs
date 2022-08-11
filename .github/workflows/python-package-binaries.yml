@@ -1,4 +1,4 @@
-name: Python Package using pre-built binaries
+name: Python Package using pre-built Linux binaries
 
 on:
   pull_request:
