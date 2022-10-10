@@ -19,8 +19,9 @@ from numcodecs.abc import Codec
 from pathlib import Path
 import numpy as np
 
+# controls the size of destination buffer for decompression
+DECOMPRESSION_BUFFER_MULTIPLIER = 50
 
-parent = Path(__file__).parent
 
 cdef extern from "wavpack/wavpack_local.h":
     const char* WavpackGetLibraryVersionString()
@@ -78,7 +79,7 @@ def compress(source, int level, int num_samples, int num_chans, float bps, int d
         char *dest_ptr
         char *dest_start
         Buffer source_buffer
-        int source_size, dest_size, compressed_size
+        unsigned long source_size, dest_size, compressed_size
         bytes dest
 
 
@@ -103,7 +104,7 @@ def compress(source, int level, int num_samples, int num_chans, float bps, int d
 
     # check compression was successful
     if compressed_size == -1:
-        raise RuntimeError(f'WavPAck compression error: {compressed_size}')
+        raise RuntimeError(f'WavPack compression error: {compressed_size}')
 
     # resize after compression
     dest = dest[:compressed_size]
@@ -133,11 +134,12 @@ def decompress(source, dest=None):
         char *dest_ptr
         Buffer source_buffer
         Buffer dest_buffer = None
-        int source_size, dest_size, decompressed_samples
+        unsigned long source_size, dest_size, decompressed_samples
         int num_chans
         int *num_chans_ptr = &num_chans
         int bytes_per_sample
         int *bytes_per_sample_ptr = &bytes_per_sample
+        int max_bytes_per_sample = 4
 
     # setup source buffer
     source_buffer = Buffer(source, PyBUF_ANY_CONTIGUOUS)
@@ -145,11 +147,10 @@ def decompress(source, dest=None):
     source_size = source_buffer.nbytes
 
     try:
-
         # setup destination
         if dest is None:
             # allocate memory
-            dest_size = int(source_size * 10)
+            dest_size = source_size * DECOMPRESSION_BUFFER_MULTIPLIER * max_bytes_per_sample
             dest = PyBytes_FromStringAndSize(NULL, dest_size)
             dest_ptr = PyBytes_AS_STRING(dest)
         else:
@@ -250,5 +251,6 @@ class WavPack(Codec):
     def decode(self, buf, out=None):        
         buf = ensure_contiguous_ndarray(buf, self.max_buffer_size)
         return decompress(buf, out)
+
 
 numcodecs.register_codec(WavPack)
