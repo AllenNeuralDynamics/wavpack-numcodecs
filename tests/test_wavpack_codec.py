@@ -82,7 +82,7 @@ def test_wavpack_zarr():
         for test_sig in test_signals:
             bpss = [None, 3]
             for bps in bpss:
-                compressor = WavPack(bps=bps, debug=True)
+                compressor = WavPack(bps=bps)
 
                 print(f"signal shape: {test_sig.shape} - bps: {bps}")
                 if test_sig.ndim == 1:
