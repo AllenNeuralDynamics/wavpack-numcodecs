@@ -126,5 +126,5 @@ def test_wavpack_zarr():
 
 
 if __name__ == '__main__':
-    test_wavpack_cython()
+    # test_wavpack_cython()
     test_wavpack_zarr()

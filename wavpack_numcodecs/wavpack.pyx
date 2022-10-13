@@ -19,8 +19,13 @@ from numcodecs.abc import Codec
 from pathlib import Path
 import numpy as np
 
-# controls the size of destination buffer for decompression
-DECOMPRESSION_BUFFER_MULTIPLIER = 50
+# controls the initial size of destination buffer for decompression
+DECOMPRESSION_BUFFER_INIT = 10
+# controls buffer extension in case destination buffer is too small
+DECOMPRESSION_BUFFER_MULTIPLIER = 5
+# controls maximum decompression iteration
+DECOMPRESSION_MAX_ITER = 10
+
 
 
 cdef extern from "wavpack/wavpack_local.h":
@@ -146,24 +151,40 @@ def decompress(source, dest=None):
     source_ptr = source_buffer.ptr
     source_size = source_buffer.nbytes
 
+    decompression_succeded = False
+    dest_size = source_size * DECOMPRESSION_BUFFER_INIT * max_bytes_per_sample
+    iteration = 0
+    iterate = True
+
     try:
-        # setup destination
-        if dest is None:
-            # allocate memory
-            dest_size = source_size * DECOMPRESSION_BUFFER_MULTIPLIER * max_bytes_per_sample
-            dest = PyBytes_FromStringAndSize(NULL, dest_size)
-            dest_ptr = PyBytes_AS_STRING(dest)
-        else:
-            arr = ensure_contiguous_ndarray(dest)
-            dest_buffer = Buffer(arr, PyBUF_ANY_CONTIGUOUS | PyBUF_WRITEABLE)
-            dest_ptr = dest_buffer.ptr
-            dest_size = dest_buffer.nbytes
+        while not decompression_succeded and iteration < DECOMPRESSION_MAX_ITER:
+            # setup destination
+            if dest is None:
+                # allocate memory
+                dest = PyBytes_FromStringAndSize(NULL, dest_size)
+                dest_ptr = PyBytes_AS_STRING(dest)
+            else:
+                arr = ensure_contiguous_ndarray(dest)
+                dest_buffer = Buffer(arr, PyBUF_ANY_CONTIGUOUS | PyBUF_WRITEABLE)
+                dest_ptr = dest_buffer.ptr
+                dest_size = dest_buffer.nbytes
 
-        decompressed_samples = WavpackDecodeFile(source_ptr, source_size, num_chans_ptr, bytes_per_sample_ptr, 
-                                                 dest_ptr, dest_size)
+            decompressed_samples = WavpackDecodeFile(source_ptr, source_size, num_chans_ptr, bytes_per_sample_ptr, 
+                                                     dest_ptr, dest_size)
+            decompressed_bytes = decompressed_samples * num_chans * bytes_per_sample
 
+            if dest_buffer is not None:
+                if decompressed_bytes <= dest_size:
+                    decompression_succeded = True
+            else:
+                if decompressed_bytes < dest_size:
+                    decompression_succeded = True
+                if not decompression_succeded:
+                    iteration += 1
+                    dest_size_ = dest_size
+                    dest_size = dest_size * DECOMPRESSION_BUFFER_MULTIPLIER
+                    dest = None
     finally:
-
         # release buffers
         source_buffer.release()
         if dest_buffer is not None:
@@ -172,6 +193,9 @@ def decompress(source, dest=None):
     # check decompression was successful
     if decompressed_samples <= 0:
         raise RuntimeError(f'WavPack decompression error: {decompressed_samples}')
+    if not decompression_succeded:
+        raise RuntimeError(f'WavPack could not allocate enough dest buffer after {iteration} iterations. '
+                           f'Buffer size: {dest_size} - Decompressed size: {decompressed_bytes}')
 
     return dest[:decompressed_samples * num_chans * bytes_per_sample]
 
@@ -179,7 +203,6 @@ def decompress(source, dest=None):
         
 class WavPack(Codec):    
     codec_id = "wavpack"
-    max_block_size = 131072
     supported_dtypes = ["int8", "int16", "int32", "float32"]
     max_channels = 4096
     max_buffer_size = 0x7E000000
