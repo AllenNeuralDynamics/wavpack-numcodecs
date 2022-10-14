@@ -1,3 +1,6 @@
+[![PyPI version](https://badge.fury.io/py/wavpack-numcodecs.svg)](https://badge.fury.io/py/wavpack-numcodecs) ![tests](https://github.com/AllenNeuralDynamics/wavpack-numcodecs/actions/workflows/python-package-cython.yml/badge.svg)
+
+
 # WavPack - numcodecs implementation
 
 [Numcodecs](https://numcodecs.readthedocs.io/en/latest/index.html) wrapper to the 
