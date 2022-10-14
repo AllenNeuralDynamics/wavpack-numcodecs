@@ -19,9 +19,6 @@ from numcodecs.abc import Codec
 from pathlib import Path
 import numpy as np
 
-# controls the size of destination buffer for decompression
-DECOMPRESSION_BUFFER_MULTIPLIER = 50
-
 
 cdef extern from "wavpack/wavpack_local.h":
     const char* WavpackGetLibraryVersionString()
@@ -146,11 +143,14 @@ def decompress(source, dest=None):
     source_ptr = source_buffer.ptr
     source_size = source_buffer.nbytes
 
+    # determine number of samples, num_channels, and bytes_per_sample
+    n_decompressed_samples = WavpackDecodeFile(source_ptr, source_size, num_chans_ptr,
+                                               bytes_per_sample_ptr, dest_ptr, 0)
     try:
         # setup destination
         if dest is None:
             # allocate memory
-            dest_size = source_size * DECOMPRESSION_BUFFER_MULTIPLIER * max_bytes_per_sample
+            dest_size = n_decompressed_samples * num_chans * bytes_per_sample
             dest = PyBytes_FromStringAndSize(NULL, dest_size)
             dest_ptr = PyBytes_AS_STRING(dest)
         else:
@@ -159,8 +159,8 @@ def decompress(source, dest=None):
             dest_ptr = dest_buffer.ptr
             dest_size = dest_buffer.nbytes
 
-        decompressed_samples = WavpackDecodeFile(source_ptr, source_size, num_chans_ptr, bytes_per_sample_ptr, 
-                                                 dest_ptr, dest_size)
+        decompressed_samples = WavpackDecodeFile(source_ptr, source_size, num_chans_ptr,
+                                                 bytes_per_sample_ptr, dest_ptr, dest_size)
 
     finally:
 
@@ -173,7 +173,7 @@ def decompress(source, dest=None):
     if decompressed_samples <= 0:
         raise RuntimeError(f'WavPack decompression error: {decompressed_samples}')
 
-    return dest[:decompressed_samples * num_chans * bytes_per_sample]
+    return dest
 
 
         

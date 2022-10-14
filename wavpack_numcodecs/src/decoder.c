@@ -79,7 +79,8 @@ static int raw_push_back_byte (void *id, int c)
 
 static int64_t raw_get_length (void *id)
 {
-    return 0;
+    WavpackReaderContext *rcxt = (WavpackReaderContext *) id;
+    return rcxt->eptr - rcxt->sptr;
 }
 
 static int raw_can_seek (void *id)
@@ -117,7 +118,7 @@ size_t WavpackDecodeFile (void *source, size_t source_bytes, int *num_chans, int
     memset (&raw_wv, 0, sizeof (WavpackReaderContext));
     raw_wv.dptr = raw_wv.sptr = (unsigned char *) source;
     raw_wv.eptr = raw_wv.dptr + source_bytes;
-    wpc = WavpackOpenFileInputEx64 (&raw_reader, &raw_wv, NULL, error, OPEN_STREAMING, 0);
+    wpc = WavpackOpenFileInputEx64 (&raw_reader, &raw_wv, NULL, error, 0, 0);
 
     if (!wpc) {
         fprintf (stderr, "error opening file: %s\n", error);
@@ -126,6 +127,7 @@ size_t WavpackDecodeFile (void *source, size_t source_bytes, int *num_chans, int
 
     nch = WavpackGetNumChannels (wpc);
     bps = WavpackGetBytesPerSample (wpc);
+    max_samples = WavpackGetNumSamples (wpc);
 
     int8_t *dest_int8 = destin_char;
     int16_t *dest_int16 = destin_char;
@@ -137,7 +139,17 @@ size_t WavpackDecodeFile (void *source, size_t source_bytes, int *num_chans, int
     if (bytes_per_sample)
         *bytes_per_sample = bps;
 
-    // fprintf (stderr, "WavPack decoding: bytes per sample %d - num chans %d\n", bps, nch);
+    // fprintf (stderr, "WavPack decoding: bytes per sample %d - num chans %d - num samples %d\n", bps, nch, (int) max_samples);
+
+    // if either the passed-in destination pointer or the byte count is zero, just
+    // return the total number of samples available without decoding anything
+
+    if (!destin_char || !destin_bytes) {
+        WavpackCloseFile (wpc);
+        return max_samples;
+    }
+
+    // if we're actually decoding, then we might have to terminate decoding early is there's not enough space
 
     max_samples = destin_bytes / bps / nch;
 

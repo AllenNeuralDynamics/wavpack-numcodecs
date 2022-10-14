@@ -1294,12 +1294,6 @@ static CYTHON_INLINE PyObject *__Pyx__GetModuleGlobalName(PyObject *name);
 /* PyObjectCall2Args.proto */
 static CYTHON_UNUSED PyObject* __Pyx_PyObject_Call2Args(PyObject* function, PyObject* arg1, PyObject* arg2);
 
-/* SliceObject.proto */
-static CYTHON_INLINE PyObject* __Pyx_PyObject_GetSlice(
-        PyObject* obj, Py_ssize_t cstart, Py_ssize_t cstop,
-        PyObject** py_start, PyObject** py_stop, PyObject** py_slice,
-        int has_cstart, int has_cstop, int wraparound);
-
 /* PyObjectSetAttrStr.proto */
 #if CYTHON_USE_TYPE_SLOTS
 #define __Pyx_PyObject_DelAttrStr(o,n) __Pyx_PyObject_SetAttrStr(o, n, NULL)
@@ -1387,9 +1381,6 @@ static CYTHON_INLINE PyObject* __Pyx_PyObject_CallNoArg(PyObject *func);
 #else
 #define __Pyx_PyObject_CallNoArg(func) __Pyx_PyObject_Call(func, __pyx_empty_tuple, NULL)
 #endif
-
-/* CIntToPyUnicode.proto */
-static CYTHON_INLINE PyObject* __Pyx_PyUnicode_From_Py_ssize_t(Py_ssize_t value, Py_ssize_t width, char padding_char, char format_char);
 
 /* TypeImport.proto */
 #ifndef __PYX_HAVE_RT_ImportType_proto
@@ -1526,9 +1517,6 @@ static CYTHON_INLINE int __Pyx_PyInt_As_int(PyObject *);
 /* CIntToPy.proto */
 static CYTHON_INLINE PyObject* __Pyx_PyInt_From_int(int value);
 
-/* CIntToPy.proto */
-static CYTHON_INLINE PyObject* __Pyx_PyInt_From_unsigned_long(unsigned long value);
-
 /* CIntFromPy.proto */
 static CYTHON_INLINE unsigned long __Pyx_PyInt_As_unsigned_long(PyObject *);
 
@@ -1585,7 +1573,6 @@ int __pyx_module_is_main_wavpack_numcodecs__wavpack = 0;
 
 /* Implementation of 'wavpack_numcodecs.wavpack' */
 static PyObject *__pyx_builtin_RuntimeError;
-static PyObject *__pyx_builtin_print;
 static const char __pyx_k_id[] = "id";
 static const char __pyx_k_np[] = "np";
 static const char __pyx_k__12[] = "_";
@@ -1606,14 +1593,11 @@ static const char __pyx_k_self[] = "self";
 static const char __pyx_k_test[] = "__test__";
 static const char __pyx_k_Codec[] = "Codec";
 static const char __pyx_k_ascii[] = "ascii";
-static const char __pyx_k_debug[] = "debug";
 static const char __pyx_k_dtype[] = "dtype";
-static const char __pyx_k_flush[] = "flush";
 static const char __pyx_k_int16[] = "int16";
 static const char __pyx_k_int32[] = "int32";
 static const char __pyx_k_level[] = "level";
 static const char __pyx_k_numpy[] = "numpy";
-static const char __pyx_k_print[] = "print";
 static const char __pyx_k_shape[] = "shape";
 static const char __pyx_k_Buffer[] = "Buffer";
 static const char __pyx_k_decode[] = "decode";
@@ -1641,7 +1625,6 @@ static const char __pyx_k_nchannels[] = "nchannels";
 static const char __pyx_k_num_chans[] = "num_chans";
 static const char __pyx_k_numcodecs[] = "numcodecs";
 static const char __pyx_k_compat_ext[] = "compat_ext";
-static const char __pyx_k_compressed[] = "compressed";
 static const char __pyx_k_decompress[] = "decompress";
 static const char __pyx_k_dest_start[] = "dest_start";
 static const char __pyx_k_dtype_enum[] = "dtype_enum";
@@ -1652,7 +1635,6 @@ static const char __pyx_k_dest_buffer[] = "dest_buffer";
 static const char __pyx_k_num_samples[] = "num_samples";
 static const char __pyx_k_source_size[] = "source_size";
 static const char __pyx_k_RuntimeError[] = "RuntimeError";
-static const char __pyx_k_decompressed[] = "decompressed";
 static const char __pyx_k_max_channels[] = "max_channels";
 static const char __pyx_k_prepare_data[] = "_prepare_data";
 static const char __pyx_k_source_start[] = "source_start";
@@ -1663,13 +1645,11 @@ static const char __pyx_k_VERSION_STRING[] = "VERSION_STRING";
 static const char __pyx_k_WavPack___init[] = "WavPack.__init__";
 static const char __pyx_k_WavPack_decode[] = "WavPack.decode";
 static const char __pyx_k_WavPack_encode[] = "WavPack.encode";
-static const char __pyx_k_len_compressed[] = "len compressed: ";
 static const char __pyx_k_max_block_size[] = "max_block_size";
 static const char __pyx_k_register_codec[] = "register_codec";
 static const char __pyx_k_compressed_size[] = "compressed_size";
 static const char __pyx_k_max_buffer_size[] = "max_buffer_size";
 static const char __pyx_k_bytes_per_sample[] = "bytes_per_sample";
-static const char __pyx_k_len_decompressed[] = "len decompressed: ";
 static const char __pyx_k_numcodecs_compat[] = "numcodecs.compat";
 static const char __pyx_k_supported_dtypes[] = "supported_dtypes";
 static const char __pyx_k_Unsupported_dtype[] = "Unsupported dtype ";
@@ -1679,15 +1659,14 @@ static const char __pyx_k_bytes_per_sample_ptr[] = "bytes_per_sample_ptr";
 static const char __pyx_k_decompressed_samples[] = "decompressed_samples";
 static const char __pyx_k_max_bytes_per_sample[] = "max_bytes_per_sample";
 static const char __pyx_k_WavPack__prepare_data[] = "WavPack._prepare_data";
+static const char __pyx_k_n_decompressed_samples[] = "n_decompressed_samples";
 static const char __pyx_k_WavPack_compression_error[] = "WavPack compression error: ";
 static const char __pyx_k_ensure_contiguous_ndarray[] = "ensure_contiguous_ndarray";
 static const char __pyx_k_wavpack_numcodecs_wavpack[] = "wavpack_numcodecs.wavpack";
 static const char __pyx_k_WavPack_decompression_error[] = "WavPack decompression error: ";
 static const char __pyx_k_wavpack_numcodecs_wavpack_pyx[] = "wavpack_numcodecs/wavpack.pyx";
-static const char __pyx_k_DECOMPRESSION_BUFFER_MULTIPLIER[] = "DECOMPRESSION_BUFFER_MULTIPLIER";
 static PyObject *__pyx_n_s_Buffer;
 static PyObject *__pyx_n_s_Codec;
-static PyObject *__pyx_n_s_DECOMPRESSION_BUFFER_MULTIPLIER;
 static PyObject *__pyx_n_s_Path;
 static PyObject *__pyx_n_s_RuntimeError;
 static PyObject *__pyx_kp_u_Unsupported_dtype;
@@ -1711,13 +1690,10 @@ static PyObject *__pyx_n_s_cline_in_traceback;
 static PyObject *__pyx_n_s_codec_id;
 static PyObject *__pyx_n_s_compat_ext;
 static PyObject *__pyx_n_s_compress;
-static PyObject *__pyx_n_s_compressed;
 static PyObject *__pyx_n_s_compressed_size;
 static PyObject *__pyx_n_s_data;
-static PyObject *__pyx_n_s_debug;
 static PyObject *__pyx_n_s_decode;
 static PyObject *__pyx_n_s_decompress;
-static PyObject *__pyx_n_s_decompressed;
 static PyObject *__pyx_n_s_decompressed_samples;
 static PyObject *__pyx_n_s_dest;
 static PyObject *__pyx_n_s_dest_buffer;
@@ -1732,7 +1708,6 @@ static PyObject *__pyx_n_s_encode;
 static PyObject *__pyx_n_s_ensure_contiguous_ndarray;
 static PyObject *__pyx_n_s_flatten;
 static PyObject *__pyx_n_u_float32;
-static PyObject *__pyx_n_s_flush;
 static PyObject *__pyx_n_s_get_config;
 static PyObject *__pyx_n_s_id;
 static PyObject *__pyx_n_s_import;
@@ -1740,8 +1715,6 @@ static PyObject *__pyx_n_s_init;
 static PyObject *__pyx_n_u_int16;
 static PyObject *__pyx_n_u_int32;
 static PyObject *__pyx_n_u_int8;
-static PyObject *__pyx_kp_u_len_compressed;
-static PyObject *__pyx_kp_u_len_decompressed;
 static PyObject *__pyx_n_s_level;
 static PyObject *__pyx_n_s_main;
 static PyObject *__pyx_n_s_max_block_size;
@@ -1750,6 +1723,7 @@ static PyObject *__pyx_n_s_max_bytes_per_sample;
 static PyObject *__pyx_n_s_max_channels;
 static PyObject *__pyx_n_s_metaclass;
 static PyObject *__pyx_n_s_module;
+static PyObject *__pyx_n_s_n_decompressed_samples;
 static PyObject *__pyx_n_s_name;
 static PyObject *__pyx_n_s_nchannels;
 static PyObject *__pyx_n_s_nchans;
@@ -1767,7 +1741,6 @@ static PyObject *__pyx_n_s_out;
 static PyObject *__pyx_n_s_pathlib;
 static PyObject *__pyx_n_s_prepare;
 static PyObject *__pyx_n_s_prepare_data;
-static PyObject *__pyx_n_s_print;
 static PyObject *__pyx_n_s_pyx_vtable;
 static PyObject *__pyx_n_s_qualname;
 static PyObject *__pyx_n_s_register_codec;
@@ -1786,7 +1759,7 @@ static PyObject *__pyx_n_s_wavpack_numcodecs_wavpack;
 static PyObject *__pyx_kp_s_wavpack_numcodecs_wavpack_pyx;
 static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_compress(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_source, int __pyx_v_level, int __pyx_v_num_samples, int __pyx_v_num_chans, float __pyx_v_bps, int __pyx_v_dtype); /* proto */
 static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_2decompress(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_source, PyObject *__pyx_v_dest); /* proto */
-static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_7WavPack___init__(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self, PyObject *__pyx_v_level, PyObject *__pyx_v_bps, PyObject *__pyx_v_debug); /* proto */
+static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_7WavPack___init__(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self, PyObject *__pyx_v_level, PyObject *__pyx_v_bps); /* proto */
 static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_7WavPack_2get_config(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_7WavPack_4_prepare_data(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self, PyObject *__pyx_v_buf); /* proto */
 static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_7WavPack_6encode(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self, PyObject *__pyx_v_buf); /* proto */
@@ -1796,7 +1769,6 @@ static PyObject *__pyx_int_1;
 static PyObject *__pyx_int_2;
 static PyObject *__pyx_int_3;
 static PyObject *__pyx_int_4;
-static PyObject *__pyx_int_50;
 static PyObject *__pyx_int_4096;
 static PyObject *__pyx_int_131072;
 static PyObject *__pyx_int_2113929216;
@@ -1820,7 +1792,7 @@ static PyObject *__pyx_codeobj__16;
 static PyObject *__pyx_codeobj__18;
 /* Late includes */
 
-/* "wavpack_numcodecs/wavpack.pyx":51
+/* "wavpack_numcodecs/wavpack.pyx":48
  * 
  * 
  * def compress(source, int level, int num_samples, int num_chans, float bps, int dtype):             # <<<<<<<<<<<<<<
@@ -1876,35 +1848,35 @@ static PyObject *__pyx_pw_17wavpack_numcodecs_7wavpack_1compress(PyObject *__pyx
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_level)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("compress", 1, 6, 6, 1); __PYX_ERR(0, 51, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("compress", 1, 6, 6, 1); __PYX_ERR(0, 48, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_num_samples)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("compress", 1, 6, 6, 2); __PYX_ERR(0, 51, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("compress", 1, 6, 6, 2); __PYX_ERR(0, 48, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
         if (likely((values[3] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_num_chans)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("compress", 1, 6, 6, 3); __PYX_ERR(0, 51, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("compress", 1, 6, 6, 3); __PYX_ERR(0, 48, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  4:
         if (likely((values[4] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_bps)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("compress", 1, 6, 6, 4); __PYX_ERR(0, 51, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("compress", 1, 6, 6, 4); __PYX_ERR(0, 48, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  5:
         if (likely((values[5] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_dtype)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("compress", 1, 6, 6, 5); __PYX_ERR(0, 51, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("compress", 1, 6, 6, 5); __PYX_ERR(0, 48, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "compress") < 0)) __PYX_ERR(0, 51, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "compress") < 0)) __PYX_ERR(0, 48, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 6) {
       goto __pyx_L5_argtuple_error;
@@ -1917,15 +1889,15 @@ static PyObject *__pyx_pw_17wavpack_numcodecs_7wavpack_1compress(PyObject *__pyx
       values[5] = PyTuple_GET_ITEM(__pyx_args, 5);
     }
     __pyx_v_source = values[0];
-    __pyx_v_level = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_level == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 51, __pyx_L3_error)
-    __pyx_v_num_samples = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_num_samples == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 51, __pyx_L3_error)
-    __pyx_v_num_chans = __Pyx_PyInt_As_int(values[3]); if (unlikely((__pyx_v_num_chans == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 51, __pyx_L3_error)
-    __pyx_v_bps = __pyx_PyFloat_AsFloat(values[4]); if (unlikely((__pyx_v_bps == (float)-1) && PyErr_Occurred())) __PYX_ERR(0, 51, __pyx_L3_error)
-    __pyx_v_dtype = __Pyx_PyInt_As_int(values[5]); if (unlikely((__pyx_v_dtype == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 51, __pyx_L3_error)
+    __pyx_v_level = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_level == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 48, __pyx_L3_error)
+    __pyx_v_num_samples = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_num_samples == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 48, __pyx_L3_error)
+    __pyx_v_num_chans = __Pyx_PyInt_As_int(values[3]); if (unlikely((__pyx_v_num_chans == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 48, __pyx_L3_error)
+    __pyx_v_bps = __pyx_PyFloat_AsFloat(values[4]); if (unlikely((__pyx_v_bps == (float)-1) && PyErr_Occurred())) __PYX_ERR(0, 48, __pyx_L3_error)
+    __pyx_v_dtype = __Pyx_PyInt_As_int(values[5]); if (unlikely((__pyx_v_dtype == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 48, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("compress", 1, 6, 6, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 51, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("compress", 1, 6, 6, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 48, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("wavpack_numcodecs.wavpack.compress", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -1967,16 +1939,16 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_compress(CYTHON_UNUSED Py
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("compress", 0);
 
-  /* "wavpack_numcodecs/wavpack.pyx":87
+  /* "wavpack_numcodecs/wavpack.pyx":84
  * 
  *     # setup source buffer
  *     source_buffer = Buffer(source, PyBUF_ANY_CONTIGUOUS)             # <<<<<<<<<<<<<<
  *     source_ptr = source_buffer.ptr
  *     source_size = source_buffer.nbytes
  */
-  __pyx_t_1 = __Pyx_PyInt_From_int(PyBUF_ANY_CONTIGUOUS); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 87, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_From_int(PyBUF_ANY_CONTIGUOUS); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 84, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 87, __pyx_L1_error)
+  __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 84, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_INCREF(__pyx_v_source);
   __Pyx_GIVEREF(__pyx_v_source);
@@ -1984,13 +1956,13 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_compress(CYTHON_UNUSED Py
   __Pyx_GIVEREF(__pyx_t_1);
   PyTuple_SET_ITEM(__pyx_t_2, 1, __pyx_t_1);
   __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_17wavpack_numcodecs_10compat_ext_Buffer), __pyx_t_2, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 87, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_17wavpack_numcodecs_10compat_ext_Buffer), __pyx_t_2, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 84, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_v_source_buffer = ((struct __pyx_obj_17wavpack_numcodecs_10compat_ext_Buffer *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "wavpack_numcodecs/wavpack.pyx":88
+  /* "wavpack_numcodecs/wavpack.pyx":85
  *     # setup source buffer
  *     source_buffer = Buffer(source, PyBUF_ANY_CONTIGUOUS)
  *     source_ptr = source_buffer.ptr             # <<<<<<<<<<<<<<
@@ -2000,7 +1972,7 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_compress(CYTHON_UNUSED Py
   __pyx_t_3 = __pyx_v_source_buffer->ptr;
   __pyx_v_source_ptr = __pyx_t_3;
 
-  /* "wavpack_numcodecs/wavpack.pyx":89
+  /* "wavpack_numcodecs/wavpack.pyx":86
  *     source_buffer = Buffer(source, PyBUF_ANY_CONTIGUOUS)
  *     source_ptr = source_buffer.ptr
  *     source_size = source_buffer.nbytes             # <<<<<<<<<<<<<<
@@ -2010,7 +1982,7 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_compress(CYTHON_UNUSED Py
   __pyx_t_4 = __pyx_v_source_buffer->nbytes;
   __pyx_v_source_size = __pyx_t_4;
 
-  /* "wavpack_numcodecs/wavpack.pyx":91
+  /* "wavpack_numcodecs/wavpack.pyx":88
  *     source_size = source_buffer.nbytes
  * 
  *     try:             # <<<<<<<<<<<<<<
@@ -2019,19 +1991,19 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_compress(CYTHON_UNUSED Py
  */
   /*try:*/ {
 
-    /* "wavpack_numcodecs/wavpack.pyx":94
+    /* "wavpack_numcodecs/wavpack.pyx":91
  * 
  *         # setup destination
  *         dest = PyBytes_FromStringAndSize(NULL, source_size)             # <<<<<<<<<<<<<<
  *         dest_ptr = PyBytes_AS_STRING(dest)
  *         dest_size = source_size
  */
-    __pyx_t_1 = PyBytes_FromStringAndSize(NULL, __pyx_v_source_size); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 94, __pyx_L4_error)
+    __pyx_t_1 = PyBytes_FromStringAndSize(NULL, __pyx_v_source_size); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 91, __pyx_L4_error)
     __Pyx_GOTREF(__pyx_t_1);
     __pyx_v_dest = ((PyObject*)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "wavpack_numcodecs/wavpack.pyx":95
+    /* "wavpack_numcodecs/wavpack.pyx":92
  *         # setup destination
  *         dest = PyBytes_FromStringAndSize(NULL, source_size)
  *         dest_ptr = PyBytes_AS_STRING(dest)             # <<<<<<<<<<<<<<
@@ -2040,7 +2012,7 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_compress(CYTHON_UNUSED Py
  */
     __pyx_v_dest_ptr = PyBytes_AS_STRING(__pyx_v_dest);
 
-    /* "wavpack_numcodecs/wavpack.pyx":96
+    /* "wavpack_numcodecs/wavpack.pyx":93
  *         dest = PyBytes_FromStringAndSize(NULL, source_size)
  *         dest_ptr = PyBytes_AS_STRING(dest)
  *         dest_size = source_size             # <<<<<<<<<<<<<<
@@ -2049,7 +2021,7 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_compress(CYTHON_UNUSED Py
  */
     __pyx_v_dest_size = __pyx_v_source_size;
 
-    /* "wavpack_numcodecs/wavpack.pyx":98
+    /* "wavpack_numcodecs/wavpack.pyx":95
  *         dest_size = source_size
  * 
  *         compressed_size = WavpackEncodeFile(source_ptr, num_samples, num_chans, level, bps, dest_ptr, dest_size, dtype)             # <<<<<<<<<<<<<<
@@ -2059,7 +2031,7 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_compress(CYTHON_UNUSED Py
     __pyx_v_compressed_size = WavpackEncodeFile(__pyx_v_source_ptr, __pyx_v_num_samples, __pyx_v_num_chans, __pyx_v_level, __pyx_v_bps, __pyx_v_dest_ptr, __pyx_v_dest_size, __pyx_v_dtype);
   }
 
-  /* "wavpack_numcodecs/wavpack.pyx":103
+  /* "wavpack_numcodecs/wavpack.pyx":100
  * 
  *         # release buffers
  *         source_buffer.release()             # <<<<<<<<<<<<<<
@@ -2068,7 +2040,7 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_compress(CYTHON_UNUSED Py
  */
   /*finally:*/ {
     /*normal exit:*/{
-      __pyx_t_1 = ((struct __pyx_vtabstruct_17wavpack_numcodecs_10compat_ext_Buffer *)__pyx_v_source_buffer->__pyx_vtab)->release(__pyx_v_source_buffer, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 103, __pyx_L1_error)
+      __pyx_t_1 = ((struct __pyx_vtabstruct_17wavpack_numcodecs_10compat_ext_Buffer *)__pyx_v_source_buffer->__pyx_vtab)->release(__pyx_v_source_buffer, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 100, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
       goto __pyx_L5;
@@ -2090,7 +2062,7 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_compress(CYTHON_UNUSED Py
       __Pyx_XGOTREF(__pyx_t_13);
       __pyx_t_5 = __pyx_lineno; __pyx_t_6 = __pyx_clineno; __pyx_t_7 = __pyx_filename;
       {
-        __pyx_t_1 = ((struct __pyx_vtabstruct_17wavpack_numcodecs_10compat_ext_Buffer *)__pyx_v_source_buffer->__pyx_vtab)->release(__pyx_v_source_buffer, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 103, __pyx_L7_error)
+        __pyx_t_1 = ((struct __pyx_vtabstruct_17wavpack_numcodecs_10compat_ext_Buffer *)__pyx_v_source_buffer->__pyx_vtab)->release(__pyx_v_source_buffer, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 100, __pyx_L7_error)
         __Pyx_GOTREF(__pyx_t_1);
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
       }
@@ -2123,7 +2095,7 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_compress(CYTHON_UNUSED Py
     __pyx_L5:;
   }
 
-  /* "wavpack_numcodecs/wavpack.pyx":106
+  /* "wavpack_numcodecs/wavpack.pyx":103
  * 
  *     # check compression was successful
  *     if compressed_size == -1:             # <<<<<<<<<<<<<<
@@ -2133,26 +2105,26 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_compress(CYTHON_UNUSED Py
   __pyx_t_14 = ((__pyx_v_compressed_size == -1L) != 0);
   if (unlikely(__pyx_t_14)) {
 
-    /* "wavpack_numcodecs/wavpack.pyx":107
+    /* "wavpack_numcodecs/wavpack.pyx":104
  *     # check compression was successful
  *     if compressed_size == -1:
  *         raise RuntimeError(f'WavPack compression error: {compressed_size}')             # <<<<<<<<<<<<<<
  * 
  *     # resize after compression
  */
-    __pyx_t_1 = __Pyx_PyUnicode_From_unsigned_long(__pyx_v_compressed_size, 0, ' ', 'd'); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 107, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyUnicode_From_unsigned_long(__pyx_v_compressed_size, 0, ' ', 'd'); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 104, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_2 = __Pyx_PyUnicode_Concat(__pyx_kp_u_WavPack_compression_error, __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 107, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyUnicode_Concat(__pyx_kp_u_WavPack_compression_error, __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 104, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_builtin_RuntimeError, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 107, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_builtin_RuntimeError, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 104, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_Raise(__pyx_t_1, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __PYX_ERR(0, 107, __pyx_L1_error)
+    __PYX_ERR(0, 104, __pyx_L1_error)
 
-    /* "wavpack_numcodecs/wavpack.pyx":106
+    /* "wavpack_numcodecs/wavpack.pyx":103
  * 
  *     # check compression was successful
  *     if compressed_size == -1:             # <<<<<<<<<<<<<<
@@ -2161,7 +2133,7 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_compress(CYTHON_UNUSED Py
  */
   }
 
-  /* "wavpack_numcodecs/wavpack.pyx":110
+  /* "wavpack_numcodecs/wavpack.pyx":107
  * 
  *     # resize after compression
  *     dest = dest[:compressed_size]             # <<<<<<<<<<<<<<
@@ -2170,14 +2142,14 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_compress(CYTHON_UNUSED Py
  */
   if (unlikely(__pyx_v_dest == Py_None)) {
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-    __PYX_ERR(0, 110, __pyx_L1_error)
+    __PYX_ERR(0, 107, __pyx_L1_error)
   }
-  __pyx_t_1 = PySequence_GetSlice(__pyx_v_dest, 0, __pyx_v_compressed_size); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 110, __pyx_L1_error)
+  __pyx_t_1 = PySequence_GetSlice(__pyx_v_dest, 0, __pyx_v_compressed_size); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 107, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF_SET(__pyx_v_dest, ((PyObject*)__pyx_t_1));
   __pyx_t_1 = 0;
 
-  /* "wavpack_numcodecs/wavpack.pyx":112
+  /* "wavpack_numcodecs/wavpack.pyx":109
  *     dest = dest[:compressed_size]
  * 
  *     return dest             # <<<<<<<<<<<<<<
@@ -2189,7 +2161,7 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_compress(CYTHON_UNUSED Py
   __pyx_r = __pyx_v_dest;
   goto __pyx_L0;
 
-  /* "wavpack_numcodecs/wavpack.pyx":51
+  /* "wavpack_numcodecs/wavpack.pyx":48
  * 
  * 
  * def compress(source, int level, int num_samples, int num_chans, float bps, int dtype):             # <<<<<<<<<<<<<<
@@ -2211,7 +2183,7 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_compress(CYTHON_UNUSED Py
   return __pyx_r;
 }
 
-/* "wavpack_numcodecs/wavpack.pyx":115
+/* "wavpack_numcodecs/wavpack.pyx":112
  * 
  * 
  * def decompress(source, dest=None):             # <<<<<<<<<<<<<<
@@ -2260,7 +2232,7 @@ static PyObject *__pyx_pw_17wavpack_numcodecs_7wavpack_3decompress(PyObject *__p
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "decompress") < 0)) __PYX_ERR(0, 115, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "decompress") < 0)) __PYX_ERR(0, 112, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -2276,7 +2248,7 @@ static PyObject *__pyx_pw_17wavpack_numcodecs_7wavpack_3decompress(PyObject *__p
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("decompress", 0, 1, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 115, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("decompress", 0, 1, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 112, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("wavpack_numcodecs.wavpack.decompress", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -2301,7 +2273,8 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_2decompress(CYTHON_UNUSED
   int *__pyx_v_num_chans_ptr;
   int __pyx_v_bytes_per_sample;
   int *__pyx_v_bytes_per_sample_ptr;
-  int __pyx_v_max_bytes_per_sample;
+  CYTHON_UNUSED int __pyx_v_max_bytes_per_sample;
+  PyObject *__pyx_v_n_decompressed_samples = NULL;
   PyObject *__pyx_v_arr = NULL;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
@@ -2328,7 +2301,7 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_2decompress(CYTHON_UNUSED
   __Pyx_RefNannySetupContext("decompress", 0);
   __Pyx_INCREF(__pyx_v_dest);
 
-  /* "wavpack_numcodecs/wavpack.pyx":136
+  /* "wavpack_numcodecs/wavpack.pyx":133
  *         char *dest_ptr
  *         Buffer source_buffer
  *         Buffer dest_buffer = None             # <<<<<<<<<<<<<<
@@ -2338,7 +2311,7 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_2decompress(CYTHON_UNUSED
   __Pyx_INCREF(Py_None);
   __pyx_v_dest_buffer = ((struct __pyx_obj_17wavpack_numcodecs_10compat_ext_Buffer *)Py_None);
 
-  /* "wavpack_numcodecs/wavpack.pyx":139
+  /* "wavpack_numcodecs/wavpack.pyx":136
  *         unsigned long source_size, dest_size, decompressed_samples
  *         int num_chans
  *         int *num_chans_ptr = &num_chans             # <<<<<<<<<<<<<<
@@ -2347,7 +2320,7 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_2decompress(CYTHON_UNUSED
  */
   __pyx_v_num_chans_ptr = (&__pyx_v_num_chans);
 
-  /* "wavpack_numcodecs/wavpack.pyx":141
+  /* "wavpack_numcodecs/wavpack.pyx":138
  *         int *num_chans_ptr = &num_chans
  *         int bytes_per_sample
  *         int *bytes_per_sample_ptr = &bytes_per_sample             # <<<<<<<<<<<<<<
@@ -2356,7 +2329,7 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_2decompress(CYTHON_UNUSED
  */
   __pyx_v_bytes_per_sample_ptr = (&__pyx_v_bytes_per_sample);
 
-  /* "wavpack_numcodecs/wavpack.pyx":142
+  /* "wavpack_numcodecs/wavpack.pyx":139
  *         int bytes_per_sample
  *         int *bytes_per_sample_ptr = &bytes_per_sample
  *         int max_bytes_per_sample = 4             # <<<<<<<<<<<<<<
@@ -2365,16 +2338,16 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_2decompress(CYTHON_UNUSED
  */
   __pyx_v_max_bytes_per_sample = 4;
 
-  /* "wavpack_numcodecs/wavpack.pyx":145
+  /* "wavpack_numcodecs/wavpack.pyx":142
  * 
  *     # setup source buffer
  *     source_buffer = Buffer(source, PyBUF_ANY_CONTIGUOUS)             # <<<<<<<<<<<<<<
  *     source_ptr = source_buffer.ptr
  *     source_size = source_buffer.nbytes
  */
-  __pyx_t_1 = __Pyx_PyInt_From_int(PyBUF_ANY_CONTIGUOUS); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 145, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_From_int(PyBUF_ANY_CONTIGUOUS); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 142, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 145, __pyx_L1_error)
+  __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 142, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_INCREF(__pyx_v_source);
   __Pyx_GIVEREF(__pyx_v_source);
@@ -2382,13 +2355,13 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_2decompress(CYTHON_UNUSED
   __Pyx_GIVEREF(__pyx_t_1);
   PyTuple_SET_ITEM(__pyx_t_2, 1, __pyx_t_1);
   __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_17wavpack_numcodecs_10compat_ext_Buffer), __pyx_t_2, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 145, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_17wavpack_numcodecs_10compat_ext_Buffer), __pyx_t_2, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 142, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_v_source_buffer = ((struct __pyx_obj_17wavpack_numcodecs_10compat_ext_Buffer *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "wavpack_numcodecs/wavpack.pyx":146
+  /* "wavpack_numcodecs/wavpack.pyx":143
  *     # setup source buffer
  *     source_buffer = Buffer(source, PyBUF_ANY_CONTIGUOUS)
  *     source_ptr = source_buffer.ptr             # <<<<<<<<<<<<<<
@@ -2398,19 +2371,31 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_2decompress(CYTHON_UNUSED
   __pyx_t_3 = __pyx_v_source_buffer->ptr;
   __pyx_v_source_ptr = __pyx_t_3;
 
-  /* "wavpack_numcodecs/wavpack.pyx":147
+  /* "wavpack_numcodecs/wavpack.pyx":144
  *     source_buffer = Buffer(source, PyBUF_ANY_CONTIGUOUS)
  *     source_ptr = source_buffer.ptr
  *     source_size = source_buffer.nbytes             # <<<<<<<<<<<<<<
  * 
- *     try:
+ *     # determine number of samples, num_channels, and bytes_per_sample
  */
   __pyx_t_4 = __pyx_v_source_buffer->nbytes;
   __pyx_v_source_size = __pyx_t_4;
 
-  /* "wavpack_numcodecs/wavpack.pyx":149
- *     source_size = source_buffer.nbytes
+  /* "wavpack_numcodecs/wavpack.pyx":147
  * 
+ *     # determine number of samples, num_channels, and bytes_per_sample
+ *     n_decompressed_samples = WavpackDecodeFile(source_ptr, source_size, num_chans_ptr,             # <<<<<<<<<<<<<<
+ *                                                bytes_per_sample_ptr, dest_ptr, 0)
+ *     try:
+ */
+  __pyx_t_1 = __Pyx_PyInt_FromSize_t(WavpackDecodeFile(__pyx_v_source_ptr, __pyx_v_source_size, __pyx_v_num_chans_ptr, __pyx_v_bytes_per_sample_ptr, __pyx_v_dest_ptr, 0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 147, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_v_n_decompressed_samples = __pyx_t_1;
+  __pyx_t_1 = 0;
+
+  /* "wavpack_numcodecs/wavpack.pyx":149
+ *     n_decompressed_samples = WavpackDecodeFile(source_ptr, source_size, num_chans_ptr,
+ *                                                bytes_per_sample_ptr, dest_ptr, 0)
  *     try:             # <<<<<<<<<<<<<<
  *         # setup destination
  *         if dest is None:
@@ -2422,7 +2407,7 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_2decompress(CYTHON_UNUSED
  *         # setup destination
  *         if dest is None:             # <<<<<<<<<<<<<<
  *             # allocate memory
- *             dest_size = source_size * DECOMPRESSION_BUFFER_MULTIPLIER * max_bytes_per_sample
+ *             dest_size = n_decompressed_samples * num_chans * bytes_per_sample
  */
     __pyx_t_5 = (__pyx_v_dest == Py_None);
     __pyx_t_6 = (__pyx_t_5 != 0);
@@ -2431,42 +2416,39 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_2decompress(CYTHON_UNUSED
       /* "wavpack_numcodecs/wavpack.pyx":153
  *         if dest is None:
  *             # allocate memory
- *             dest_size = source_size * DECOMPRESSION_BUFFER_MULTIPLIER * max_bytes_per_sample             # <<<<<<<<<<<<<<
+ *             dest_size = n_decompressed_samples * num_chans * bytes_per_sample             # <<<<<<<<<<<<<<
  *             dest = PyBytes_FromStringAndSize(NULL, dest_size)
  *             dest_ptr = PyBytes_AS_STRING(dest)
  */
-      __pyx_t_1 = __Pyx_PyInt_From_unsigned_long(__pyx_v_source_size); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 153, __pyx_L4_error)
+      __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_num_chans); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 153, __pyx_L4_error)
       __Pyx_GOTREF(__pyx_t_1);
-      __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_DECOMPRESSION_BUFFER_MULTIPLIER); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 153, __pyx_L4_error)
+      __pyx_t_2 = PyNumber_Multiply(__pyx_v_n_decompressed_samples, __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 153, __pyx_L4_error)
       __Pyx_GOTREF(__pyx_t_2);
-      __pyx_t_7 = PyNumber_Multiply(__pyx_t_1, __pyx_t_2); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 153, __pyx_L4_error)
+      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+      __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_bytes_per_sample); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 153, __pyx_L4_error)
+      __Pyx_GOTREF(__pyx_t_1);
+      __pyx_t_7 = PyNumber_Multiply(__pyx_t_2, __pyx_t_1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 153, __pyx_L4_error)
       __Pyx_GOTREF(__pyx_t_7);
-      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-      __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_max_bytes_per_sample); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 153, __pyx_L4_error)
-      __Pyx_GOTREF(__pyx_t_2);
-      __pyx_t_1 = PyNumber_Multiply(__pyx_t_7, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 153, __pyx_L4_error)
-      __Pyx_GOTREF(__pyx_t_1);
+      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+      __pyx_t_8 = __Pyx_PyInt_As_unsigned_long(__pyx_t_7); if (unlikely((__pyx_t_8 == (unsigned long)-1) && PyErr_Occurred())) __PYX_ERR(0, 153, __pyx_L4_error)
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-      __pyx_t_8 = __Pyx_PyInt_As_unsigned_long(__pyx_t_1); if (unlikely((__pyx_t_8 == (unsigned long)-1) && PyErr_Occurred())) __PYX_ERR(0, 153, __pyx_L4_error)
-      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
       __pyx_v_dest_size = __pyx_t_8;
 
       /* "wavpack_numcodecs/wavpack.pyx":154
  *             # allocate memory
- *             dest_size = source_size * DECOMPRESSION_BUFFER_MULTIPLIER * max_bytes_per_sample
+ *             dest_size = n_decompressed_samples * num_chans * bytes_per_sample
  *             dest = PyBytes_FromStringAndSize(NULL, dest_size)             # <<<<<<<<<<<<<<
  *             dest_ptr = PyBytes_AS_STRING(dest)
  *         else:
  */
-      __pyx_t_1 = PyBytes_FromStringAndSize(NULL, __pyx_v_dest_size); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 154, __pyx_L4_error)
-      __Pyx_GOTREF(__pyx_t_1);
-      __Pyx_DECREF_SET(__pyx_v_dest, __pyx_t_1);
-      __pyx_t_1 = 0;
+      __pyx_t_7 = PyBytes_FromStringAndSize(NULL, __pyx_v_dest_size); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 154, __pyx_L4_error)
+      __Pyx_GOTREF(__pyx_t_7);
+      __Pyx_DECREF_SET(__pyx_v_dest, __pyx_t_7);
+      __pyx_t_7 = 0;
 
       /* "wavpack_numcodecs/wavpack.pyx":155
- *             dest_size = source_size * DECOMPRESSION_BUFFER_MULTIPLIER * max_bytes_per_sample
+ *             dest_size = n_decompressed_samples * num_chans * bytes_per_sample
  *             dest = PyBytes_FromStringAndSize(NULL, dest_size)
  *             dest_ptr = PyBytes_AS_STRING(dest)             # <<<<<<<<<<<<<<
  *         else:
@@ -2479,7 +2461,7 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_2decompress(CYTHON_UNUSED
  *         # setup destination
  *         if dest is None:             # <<<<<<<<<<<<<<
  *             # allocate memory
- *             dest_size = source_size * DECOMPRESSION_BUFFER_MULTIPLIER * max_bytes_per_sample
+ *             dest_size = n_decompressed_samples * num_chans * bytes_per_sample
  */
       goto __pyx_L6;
     }
@@ -2492,25 +2474,25 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_2decompress(CYTHON_UNUSED
  *             dest_ptr = dest_buffer.ptr
  */
     /*else*/ {
-      __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_ensure_contiguous_ndarray); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 157, __pyx_L4_error)
-      __Pyx_GOTREF(__pyx_t_2);
-      __pyx_t_7 = NULL;
-      if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_2))) {
-        __pyx_t_7 = PyMethod_GET_SELF(__pyx_t_2);
-        if (likely(__pyx_t_7)) {
-          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-          __Pyx_INCREF(__pyx_t_7);
+      __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_ensure_contiguous_ndarray); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 157, __pyx_L4_error)
+      __Pyx_GOTREF(__pyx_t_1);
+      __pyx_t_2 = NULL;
+      if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_1))) {
+        __pyx_t_2 = PyMethod_GET_SELF(__pyx_t_1);
+        if (likely(__pyx_t_2)) {
+          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_1);
+          __Pyx_INCREF(__pyx_t_2);
           __Pyx_INCREF(function);
-          __Pyx_DECREF_SET(__pyx_t_2, function);
+          __Pyx_DECREF_SET(__pyx_t_1, function);
         }
       }
-      __pyx_t_1 = (__pyx_t_7) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_7, __pyx_v_dest) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_v_dest);
-      __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
-      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 157, __pyx_L4_error)
-      __Pyx_GOTREF(__pyx_t_1);
-      __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-      __pyx_v_arr = __pyx_t_1;
-      __pyx_t_1 = 0;
+      __pyx_t_7 = (__pyx_t_2) ? __Pyx_PyObject_Call2Args(__pyx_t_1, __pyx_t_2, __pyx_v_dest) : __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_v_dest);
+      __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
+      if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 157, __pyx_L4_error)
+      __Pyx_GOTREF(__pyx_t_7);
+      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+      __pyx_v_arr = __pyx_t_7;
+      __pyx_t_7 = 0;
 
       /* "wavpack_numcodecs/wavpack.pyx":158
  *         else:
@@ -2519,21 +2501,21 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_2decompress(CYTHON_UNUSED
  *             dest_ptr = dest_buffer.ptr
  *             dest_size = dest_buffer.nbytes
  */
-      __pyx_t_1 = __Pyx_PyInt_From_int((PyBUF_ANY_CONTIGUOUS | PyBUF_WRITEABLE)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 158, __pyx_L4_error)
+      __pyx_t_7 = __Pyx_PyInt_From_int((PyBUF_ANY_CONTIGUOUS | PyBUF_WRITEABLE)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 158, __pyx_L4_error)
+      __Pyx_GOTREF(__pyx_t_7);
+      __pyx_t_1 = PyTuple_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 158, __pyx_L4_error)
       __Pyx_GOTREF(__pyx_t_1);
-      __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 158, __pyx_L4_error)
-      __Pyx_GOTREF(__pyx_t_2);
       __Pyx_INCREF(__pyx_v_arr);
       __Pyx_GIVEREF(__pyx_v_arr);
-      PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_v_arr);
-      __Pyx_GIVEREF(__pyx_t_1);
-      PyTuple_SET_ITEM(__pyx_t_2, 1, __pyx_t_1);
-      __pyx_t_1 = 0;
-      __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_17wavpack_numcodecs_10compat_ext_Buffer), __pyx_t_2, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 158, __pyx_L4_error)
-      __Pyx_GOTREF(__pyx_t_1);
-      __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-      __Pyx_DECREF_SET(__pyx_v_dest_buffer, ((struct __pyx_obj_17wavpack_numcodecs_10compat_ext_Buffer *)__pyx_t_1));
-      __pyx_t_1 = 0;
+      PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_v_arr);
+      __Pyx_GIVEREF(__pyx_t_7);
+      PyTuple_SET_ITEM(__pyx_t_1, 1, __pyx_t_7);
+      __pyx_t_7 = 0;
+      __pyx_t_7 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_17wavpack_numcodecs_10compat_ext_Buffer), __pyx_t_1, NULL); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 158, __pyx_L4_error)
+      __Pyx_GOTREF(__pyx_t_7);
+      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+      __Pyx_DECREF_SET(__pyx_v_dest_buffer, ((struct __pyx_obj_17wavpack_numcodecs_10compat_ext_Buffer *)__pyx_t_7));
+      __pyx_t_7 = 0;
 
       /* "wavpack_numcodecs/wavpack.pyx":159
  *             arr = ensure_contiguous_ndarray(dest)
@@ -2550,7 +2532,7 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_2decompress(CYTHON_UNUSED
  *             dest_ptr = dest_buffer.ptr
  *             dest_size = dest_buffer.nbytes             # <<<<<<<<<<<<<<
  * 
- *         decompressed_samples = WavpackDecodeFile(source_ptr, source_size, num_chans_ptr, bytes_per_sample_ptr,
+ *         decompressed_samples = WavpackDecodeFile(source_ptr, source_size, num_chans_ptr,
  */
       __pyx_t_4 = __pyx_v_dest_buffer->nbytes;
       __pyx_v_dest_size = __pyx_t_4;
@@ -2560,8 +2542,8 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_2decompress(CYTHON_UNUSED
     /* "wavpack_numcodecs/wavpack.pyx":162
  *             dest_size = dest_buffer.nbytes
  * 
- *         decompressed_samples = WavpackDecodeFile(source_ptr, source_size, num_chans_ptr, bytes_per_sample_ptr,             # <<<<<<<<<<<<<<
- *                                                  dest_ptr, dest_size)
+ *         decompressed_samples = WavpackDecodeFile(source_ptr, source_size, num_chans_ptr,             # <<<<<<<<<<<<<<
+ *                                                  bytes_per_sample_ptr, dest_ptr, dest_size)
  * 
  */
     __pyx_v_decompressed_samples = WavpackDecodeFile(__pyx_v_source_ptr, __pyx_v_source_size, __pyx_v_num_chans_ptr, __pyx_v_bytes_per_sample_ptr, __pyx_v_dest_ptr, __pyx_v_dest_size);
@@ -2576,9 +2558,9 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_2decompress(CYTHON_UNUSED
  */
   /*finally:*/ {
     /*normal exit:*/{
-      __pyx_t_1 = ((struct __pyx_vtabstruct_17wavpack_numcodecs_10compat_ext_Buffer *)__pyx_v_source_buffer->__pyx_vtab)->release(__pyx_v_source_buffer, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 168, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_1);
-      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+      __pyx_t_7 = ((struct __pyx_vtabstruct_17wavpack_numcodecs_10compat_ext_Buffer *)__pyx_v_source_buffer->__pyx_vtab)->release(__pyx_v_source_buffer, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 168, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_7);
+      __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
       /* "wavpack_numcodecs/wavpack.pyx":169
  *         # release buffers
@@ -2598,9 +2580,9 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_2decompress(CYTHON_UNUSED
  * 
  *     # check decompression was successful
  */
-        __pyx_t_1 = ((struct __pyx_vtabstruct_17wavpack_numcodecs_10compat_ext_Buffer *)__pyx_v_dest_buffer->__pyx_vtab)->release(__pyx_v_dest_buffer, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 170, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_1);
-        __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+        __pyx_t_7 = ((struct __pyx_vtabstruct_17wavpack_numcodecs_10compat_ext_Buffer *)__pyx_v_dest_buffer->__pyx_vtab)->release(__pyx_v_dest_buffer, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 170, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_7);
+        __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
         /* "wavpack_numcodecs/wavpack.pyx":169
  *         # release buffers
@@ -2638,9 +2620,9 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_2decompress(CYTHON_UNUSED
  *         if dest_buffer is not None:
  *             dest_buffer.release()
  */
-        __pyx_t_1 = ((struct __pyx_vtabstruct_17wavpack_numcodecs_10compat_ext_Buffer *)__pyx_v_source_buffer->__pyx_vtab)->release(__pyx_v_source_buffer, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 168, __pyx_L9_error)
-        __Pyx_GOTREF(__pyx_t_1);
-        __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+        __pyx_t_7 = ((struct __pyx_vtabstruct_17wavpack_numcodecs_10compat_ext_Buffer *)__pyx_v_source_buffer->__pyx_vtab)->release(__pyx_v_source_buffer, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 168, __pyx_L9_error)
+        __Pyx_GOTREF(__pyx_t_7);
+        __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
         /* "wavpack_numcodecs/wavpack.pyx":169
  *         # release buffers
@@ -2660,9 +2642,9 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_2decompress(CYTHON_UNUSED
  * 
  *     # check decompression was successful
  */
-          __pyx_t_1 = ((struct __pyx_vtabstruct_17wavpack_numcodecs_10compat_ext_Buffer *)__pyx_v_dest_buffer->__pyx_vtab)->release(__pyx_v_dest_buffer, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 170, __pyx_L9_error)
-          __Pyx_GOTREF(__pyx_t_1);
-          __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+          __pyx_t_7 = ((struct __pyx_vtabstruct_17wavpack_numcodecs_10compat_ext_Buffer *)__pyx_v_dest_buffer->__pyx_vtab)->release(__pyx_v_dest_buffer, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 170, __pyx_L9_error)
+          __Pyx_GOTREF(__pyx_t_7);
+          __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
           /* "wavpack_numcodecs/wavpack.pyx":169
  *         # release buffers
@@ -2717,18 +2699,18 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_2decompress(CYTHON_UNUSED
  *     if decompressed_samples <= 0:
  *         raise RuntimeError(f'WavPack decompression error: {decompressed_samples}')             # <<<<<<<<<<<<<<
  * 
- *     return dest[:decompressed_samples * num_chans * bytes_per_sample]
+ *     return dest
  */
-    __pyx_t_1 = __Pyx_PyUnicode_From_unsigned_long(__pyx_v_decompressed_samples, 0, ' ', 'd'); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 174, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_PyUnicode_From_unsigned_long(__pyx_v_decompressed_samples, 0, ' ', 'd'); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 174, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_7);
+    __pyx_t_1 = __Pyx_PyUnicode_Concat(__pyx_kp_u_WavPack_decompression_error, __pyx_t_7); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 174, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_2 = __Pyx_PyUnicode_Concat(__pyx_kp_u_WavPack_decompression_error, __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 174, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
+    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+    __pyx_t_7 = __Pyx_PyObject_CallOneArg(__pyx_builtin_RuntimeError, __pyx_t_1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 174, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_7);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_builtin_RuntimeError, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 174, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __Pyx_Raise(__pyx_t_1, 0, 0, 0);
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+    __Pyx_Raise(__pyx_t_7, 0, 0, 0);
+    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
     __PYX_ERR(0, 174, __pyx_L1_error)
 
     /* "wavpack_numcodecs/wavpack.pyx":173
@@ -2743,18 +2725,16 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_2decompress(CYTHON_UNUSED
   /* "wavpack_numcodecs/wavpack.pyx":176
  *         raise RuntimeError(f'WavPack decompression error: {decompressed_samples}')
  * 
- *     return dest[:decompressed_samples * num_chans * bytes_per_sample]             # <<<<<<<<<<<<<<
+ *     return dest             # <<<<<<<<<<<<<<
  * 
  * 
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyObject_GetSlice(__pyx_v_dest, 0, ((__pyx_v_decompressed_samples * __pyx_v_num_chans) * __pyx_v_bytes_per_sample), NULL, NULL, NULL, 0, 1, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 176, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_r = __pyx_t_1;
-  __pyx_t_1 = 0;
+  __Pyx_INCREF(__pyx_v_dest);
+  __pyx_r = __pyx_v_dest;
   goto __pyx_L0;
 
-  /* "wavpack_numcodecs/wavpack.pyx":115
+  /* "wavpack_numcodecs/wavpack.pyx":112
  * 
  * 
  * def decompress(source, dest=None):             # <<<<<<<<<<<<<<
@@ -2772,6 +2752,7 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_2decompress(CYTHON_UNUSED
   __pyx_L0:;
   __Pyx_XDECREF((PyObject *)__pyx_v_source_buffer);
   __Pyx_XDECREF((PyObject *)__pyx_v_dest_buffer);
+  __Pyx_XDECREF(__pyx_v_n_decompressed_samples);
   __Pyx_XDECREF(__pyx_v_arr);
   __Pyx_XDECREF(__pyx_v_dest);
   __Pyx_XGIVEREF(__pyx_r);
@@ -2782,20 +2763,19 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_2decompress(CYTHON_UNUSED
 /* "wavpack_numcodecs/wavpack.pyx":187
  *     max_buffer_size = 0x7E000000
  * 
- *     def __init__(self, level=1, bps=None, debug=False):             # <<<<<<<<<<<<<<
+ *     def __init__(self, level=1, bps=None):             # <<<<<<<<<<<<<<
  *         """
  *         Numcodecs Codec implementation for WavPack (https://www.wavpack.com/) codec.
  */
 
 /* Python wrapper */
 static PyObject *__pyx_pw_17wavpack_numcodecs_7wavpack_7WavPack_1__init__(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_17wavpack_numcodecs_7wavpack_7WavPack___init__[] = "WavPack.__init__(self, level=1, bps=None, debug=False)\n\n        Numcodecs Codec implementation for WavPack (https://www.wavpack.com/) codec.\n\n        2D buffers exceeding the supported number of channels (buffer's second dimension) \n        and buffers > 2D are flattened before compression.\n\n\n        Parameters\n        ----------\n        level : int, optional\n            The wavpack compression level (from low to high: 1, 2, 3, 4), by default 1\n        bps : float or None, optional\n            If the bps is not None or 0, the WavPack hybrid mode is used and compression is lossy. \n            The bps is between 2.25 and 24 (it can be a decimal, e.g. 3.5) and it \n            is the average number of bits used to encode each sample, by default None\n\n        Returns\n        -------\n        Codec\n            The instantiated WavPack numcodecs codec\n        ";
+static char __pyx_doc_17wavpack_numcodecs_7wavpack_7WavPack___init__[] = "WavPack.__init__(self, level=1, bps=None)\n\n        Numcodecs Codec implementation for WavPack (https://www.wavpack.com/) codec.\n\n        2D buffers exceeding the supported number of channels (buffer's second dimension) \n        and buffers > 2D are flattened before compression.\n\n\n        Parameters\n        ----------\n        level : int, optional\n            The wavpack compression level (from low to high: 1, 2, 3, 4), by default 1\n        bps : float or None, optional\n            If the bps is not None or 0, the WavPack hybrid mode is used and compression is lossy. \n            The bps is between 2.25 and 24 (it can be a decimal, e.g. 3.5) and it \n            is the average number of bits used to encode each sample, by default None\n\n        Returns\n        -------\n        Codec\n            The instantiated WavPack numcodecs codec\n        ";
 static PyMethodDef __pyx_mdef_17wavpack_numcodecs_7wavpack_7WavPack_1__init__ = {"__init__", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_17wavpack_numcodecs_7wavpack_7WavPack_1__init__, METH_VARARGS|METH_KEYWORDS, __pyx_doc_17wavpack_numcodecs_7wavpack_7WavPack___init__};
 static PyObject *__pyx_pw_17wavpack_numcodecs_7wavpack_7WavPack_1__init__(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_self = 0;
   PyObject *__pyx_v_level = 0;
   PyObject *__pyx_v_bps = 0;
-  PyObject *__pyx_v_debug = 0;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
@@ -2803,17 +2783,14 @@ static PyObject *__pyx_pw_17wavpack_numcodecs_7wavpack_7WavPack_1__init__(PyObje
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__init__ (wrapper)", 0);
   {
-    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_self,&__pyx_n_s_level,&__pyx_n_s_bps,&__pyx_n_s_debug,0};
-    PyObject* values[4] = {0,0,0,0};
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_self,&__pyx_n_s_level,&__pyx_n_s_bps,0};
+    PyObject* values[3] = {0,0,0};
     values[1] = ((PyObject *)((PyObject *)__pyx_int_1));
     values[2] = ((PyObject *)((PyObject *)Py_None));
-    values[3] = ((PyObject *)((PyObject *)Py_False));
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
       const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
       switch (pos_args) {
-        case  4: values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
-        CYTHON_FALLTHROUGH;
         case  3: values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
         CYTHON_FALLTHROUGH;
         case  2: values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
@@ -2840,20 +2817,12 @@ static PyObject *__pyx_pw_17wavpack_numcodecs_7wavpack_7WavPack_1__init__(PyObje
           PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_bps);
           if (value) { values[2] = value; kw_args--; }
         }
-        CYTHON_FALLTHROUGH;
-        case  3:
-        if (kw_args > 0) {
-          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_debug);
-          if (value) { values[3] = value; kw_args--; }
-        }
       }
       if (unlikely(kw_args > 0)) {
         if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__init__") < 0)) __PYX_ERR(0, 187, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
-        case  4: values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
-        CYTHON_FALLTHROUGH;
         case  3: values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
         CYTHON_FALLTHROUGH;
         case  2: values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
@@ -2866,24 +2835,23 @@ static PyObject *__pyx_pw_17wavpack_numcodecs_7wavpack_7WavPack_1__init__(PyObje
     __pyx_v_self = values[0];
     __pyx_v_level = values[1];
     __pyx_v_bps = values[2];
-    __pyx_v_debug = values[3];
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__init__", 0, 1, 4, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 187, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("__init__", 0, 1, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 187, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("wavpack_numcodecs.wavpack.WavPack.__init__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_17wavpack_numcodecs_7wavpack_7WavPack___init__(__pyx_self, __pyx_v_self, __pyx_v_level, __pyx_v_bps, __pyx_v_debug);
+  __pyx_r = __pyx_pf_17wavpack_numcodecs_7wavpack_7WavPack___init__(__pyx_self, __pyx_v_self, __pyx_v_level, __pyx_v_bps);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_7WavPack___init__(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self, PyObject *__pyx_v_level, PyObject *__pyx_v_bps, PyObject *__pyx_v_debug) {
+static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_7WavPack___init__(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self, PyObject *__pyx_v_level, PyObject *__pyx_v_bps) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -3053,27 +3021,18 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_7WavPack___init__(CYTHON_
  *                 self.bps = 0
  *         else:
  *             self.bps = 0             # <<<<<<<<<<<<<<
- *         self.debug = debug
  * 
+ *     def get_config(self):
  */
   /*else*/ {
     if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_bps, __pyx_int_0) < 0) __PYX_ERR(0, 218, __pyx_L1_error)
   }
   __pyx_L7:;
 
-  /* "wavpack_numcodecs/wavpack.pyx":219
- *         else:
- *             self.bps = 0
- *         self.debug = debug             # <<<<<<<<<<<<<<
- * 
- *     def get_config(self):
- */
-  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_debug, __pyx_v_debug) < 0) __PYX_ERR(0, 219, __pyx_L1_error)
-
   /* "wavpack_numcodecs/wavpack.pyx":187
  *     max_buffer_size = 0x7E000000
  * 
- *     def __init__(self, level=1, bps=None, debug=False):             # <<<<<<<<<<<<<<
+ *     def __init__(self, level=1, bps=None):             # <<<<<<<<<<<<<<
  *         """
  *         Numcodecs Codec implementation for WavPack (https://www.wavpack.com/) codec.
  */
@@ -3094,8 +3053,8 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_7WavPack___init__(CYTHON_
   return __pyx_r;
 }
 
-/* "wavpack_numcodecs/wavpack.pyx":221
- *         self.debug = debug
+/* "wavpack_numcodecs/wavpack.pyx":220
+ *             self.bps = 0
  * 
  *     def get_config(self):             # <<<<<<<<<<<<<<
  *         # override to handle encoding dtypes
@@ -3128,7 +3087,7 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_7WavPack_2get_config(CYTH
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("get_config", 0);
 
-  /* "wavpack_numcodecs/wavpack.pyx":223
+  /* "wavpack_numcodecs/wavpack.pyx":222
  *     def get_config(self):
  *         # override to handle encoding dtypes
  *         return dict(             # <<<<<<<<<<<<<<
@@ -3137,52 +3096,52 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_7WavPack_2get_config(CYTH
  */
   __Pyx_XDECREF(__pyx_r);
 
-  /* "wavpack_numcodecs/wavpack.pyx":224
+  /* "wavpack_numcodecs/wavpack.pyx":223
  *         # override to handle encoding dtypes
  *         return dict(
  *             id=self.codec_id,             # <<<<<<<<<<<<<<
  *             level=self.level,
  *             bps=float(self.bps)
  */
-  __pyx_t_1 = __Pyx_PyDict_NewPresized(3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 224, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyDict_NewPresized(3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 223, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_codec_id); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 224, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_codec_id); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 223, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_id, __pyx_t_2) < 0) __PYX_ERR(0, 224, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_id, __pyx_t_2) < 0) __PYX_ERR(0, 223, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "wavpack_numcodecs/wavpack.pyx":225
+  /* "wavpack_numcodecs/wavpack.pyx":224
  *         return dict(
  *             id=self.codec_id,
  *             level=self.level,             # <<<<<<<<<<<<<<
  *             bps=float(self.bps)
  *         )
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_level); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 225, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_level); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 224, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_level, __pyx_t_2) < 0) __PYX_ERR(0, 224, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_level, __pyx_t_2) < 0) __PYX_ERR(0, 223, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "wavpack_numcodecs/wavpack.pyx":226
+  /* "wavpack_numcodecs/wavpack.pyx":225
  *             id=self.codec_id,
  *             level=self.level,
  *             bps=float(self.bps)             # <<<<<<<<<<<<<<
  *         )
  * 
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_bps); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 226, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_bps); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 225, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyNumber_Float(__pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 226, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyNumber_Float(__pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 225, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_bps, __pyx_t_3) < 0) __PYX_ERR(0, 224, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_bps, __pyx_t_3) < 0) __PYX_ERR(0, 223, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "wavpack_numcodecs/wavpack.pyx":221
- *         self.debug = debug
+  /* "wavpack_numcodecs/wavpack.pyx":220
+ *             self.bps = 0
  * 
  *     def get_config(self):             # <<<<<<<<<<<<<<
  *         # override to handle encoding dtypes
@@ -3202,7 +3161,7 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_7WavPack_2get_config(CYTH
   return __pyx_r;
 }
 
-/* "wavpack_numcodecs/wavpack.pyx":229
+/* "wavpack_numcodecs/wavpack.pyx":228
  *         )
  * 
  *     def _prepare_data(self, buf):             # <<<<<<<<<<<<<<
@@ -3246,11 +3205,11 @@ static PyObject *__pyx_pw_17wavpack_numcodecs_7wavpack_7WavPack_5_prepare_data(P
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_buf)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("_prepare_data", 1, 2, 2, 1); __PYX_ERR(0, 229, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("_prepare_data", 1, 2, 2, 1); __PYX_ERR(0, 228, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "_prepare_data") < 0)) __PYX_ERR(0, 229, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "_prepare_data") < 0)) __PYX_ERR(0, 228, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
       goto __pyx_L5_argtuple_error;
@@ -3263,7 +3222,7 @@ static PyObject *__pyx_pw_17wavpack_numcodecs_7wavpack_7WavPack_5_prepare_data(P
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("_prepare_data", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 229, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("_prepare_data", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 228, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("wavpack_numcodecs.wavpack.WavPack._prepare_data", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -3293,7 +3252,7 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_7WavPack_4_prepare_data(C
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("_prepare_data", 0);
 
-  /* "wavpack_numcodecs/wavpack.pyx":231
+  /* "wavpack_numcodecs/wavpack.pyx":230
  *     def _prepare_data(self, buf):
  *         # checks
  *         assert str(buf.dtype) in self.supported_dtypes, f"Unsupported dtype {buf.dtype}"             # <<<<<<<<<<<<<<
@@ -3302,61 +3261,61 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_7WavPack_4_prepare_data(C
  */
   #ifndef CYTHON_WITHOUT_ASSERTIONS
   if (unlikely(!Py_OptimizeFlag)) {
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_buf, __pyx_n_s_dtype); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 231, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_buf, __pyx_n_s_dtype); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 230, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_2 = __Pyx_PyObject_CallOneArg(((PyObject *)(&PyUnicode_Type)), __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 231, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_CallOneArg(((PyObject *)(&PyUnicode_Type)), __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 230, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_supported_dtypes); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 231, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_supported_dtypes); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 230, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_3 = (__Pyx_PySequence_ContainsTF(__pyx_t_2, __pyx_t_1, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 231, __pyx_L1_error)
+    __pyx_t_3 = (__Pyx_PySequence_ContainsTF(__pyx_t_2, __pyx_t_1, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 230, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     if (unlikely(!(__pyx_t_3 != 0))) {
-      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_buf, __pyx_n_s_dtype); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 231, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_buf, __pyx_n_s_dtype); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 230, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
-      __pyx_t_2 = __Pyx_PyObject_FormatSimple(__pyx_t_1, __pyx_empty_unicode); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 231, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyObject_FormatSimple(__pyx_t_1, __pyx_empty_unicode); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 230, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      __pyx_t_1 = __Pyx_PyUnicode_Concat(__pyx_kp_u_Unsupported_dtype, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 231, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyUnicode_Concat(__pyx_kp_u_Unsupported_dtype, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 230, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
       PyErr_SetObject(PyExc_AssertionError, __pyx_t_1);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      __PYX_ERR(0, 231, __pyx_L1_error)
+      __PYX_ERR(0, 230, __pyx_L1_error)
     }
   }
   #endif
 
-  /* "wavpack_numcodecs/wavpack.pyx":232
+  /* "wavpack_numcodecs/wavpack.pyx":231
  *         # checks
  *         assert str(buf.dtype) in self.supported_dtypes, f"Unsupported dtype {buf.dtype}"
  *         if buf.ndim == 1:             # <<<<<<<<<<<<<<
  *             data = buf[:, None]
  *         elif buf.ndim == 2:
  */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_buf, __pyx_n_s_ndim); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 232, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_buf, __pyx_n_s_ndim); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 231, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyInt_EqObjC(__pyx_t_1, __pyx_int_1, 1, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 232, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyInt_EqObjC(__pyx_t_1, __pyx_int_1, 1, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 231, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_2); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 232, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_2); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 231, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   if (__pyx_t_3) {
 
-    /* "wavpack_numcodecs/wavpack.pyx":233
+    /* "wavpack_numcodecs/wavpack.pyx":232
  *         assert str(buf.dtype) in self.supported_dtypes, f"Unsupported dtype {buf.dtype}"
  *         if buf.ndim == 1:
  *             data = buf[:, None]             # <<<<<<<<<<<<<<
  *         elif buf.ndim == 2:
  *             _, nchannels = buf.shape
  */
-    __pyx_t_2 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_tuple__2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 233, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_tuple__2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 232, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __pyx_v_data = __pyx_t_2;
     __pyx_t_2 = 0;
 
-    /* "wavpack_numcodecs/wavpack.pyx":232
+    /* "wavpack_numcodecs/wavpack.pyx":231
  *         # checks
  *         assert str(buf.dtype) in self.supported_dtypes, f"Unsupported dtype {buf.dtype}"
  *         if buf.ndim == 1:             # <<<<<<<<<<<<<<
@@ -3366,30 +3325,30 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_7WavPack_4_prepare_data(C
     goto __pyx_L3;
   }
 
-  /* "wavpack_numcodecs/wavpack.pyx":234
+  /* "wavpack_numcodecs/wavpack.pyx":233
  *         if buf.ndim == 1:
  *             data = buf[:, None]
  *         elif buf.ndim == 2:             # <<<<<<<<<<<<<<
  *             _, nchannels = buf.shape
  * 
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_buf, __pyx_n_s_ndim); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 234, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_buf, __pyx_n_s_ndim); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 233, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_1 = __Pyx_PyInt_EqObjC(__pyx_t_2, __pyx_int_2, 2, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 234, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_EqObjC(__pyx_t_2, __pyx_int_2, 2, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 233, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 234, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 233, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_3) {
 
-    /* "wavpack_numcodecs/wavpack.pyx":235
+    /* "wavpack_numcodecs/wavpack.pyx":234
  *             data = buf[:, None]
  *         elif buf.ndim == 2:
  *             _, nchannels = buf.shape             # <<<<<<<<<<<<<<
  * 
  *             if nchannels > self.max_channels:
  */
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_buf, __pyx_n_s_shape); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 235, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_buf, __pyx_n_s_shape); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 234, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     if ((likely(PyTuple_CheckExact(__pyx_t_1))) || (PyList_CheckExact(__pyx_t_1))) {
       PyObject* sequence = __pyx_t_1;
@@ -3397,7 +3356,7 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_7WavPack_4_prepare_data(C
       if (unlikely(size != 2)) {
         if (size > 2) __Pyx_RaiseTooManyValuesError(2);
         else if (size >= 0) __Pyx_RaiseNeedMoreValuesError(size);
-        __PYX_ERR(0, 235, __pyx_L1_error)
+        __PYX_ERR(0, 234, __pyx_L1_error)
       }
       #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
       if (likely(PyTuple_CheckExact(sequence))) {
@@ -3410,15 +3369,15 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_7WavPack_4_prepare_data(C
       __Pyx_INCREF(__pyx_t_2);
       __Pyx_INCREF(__pyx_t_4);
       #else
-      __pyx_t_2 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 235, __pyx_L1_error)
+      __pyx_t_2 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 234, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
-      __pyx_t_4 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 235, __pyx_L1_error)
+      __pyx_t_4 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 234, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
       #endif
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     } else {
       Py_ssize_t index = -1;
-      __pyx_t_5 = PyObject_GetIter(__pyx_t_1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 235, __pyx_L1_error)
+      __pyx_t_5 = PyObject_GetIter(__pyx_t_1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 234, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
       __pyx_t_6 = Py_TYPE(__pyx_t_5)->tp_iternext;
@@ -3426,7 +3385,7 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_7WavPack_4_prepare_data(C
       __Pyx_GOTREF(__pyx_t_2);
       index = 1; __pyx_t_4 = __pyx_t_6(__pyx_t_5); if (unlikely(!__pyx_t_4)) goto __pyx_L4_unpacking_failed;
       __Pyx_GOTREF(__pyx_t_4);
-      if (__Pyx_IternextUnpackEndCheck(__pyx_t_6(__pyx_t_5), 2) < 0) __PYX_ERR(0, 235, __pyx_L1_error)
+      if (__Pyx_IternextUnpackEndCheck(__pyx_t_6(__pyx_t_5), 2) < 0) __PYX_ERR(0, 234, __pyx_L1_error)
       __pyx_t_6 = NULL;
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       goto __pyx_L5_unpacking_done;
@@ -3434,7 +3393,7 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_7WavPack_4_prepare_data(C
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       __pyx_t_6 = NULL;
       if (__Pyx_IterFinish() == 0) __Pyx_RaiseNeedMoreValuesError(index);
-      __PYX_ERR(0, 235, __pyx_L1_error)
+      __PYX_ERR(0, 234, __pyx_L1_error)
       __pyx_L5_unpacking_done:;
     }
     __pyx_v__ = __pyx_t_2;
@@ -3442,29 +3401,29 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_7WavPack_4_prepare_data(C
     __pyx_v_nchannels = __pyx_t_4;
     __pyx_t_4 = 0;
 
-    /* "wavpack_numcodecs/wavpack.pyx":237
+    /* "wavpack_numcodecs/wavpack.pyx":236
  *             _, nchannels = buf.shape
  * 
  *             if nchannels > self.max_channels:             # <<<<<<<<<<<<<<
  *                 data = buf.flatten()[:, None]
  *             else:
  */
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_max_channels); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 237, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_max_channels); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 236, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_4 = PyObject_RichCompare(__pyx_v_nchannels, __pyx_t_1, Py_GT); __Pyx_XGOTREF(__pyx_t_4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 237, __pyx_L1_error)
+    __pyx_t_4 = PyObject_RichCompare(__pyx_v_nchannels, __pyx_t_1, Py_GT); __Pyx_XGOTREF(__pyx_t_4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 236, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 237, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 236, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     if (__pyx_t_3) {
 
-      /* "wavpack_numcodecs/wavpack.pyx":238
+      /* "wavpack_numcodecs/wavpack.pyx":237
  * 
  *             if nchannels > self.max_channels:
  *                 data = buf.flatten()[:, None]             # <<<<<<<<<<<<<<
  *             else:
  *                 data = buf
  */
-      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_buf, __pyx_n_s_flatten); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 238, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_buf, __pyx_n_s_flatten); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 237, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __pyx_t_2 = NULL;
       if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_1))) {
@@ -3478,16 +3437,16 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_7WavPack_4_prepare_data(C
       }
       __pyx_t_4 = (__pyx_t_2) ? __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_t_2) : __Pyx_PyObject_CallNoArg(__pyx_t_1);
       __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
-      if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 238, __pyx_L1_error)
+      if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 237, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_t_4, __pyx_tuple__2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 238, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_t_4, __pyx_tuple__2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 237, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       __pyx_v_data = __pyx_t_1;
       __pyx_t_1 = 0;
 
-      /* "wavpack_numcodecs/wavpack.pyx":237
+      /* "wavpack_numcodecs/wavpack.pyx":236
  *             _, nchannels = buf.shape
  * 
  *             if nchannels > self.max_channels:             # <<<<<<<<<<<<<<
@@ -3497,7 +3456,7 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_7WavPack_4_prepare_data(C
       goto __pyx_L6;
     }
 
-    /* "wavpack_numcodecs/wavpack.pyx":240
+    /* "wavpack_numcodecs/wavpack.pyx":239
  *                 data = buf.flatten()[:, None]
  *             else:
  *                 data = buf             # <<<<<<<<<<<<<<
@@ -3510,7 +3469,7 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_7WavPack_4_prepare_data(C
     }
     __pyx_L6:;
 
-    /* "wavpack_numcodecs/wavpack.pyx":234
+    /* "wavpack_numcodecs/wavpack.pyx":233
  *         if buf.ndim == 1:
  *             data = buf[:, None]
  *         elif buf.ndim == 2:             # <<<<<<<<<<<<<<
@@ -3520,7 +3479,7 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_7WavPack_4_prepare_data(C
     goto __pyx_L3;
   }
 
-  /* "wavpack_numcodecs/wavpack.pyx":242
+  /* "wavpack_numcodecs/wavpack.pyx":241
  *                 data = buf
  *         else:
  *             data = buf.flatten()[:, None]             # <<<<<<<<<<<<<<
@@ -3528,7 +3487,7 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_7WavPack_4_prepare_data(C
  * 
  */
   /*else*/ {
-    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_buf, __pyx_n_s_flatten); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 242, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_buf, __pyx_n_s_flatten); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 241, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __pyx_t_2 = NULL;
     if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_4))) {
@@ -3542,10 +3501,10 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_7WavPack_4_prepare_data(C
     }
     __pyx_t_1 = (__pyx_t_2) ? __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_2) : __Pyx_PyObject_CallNoArg(__pyx_t_4);
     __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 242, __pyx_L1_error)
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 241, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __pyx_t_4 = __Pyx_PyObject_GetItem(__pyx_t_1, __pyx_tuple__2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 242, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_GetItem(__pyx_t_1, __pyx_tuple__2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 241, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __pyx_v_data = __pyx_t_4;
@@ -3553,7 +3512,7 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_7WavPack_4_prepare_data(C
   }
   __pyx_L3:;
 
-  /* "wavpack_numcodecs/wavpack.pyx":243
+  /* "wavpack_numcodecs/wavpack.pyx":242
  *         else:
  *             data = buf.flatten()[:, None]
  *         return data             # <<<<<<<<<<<<<<
@@ -3565,7 +3524,7 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_7WavPack_4_prepare_data(C
   __pyx_r = __pyx_v_data;
   goto __pyx_L0;
 
-  /* "wavpack_numcodecs/wavpack.pyx":229
+  /* "wavpack_numcodecs/wavpack.pyx":228
  *         )
  * 
  *     def _prepare_data(self, buf):             # <<<<<<<<<<<<<<
@@ -3590,12 +3549,12 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_7WavPack_4_prepare_data(C
   return __pyx_r;
 }
 
-/* "wavpack_numcodecs/wavpack.pyx":245
+/* "wavpack_numcodecs/wavpack.pyx":244
  *         return data
  * 
  *     def encode(self, buf):             # <<<<<<<<<<<<<<
  *         data = self._prepare_data(buf)
- *         if self.debug:
+ *         dtype = str(data.dtype)
  */
 
 /* Python wrapper */
@@ -3634,11 +3593,11 @@ static PyObject *__pyx_pw_17wavpack_numcodecs_7wavpack_7WavPack_7encode(PyObject
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_buf)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("encode", 1, 2, 2, 1); __PYX_ERR(0, 245, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("encode", 1, 2, 2, 1); __PYX_ERR(0, 244, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "encode") < 0)) __PYX_ERR(0, 245, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "encode") < 0)) __PYX_ERR(0, 244, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
       goto __pyx_L5_argtuple_error;
@@ -3651,7 +3610,7 @@ static PyObject *__pyx_pw_17wavpack_numcodecs_7wavpack_7WavPack_7encode(PyObject
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("encode", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 245, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("encode", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 244, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("wavpack_numcodecs.wavpack.WavPack.encode", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -3670,32 +3629,29 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_7WavPack_6encode(CYTHON_U
   PyObject *__pyx_v_nsamples = NULL;
   PyObject *__pyx_v_nchans = NULL;
   PyObject *__pyx_v_dtype_id = NULL;
-  PyObject *__pyx_v_compressed = NULL;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
   PyObject *__pyx_t_2 = NULL;
   PyObject *__pyx_t_3 = NULL;
-  int __pyx_t_4;
-  PyObject *__pyx_t_5 = NULL;
-  PyObject *(*__pyx_t_6)(PyObject *);
-  PyObject *__pyx_t_7 = NULL;
-  int __pyx_t_8;
-  PyObject *__pyx_t_9 = NULL;
-  Py_ssize_t __pyx_t_10;
+  PyObject *__pyx_t_4 = NULL;
+  PyObject *(*__pyx_t_5)(PyObject *);
+  PyObject *__pyx_t_6 = NULL;
+  int __pyx_t_7;
+  PyObject *__pyx_t_8 = NULL;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("encode", 0);
 
-  /* "wavpack_numcodecs/wavpack.pyx":246
+  /* "wavpack_numcodecs/wavpack.pyx":245
  * 
  *     def encode(self, buf):
  *         data = self._prepare_data(buf)             # <<<<<<<<<<<<<<
- *         if self.debug:
- *             print(data.shape, flush=True)
+ *         dtype = str(data.dtype)
+ *         nsamples, nchans = data.shape
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_prepare_data); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 246, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_prepare_data); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 245, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_3 = NULL;
   if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
@@ -3709,282 +3665,187 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_7WavPack_6encode(CYTHON_U
   }
   __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_v_buf) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_v_buf);
   __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 246, __pyx_L1_error)
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 245, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_v_data = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "wavpack_numcodecs/wavpack.pyx":247
+  /* "wavpack_numcodecs/wavpack.pyx":246
  *     def encode(self, buf):
  *         data = self._prepare_data(buf)
- *         if self.debug:             # <<<<<<<<<<<<<<
- *             print(data.shape, flush=True)
- *         dtype = str(data.dtype)
- */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_debug); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 247, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_4 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_4 < 0)) __PYX_ERR(0, 247, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (__pyx_t_4) {
-
-    /* "wavpack_numcodecs/wavpack.pyx":248
- *         data = self._prepare_data(buf)
- *         if self.debug:
- *             print(data.shape, flush=True)             # <<<<<<<<<<<<<<
- *         dtype = str(data.dtype)
- *         nsamples, nchans = data.shape
- */
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_data, __pyx_n_s_shape); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 248, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_2 = PyTuple_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 248, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    __Pyx_GIVEREF(__pyx_t_1);
-    PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_t_1);
-    __pyx_t_1 = 0;
-    __pyx_t_1 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 248, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_flush, Py_True) < 0) __PYX_ERR(0, 248, __pyx_L1_error)
-    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_print, __pyx_t_2, __pyx_t_1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 248, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-
-    /* "wavpack_numcodecs/wavpack.pyx":247
- *     def encode(self, buf):
- *         data = self._prepare_data(buf)
- *         if self.debug:             # <<<<<<<<<<<<<<
- *             print(data.shape, flush=True)
- *         dtype = str(data.dtype)
- */
-  }
-
-  /* "wavpack_numcodecs/wavpack.pyx":249
- *         if self.debug:
- *             print(data.shape, flush=True)
  *         dtype = str(data.dtype)             # <<<<<<<<<<<<<<
  *         nsamples, nchans = data.shape
  *         dtype_id = dtype_enum[dtype]
  */
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_data, __pyx_n_s_dtype); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 249, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_1 = __Pyx_PyObject_CallOneArg(((PyObject *)(&PyUnicode_Type)), __pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 249, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_data, __pyx_n_s_dtype); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 246, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_v_dtype = __pyx_t_1;
-  __pyx_t_1 = 0;
+  __pyx_t_2 = __Pyx_PyObject_CallOneArg(((PyObject *)(&PyUnicode_Type)), __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 246, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_v_dtype = __pyx_t_2;
+  __pyx_t_2 = 0;
 
-  /* "wavpack_numcodecs/wavpack.pyx":250
- *             print(data.shape, flush=True)
+  /* "wavpack_numcodecs/wavpack.pyx":247
+ *         data = self._prepare_data(buf)
  *         dtype = str(data.dtype)
  *         nsamples, nchans = data.shape             # <<<<<<<<<<<<<<
  *         dtype_id = dtype_enum[dtype]
- *         compressed = compress(data, self.level, nsamples, nchans, self.bps, dtype_id)
+ *         return compress(data, self.level, nsamples, nchans, self.bps, dtype_id)
  */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_data, __pyx_n_s_shape); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 250, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  if ((likely(PyTuple_CheckExact(__pyx_t_1))) || (PyList_CheckExact(__pyx_t_1))) {
-    PyObject* sequence = __pyx_t_1;
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_data, __pyx_n_s_shape); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 247, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  if ((likely(PyTuple_CheckExact(__pyx_t_2))) || (PyList_CheckExact(__pyx_t_2))) {
+    PyObject* sequence = __pyx_t_2;
     Py_ssize_t size = __Pyx_PySequence_SIZE(sequence);
     if (unlikely(size != 2)) {
       if (size > 2) __Pyx_RaiseTooManyValuesError(2);
       else if (size >= 0) __Pyx_RaiseNeedMoreValuesError(size);
-      __PYX_ERR(0, 250, __pyx_L1_error)
+      __PYX_ERR(0, 247, __pyx_L1_error)
     }
     #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
     if (likely(PyTuple_CheckExact(sequence))) {
-      __pyx_t_3 = PyTuple_GET_ITEM(sequence, 0); 
-      __pyx_t_2 = PyTuple_GET_ITEM(sequence, 1); 
+      __pyx_t_1 = PyTuple_GET_ITEM(sequence, 0); 
+      __pyx_t_3 = PyTuple_GET_ITEM(sequence, 1); 
     } else {
-      __pyx_t_3 = PyList_GET_ITEM(sequence, 0); 
-      __pyx_t_2 = PyList_GET_ITEM(sequence, 1); 
+      __pyx_t_1 = PyList_GET_ITEM(sequence, 0); 
+      __pyx_t_3 = PyList_GET_ITEM(sequence, 1); 
     }
+    __Pyx_INCREF(__pyx_t_1);
     __Pyx_INCREF(__pyx_t_3);
-    __Pyx_INCREF(__pyx_t_2);
     #else
-    __pyx_t_3 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 250, __pyx_L1_error)
+    __pyx_t_1 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 247, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __pyx_t_3 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 247, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_2 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 250, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
     #endif
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   } else {
     Py_ssize_t index = -1;
-    __pyx_t_5 = PyObject_GetIter(__pyx_t_1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 250, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_5);
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_t_6 = Py_TYPE(__pyx_t_5)->tp_iternext;
-    index = 0; __pyx_t_3 = __pyx_t_6(__pyx_t_5); if (unlikely(!__pyx_t_3)) goto __pyx_L4_unpacking_failed;
+    __pyx_t_4 = PyObject_GetIter(__pyx_t_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 247, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    __pyx_t_5 = Py_TYPE(__pyx_t_4)->tp_iternext;
+    index = 0; __pyx_t_1 = __pyx_t_5(__pyx_t_4); if (unlikely(!__pyx_t_1)) goto __pyx_L3_unpacking_failed;
+    __Pyx_GOTREF(__pyx_t_1);
+    index = 1; __pyx_t_3 = __pyx_t_5(__pyx_t_4); if (unlikely(!__pyx_t_3)) goto __pyx_L3_unpacking_failed;
     __Pyx_GOTREF(__pyx_t_3);
-    index = 1; __pyx_t_2 = __pyx_t_6(__pyx_t_5); if (unlikely(!__pyx_t_2)) goto __pyx_L4_unpacking_failed;
-    __Pyx_GOTREF(__pyx_t_2);
-    if (__Pyx_IternextUnpackEndCheck(__pyx_t_6(__pyx_t_5), 2) < 0) __PYX_ERR(0, 250, __pyx_L1_error)
-    __pyx_t_6 = NULL;
-    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    goto __pyx_L5_unpacking_done;
-    __pyx_L4_unpacking_failed:;
-    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    __pyx_t_6 = NULL;
+    if (__Pyx_IternextUnpackEndCheck(__pyx_t_5(__pyx_t_4), 2) < 0) __PYX_ERR(0, 247, __pyx_L1_error)
+    __pyx_t_5 = NULL;
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    goto __pyx_L4_unpacking_done;
+    __pyx_L3_unpacking_failed:;
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __pyx_t_5 = NULL;
     if (__Pyx_IterFinish() == 0) __Pyx_RaiseNeedMoreValuesError(index);
-    __PYX_ERR(0, 250, __pyx_L1_error)
-    __pyx_L5_unpacking_done:;
+    __PYX_ERR(0, 247, __pyx_L1_error)
+    __pyx_L4_unpacking_done:;
   }
-  __pyx_v_nsamples = __pyx_t_3;
+  __pyx_v_nsamples = __pyx_t_1;
+  __pyx_t_1 = 0;
+  __pyx_v_nchans = __pyx_t_3;
   __pyx_t_3 = 0;
-  __pyx_v_nchans = __pyx_t_2;
-  __pyx_t_2 = 0;
 
-  /* "wavpack_numcodecs/wavpack.pyx":251
+  /* "wavpack_numcodecs/wavpack.pyx":248
  *         dtype = str(data.dtype)
  *         nsamples, nchans = data.shape
  *         dtype_id = dtype_enum[dtype]             # <<<<<<<<<<<<<<
- *         compressed = compress(data, self.level, nsamples, nchans, self.bps, dtype_id)
- *         if self.debug:
- */
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_dtype_enum); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 251, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_GetItem(__pyx_t_1, __pyx_v_dtype); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 251, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_v_dtype_id = __pyx_t_2;
-  __pyx_t_2 = 0;
-
-  /* "wavpack_numcodecs/wavpack.pyx":252
- *         nsamples, nchans = data.shape
- *         dtype_id = dtype_enum[dtype]
- *         compressed = compress(data, self.level, nsamples, nchans, self.bps, dtype_id)             # <<<<<<<<<<<<<<
- *         if self.debug:
- *             print(f"len compressed: {len(compressed)}")
- */
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_compress); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 252, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_level); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 252, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_bps); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 252, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_7 = NULL;
-  __pyx_t_8 = 0;
-  if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_1))) {
-    __pyx_t_7 = PyMethod_GET_SELF(__pyx_t_1);
-    if (likely(__pyx_t_7)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_1);
-      __Pyx_INCREF(__pyx_t_7);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_1, function);
-      __pyx_t_8 = 1;
-    }
-  }
-  #if CYTHON_FAST_PYCALL
-  if (PyFunction_Check(__pyx_t_1)) {
-    PyObject *__pyx_temp[7] = {__pyx_t_7, __pyx_v_data, __pyx_t_3, __pyx_v_nsamples, __pyx_v_nchans, __pyx_t_5, __pyx_v_dtype_id};
-    __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_8, 6+__pyx_t_8); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 252, __pyx_L1_error)
-    __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
-    __Pyx_GOTREF(__pyx_t_2);
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  } else
-  #endif
-  #if CYTHON_FAST_PYCCALL
-  if (__Pyx_PyFastCFunction_Check(__pyx_t_1)) {
-    PyObject *__pyx_temp[7] = {__pyx_t_7, __pyx_v_data, __pyx_t_3, __pyx_v_nsamples, __pyx_v_nchans, __pyx_t_5, __pyx_v_dtype_id};
-    __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_8, 6+__pyx_t_8); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 252, __pyx_L1_error)
-    __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
-    __Pyx_GOTREF(__pyx_t_2);
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  } else
-  #endif
-  {
-    __pyx_t_9 = PyTuple_New(6+__pyx_t_8); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 252, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_9);
-    if (__pyx_t_7) {
-      __Pyx_GIVEREF(__pyx_t_7); PyTuple_SET_ITEM(__pyx_t_9, 0, __pyx_t_7); __pyx_t_7 = NULL;
-    }
-    __Pyx_INCREF(__pyx_v_data);
-    __Pyx_GIVEREF(__pyx_v_data);
-    PyTuple_SET_ITEM(__pyx_t_9, 0+__pyx_t_8, __pyx_v_data);
-    __Pyx_GIVEREF(__pyx_t_3);
-    PyTuple_SET_ITEM(__pyx_t_9, 1+__pyx_t_8, __pyx_t_3);
-    __Pyx_INCREF(__pyx_v_nsamples);
-    __Pyx_GIVEREF(__pyx_v_nsamples);
-    PyTuple_SET_ITEM(__pyx_t_9, 2+__pyx_t_8, __pyx_v_nsamples);
-    __Pyx_INCREF(__pyx_v_nchans);
-    __Pyx_GIVEREF(__pyx_v_nchans);
-    PyTuple_SET_ITEM(__pyx_t_9, 3+__pyx_t_8, __pyx_v_nchans);
-    __Pyx_GIVEREF(__pyx_t_5);
-    PyTuple_SET_ITEM(__pyx_t_9, 4+__pyx_t_8, __pyx_t_5);
-    __Pyx_INCREF(__pyx_v_dtype_id);
-    __Pyx_GIVEREF(__pyx_v_dtype_id);
-    PyTuple_SET_ITEM(__pyx_t_9, 5+__pyx_t_8, __pyx_v_dtype_id);
-    __pyx_t_3 = 0;
-    __pyx_t_5 = 0;
-    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_9, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 252, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-  }
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_v_compressed = __pyx_t_2;
-  __pyx_t_2 = 0;
-
-  /* "wavpack_numcodecs/wavpack.pyx":253
- *         dtype_id = dtype_enum[dtype]
- *         compressed = compress(data, self.level, nsamples, nchans, self.bps, dtype_id)
- *         if self.debug:             # <<<<<<<<<<<<<<
- *             print(f"len compressed: {len(compressed)}")
- *         return compressed
- */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_debug); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 253, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_4 = __Pyx_PyObject_IsTrue(__pyx_t_2); if (unlikely(__pyx_t_4 < 0)) __PYX_ERR(0, 253, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (__pyx_t_4) {
-
-    /* "wavpack_numcodecs/wavpack.pyx":254
- *         compressed = compress(data, self.level, nsamples, nchans, self.bps, dtype_id)
- *         if self.debug:
- *             print(f"len compressed: {len(compressed)}")             # <<<<<<<<<<<<<<
- *         return compressed
+ *         return compress(data, self.level, nsamples, nchans, self.bps, dtype_id)
  * 
  */
-    __pyx_t_10 = PyObject_Length(__pyx_v_compressed); if (unlikely(__pyx_t_10 == ((Py_ssize_t)-1))) __PYX_ERR(0, 254, __pyx_L1_error)
-    __pyx_t_2 = __Pyx_PyUnicode_From_Py_ssize_t(__pyx_t_10, 0, ' ', 'd'); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 254, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_1 = __Pyx_PyUnicode_Concat(__pyx_kp_u_len_compressed, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 254, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_builtin_print, __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 254, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_dtype_enum); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 248, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_3 = __Pyx_PyObject_GetItem(__pyx_t_2, __pyx_v_dtype); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 248, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_v_dtype_id = __pyx_t_3;
+  __pyx_t_3 = 0;
 
-    /* "wavpack_numcodecs/wavpack.pyx":253
+  /* "wavpack_numcodecs/wavpack.pyx":249
+ *         nsamples, nchans = data.shape
  *         dtype_id = dtype_enum[dtype]
- *         compressed = compress(data, self.level, nsamples, nchans, self.bps, dtype_id)
- *         if self.debug:             # <<<<<<<<<<<<<<
- *             print(f"len compressed: {len(compressed)}")
- *         return compressed
- */
-  }
-
-  /* "wavpack_numcodecs/wavpack.pyx":255
- *         if self.debug:
- *             print(f"len compressed: {len(compressed)}")
- *         return compressed             # <<<<<<<<<<<<<<
+ *         return compress(data, self.level, nsamples, nchans, self.bps, dtype_id)             # <<<<<<<<<<<<<<
  * 
  *     def decode(self, buf, out=None):
  */
   __Pyx_XDECREF(__pyx_r);
-  __Pyx_INCREF(__pyx_v_compressed);
-  __pyx_r = __pyx_v_compressed;
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_compress); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 249, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_level); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 249, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_bps); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 249, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __pyx_t_6 = NULL;
+  __pyx_t_7 = 0;
+  if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_2))) {
+    __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_2);
+    if (likely(__pyx_t_6)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+      __Pyx_INCREF(__pyx_t_6);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_2, function);
+      __pyx_t_7 = 1;
+    }
+  }
+  #if CYTHON_FAST_PYCALL
+  if (PyFunction_Check(__pyx_t_2)) {
+    PyObject *__pyx_temp[7] = {__pyx_t_6, __pyx_v_data, __pyx_t_1, __pyx_v_nsamples, __pyx_v_nchans, __pyx_t_4, __pyx_v_dtype_id};
+    __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_7, 6+__pyx_t_7); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 249, __pyx_L1_error)
+    __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
+    __Pyx_GOTREF(__pyx_t_3);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  } else
+  #endif
+  #if CYTHON_FAST_PYCCALL
+  if (__Pyx_PyFastCFunction_Check(__pyx_t_2)) {
+    PyObject *__pyx_temp[7] = {__pyx_t_6, __pyx_v_data, __pyx_t_1, __pyx_v_nsamples, __pyx_v_nchans, __pyx_t_4, __pyx_v_dtype_id};
+    __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_7, 6+__pyx_t_7); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 249, __pyx_L1_error)
+    __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
+    __Pyx_GOTREF(__pyx_t_3);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  } else
+  #endif
+  {
+    __pyx_t_8 = PyTuple_New(6+__pyx_t_7); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 249, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_8);
+    if (__pyx_t_6) {
+      __Pyx_GIVEREF(__pyx_t_6); PyTuple_SET_ITEM(__pyx_t_8, 0, __pyx_t_6); __pyx_t_6 = NULL;
+    }
+    __Pyx_INCREF(__pyx_v_data);
+    __Pyx_GIVEREF(__pyx_v_data);
+    PyTuple_SET_ITEM(__pyx_t_8, 0+__pyx_t_7, __pyx_v_data);
+    __Pyx_GIVEREF(__pyx_t_1);
+    PyTuple_SET_ITEM(__pyx_t_8, 1+__pyx_t_7, __pyx_t_1);
+    __Pyx_INCREF(__pyx_v_nsamples);
+    __Pyx_GIVEREF(__pyx_v_nsamples);
+    PyTuple_SET_ITEM(__pyx_t_8, 2+__pyx_t_7, __pyx_v_nsamples);
+    __Pyx_INCREF(__pyx_v_nchans);
+    __Pyx_GIVEREF(__pyx_v_nchans);
+    PyTuple_SET_ITEM(__pyx_t_8, 3+__pyx_t_7, __pyx_v_nchans);
+    __Pyx_GIVEREF(__pyx_t_4);
+    PyTuple_SET_ITEM(__pyx_t_8, 4+__pyx_t_7, __pyx_t_4);
+    __Pyx_INCREF(__pyx_v_dtype_id);
+    __Pyx_GIVEREF(__pyx_v_dtype_id);
+    PyTuple_SET_ITEM(__pyx_t_8, 5+__pyx_t_7, __pyx_v_dtype_id);
+    __pyx_t_1 = 0;
+    __pyx_t_4 = 0;
+    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_8, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 249, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+  }
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_r = __pyx_t_3;
+  __pyx_t_3 = 0;
   goto __pyx_L0;
 
-  /* "wavpack_numcodecs/wavpack.pyx":245
+  /* "wavpack_numcodecs/wavpack.pyx":244
  *         return data
  * 
  *     def encode(self, buf):             # <<<<<<<<<<<<<<
  *         data = self._prepare_data(buf)
- *         if self.debug:
+ *         dtype = str(data.dtype)
  */
 
   /* function exit code */
@@ -3992,9 +3853,9 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_7WavPack_6encode(CYTHON_U
   __Pyx_XDECREF(__pyx_t_1);
   __Pyx_XDECREF(__pyx_t_2);
   __Pyx_XDECREF(__pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_5);
-  __Pyx_XDECREF(__pyx_t_7);
-  __Pyx_XDECREF(__pyx_t_9);
+  __Pyx_XDECREF(__pyx_t_4);
+  __Pyx_XDECREF(__pyx_t_6);
+  __Pyx_XDECREF(__pyx_t_8);
   __Pyx_AddTraceback("wavpack_numcodecs.wavpack.WavPack.encode", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
@@ -4003,18 +3864,17 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_7WavPack_6encode(CYTHON_U
   __Pyx_XDECREF(__pyx_v_nsamples);
   __Pyx_XDECREF(__pyx_v_nchans);
   __Pyx_XDECREF(__pyx_v_dtype_id);
-  __Pyx_XDECREF(__pyx_v_compressed);
   __Pyx_XGIVEREF(__pyx_r);
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-/* "wavpack_numcodecs/wavpack.pyx":257
- *         return compressed
+/* "wavpack_numcodecs/wavpack.pyx":251
+ *         return compress(data, self.level, nsamples, nchans, self.bps, dtype_id)
  * 
  *     def decode(self, buf, out=None):             # <<<<<<<<<<<<<<
  *         buf = ensure_contiguous_ndarray(buf, self.max_buffer_size)
- *         decompressed = decompress(buf, out)
+ *         return decompress(buf, out)
  */
 
 /* Python wrapper */
@@ -4057,7 +3917,7 @@ static PyObject *__pyx_pw_17wavpack_numcodecs_7wavpack_7WavPack_9decode(PyObject
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_buf)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("decode", 0, 2, 3, 1); __PYX_ERR(0, 257, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("decode", 0, 2, 3, 1); __PYX_ERR(0, 251, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
@@ -4067,7 +3927,7 @@ static PyObject *__pyx_pw_17wavpack_numcodecs_7wavpack_7WavPack_9decode(PyObject
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "decode") < 0)) __PYX_ERR(0, 257, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "decode") < 0)) __PYX_ERR(0, 251, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -4085,7 +3945,7 @@ static PyObject *__pyx_pw_17wavpack_numcodecs_7wavpack_7WavPack_9decode(PyObject
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("decode", 0, 2, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 257, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("decode", 0, 2, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 251, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("wavpack_numcodecs.wavpack.WavPack.decode", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -4099,7 +3959,6 @@ static PyObject *__pyx_pw_17wavpack_numcodecs_7wavpack_7WavPack_9decode(PyObject
 }
 
 static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_7WavPack_8decode(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self, PyObject *__pyx_v_buf, PyObject *__pyx_v_out) {
-  PyObject *__pyx_v_decompressed = NULL;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -4108,24 +3967,22 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_7WavPack_8decode(CYTHON_U
   PyObject *__pyx_t_4 = NULL;
   int __pyx_t_5;
   PyObject *__pyx_t_6 = NULL;
-  int __pyx_t_7;
-  Py_ssize_t __pyx_t_8;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("decode", 0);
   __Pyx_INCREF(__pyx_v_buf);
 
-  /* "wavpack_numcodecs/wavpack.pyx":258
+  /* "wavpack_numcodecs/wavpack.pyx":252
  * 
  *     def decode(self, buf, out=None):
  *         buf = ensure_contiguous_ndarray(buf, self.max_buffer_size)             # <<<<<<<<<<<<<<
- *         decompressed = decompress(buf, out)
- *         if self.debug:
+ *         return decompress(buf, out)
+ * 
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_ensure_contiguous_ndarray); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 258, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_ensure_contiguous_ndarray); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 252, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_max_buffer_size); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 258, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_max_buffer_size); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 252, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __pyx_t_4 = NULL;
   __pyx_t_5 = 0;
@@ -4142,7 +3999,7 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_7WavPack_8decode(CYTHON_U
   #if CYTHON_FAST_PYCALL
   if (PyFunction_Check(__pyx_t_2)) {
     PyObject *__pyx_temp[3] = {__pyx_t_4, __pyx_v_buf, __pyx_t_3};
-    __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_5, 2+__pyx_t_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 258, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_5, 2+__pyx_t_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 252, __pyx_L1_error)
     __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -4151,14 +4008,14 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_7WavPack_8decode(CYTHON_U
   #if CYTHON_FAST_PYCCALL
   if (__Pyx_PyFastCFunction_Check(__pyx_t_2)) {
     PyObject *__pyx_temp[3] = {__pyx_t_4, __pyx_v_buf, __pyx_t_3};
-    __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_5, 2+__pyx_t_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 258, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_5, 2+__pyx_t_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 252, __pyx_L1_error)
     __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   } else
   #endif
   {
-    __pyx_t_6 = PyTuple_New(2+__pyx_t_5); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 258, __pyx_L1_error)
+    __pyx_t_6 = PyTuple_New(2+__pyx_t_5); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 252, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
     if (__pyx_t_4) {
       __Pyx_GIVEREF(__pyx_t_4); PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_4); __pyx_t_4 = NULL;
@@ -4169,7 +4026,7 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_7WavPack_8decode(CYTHON_U
     __Pyx_GIVEREF(__pyx_t_3);
     PyTuple_SET_ITEM(__pyx_t_6, 1+__pyx_t_5, __pyx_t_3);
     __pyx_t_3 = 0;
-    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_6, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 258, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_6, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 252, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
   }
@@ -4177,14 +4034,15 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_7WavPack_8decode(CYTHON_U
   __Pyx_DECREF_SET(__pyx_v_buf, __pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "wavpack_numcodecs/wavpack.pyx":259
+  /* "wavpack_numcodecs/wavpack.pyx":253
  *     def decode(self, buf, out=None):
  *         buf = ensure_contiguous_ndarray(buf, self.max_buffer_size)
- *         decompressed = decompress(buf, out)             # <<<<<<<<<<<<<<
- *         if self.debug:
- *             print(f"len decompressed: {len(decompressed)}")
+ *         return decompress(buf, out)             # <<<<<<<<<<<<<<
+ * 
+ * 
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_decompress); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 259, __pyx_L1_error)
+  __Pyx_XDECREF(__pyx_r);
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_decompress); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 253, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_6 = NULL;
   __pyx_t_5 = 0;
@@ -4201,7 +4059,7 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_7WavPack_8decode(CYTHON_U
   #if CYTHON_FAST_PYCALL
   if (PyFunction_Check(__pyx_t_2)) {
     PyObject *__pyx_temp[3] = {__pyx_t_6, __pyx_v_buf, __pyx_v_out};
-    __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_5, 2+__pyx_t_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 259, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_5, 2+__pyx_t_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 253, __pyx_L1_error)
     __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
     __Pyx_GOTREF(__pyx_t_1);
   } else
@@ -4209,13 +4067,13 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_7WavPack_8decode(CYTHON_U
   #if CYTHON_FAST_PYCCALL
   if (__Pyx_PyFastCFunction_Check(__pyx_t_2)) {
     PyObject *__pyx_temp[3] = {__pyx_t_6, __pyx_v_buf, __pyx_v_out};
-    __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_5, 2+__pyx_t_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 259, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_5, 2+__pyx_t_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 253, __pyx_L1_error)
     __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
     __Pyx_GOTREF(__pyx_t_1);
   } else
   #endif
   {
-    __pyx_t_3 = PyTuple_New(2+__pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 259, __pyx_L1_error)
+    __pyx_t_3 = PyTuple_New(2+__pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 253, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     if (__pyx_t_6) {
       __Pyx_GIVEREF(__pyx_t_6); PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_6); __pyx_t_6 = NULL;
@@ -4226,72 +4084,21 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_7WavPack_8decode(CYTHON_U
     __Pyx_INCREF(__pyx_v_out);
     __Pyx_GIVEREF(__pyx_v_out);
     PyTuple_SET_ITEM(__pyx_t_3, 1+__pyx_t_5, __pyx_v_out);
-    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_3, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 259, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_3, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 253, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   }
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_v_decompressed = __pyx_t_1;
+  __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
-
-  /* "wavpack_numcodecs/wavpack.pyx":260
- *         buf = ensure_contiguous_ndarray(buf, self.max_buffer_size)
- *         decompressed = decompress(buf, out)
- *         if self.debug:             # <<<<<<<<<<<<<<
- *             print(f"len decompressed: {len(decompressed)}")
- *         return decompressed
- */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_debug); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 260, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_7 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_7 < 0)) __PYX_ERR(0, 260, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (__pyx_t_7) {
-
-    /* "wavpack_numcodecs/wavpack.pyx":261
- *         decompressed = decompress(buf, out)
- *         if self.debug:
- *             print(f"len decompressed: {len(decompressed)}")             # <<<<<<<<<<<<<<
- *         return decompressed
- * 
- */
-    __pyx_t_8 = PyObject_Length(__pyx_v_decompressed); if (unlikely(__pyx_t_8 == ((Py_ssize_t)-1))) __PYX_ERR(0, 261, __pyx_L1_error)
-    __pyx_t_1 = __Pyx_PyUnicode_From_Py_ssize_t(__pyx_t_8, 0, ' ', 'd'); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 261, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_2 = __Pyx_PyUnicode_Concat(__pyx_kp_u_len_decompressed, __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 261, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_builtin_print, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 261, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-    /* "wavpack_numcodecs/wavpack.pyx":260
- *         buf = ensure_contiguous_ndarray(buf, self.max_buffer_size)
- *         decompressed = decompress(buf, out)
- *         if self.debug:             # <<<<<<<<<<<<<<
- *             print(f"len decompressed: {len(decompressed)}")
- *         return decompressed
- */
-  }
-
-  /* "wavpack_numcodecs/wavpack.pyx":262
- *         if self.debug:
- *             print(f"len decompressed: {len(decompressed)}")
- *         return decompressed             # <<<<<<<<<<<<<<
- * 
- * numcodecs.register_codec(WavPack)
- */
-  __Pyx_XDECREF(__pyx_r);
-  __Pyx_INCREF(__pyx_v_decompressed);
-  __pyx_r = __pyx_v_decompressed;
   goto __pyx_L0;
 
-  /* "wavpack_numcodecs/wavpack.pyx":257
- *         return compressed
+  /* "wavpack_numcodecs/wavpack.pyx":251
+ *         return compress(data, self.level, nsamples, nchans, self.bps, dtype_id)
  * 
  *     def decode(self, buf, out=None):             # <<<<<<<<<<<<<<
  *         buf = ensure_contiguous_ndarray(buf, self.max_buffer_size)
- *         decompressed = decompress(buf, out)
+ *         return decompress(buf, out)
  */
 
   /* function exit code */
@@ -4304,7 +4111,6 @@ static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_7WavPack_8decode(CYTHON_U
   __Pyx_AddTraceback("wavpack_numcodecs.wavpack.WavPack.decode", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
-  __Pyx_XDECREF(__pyx_v_decompressed);
   __Pyx_XDECREF(__pyx_v_buf);
   __Pyx_XGIVEREF(__pyx_r);
   __Pyx_RefNannyFinishContext();
@@ -4359,7 +4165,6 @@ static struct PyModuleDef __pyx_moduledef = {
 static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_Buffer, __pyx_k_Buffer, sizeof(__pyx_k_Buffer), 0, 0, 1, 1},
   {&__pyx_n_s_Codec, __pyx_k_Codec, sizeof(__pyx_k_Codec), 0, 0, 1, 1},
-  {&__pyx_n_s_DECOMPRESSION_BUFFER_MULTIPLIER, __pyx_k_DECOMPRESSION_BUFFER_MULTIPLIER, sizeof(__pyx_k_DECOMPRESSION_BUFFER_MULTIPLIER), 0, 0, 1, 1},
   {&__pyx_n_s_Path, __pyx_k_Path, sizeof(__pyx_k_Path), 0, 0, 1, 1},
   {&__pyx_n_s_RuntimeError, __pyx_k_RuntimeError, sizeof(__pyx_k_RuntimeError), 0, 0, 1, 1},
   {&__pyx_kp_u_Unsupported_dtype, __pyx_k_Unsupported_dtype, sizeof(__pyx_k_Unsupported_dtype), 0, 1, 0, 0},
@@ -4383,13 +4188,10 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_codec_id, __pyx_k_codec_id, sizeof(__pyx_k_codec_id), 0, 0, 1, 1},
   {&__pyx_n_s_compat_ext, __pyx_k_compat_ext, sizeof(__pyx_k_compat_ext), 0, 0, 1, 1},
   {&__pyx_n_s_compress, __pyx_k_compress, sizeof(__pyx_k_compress), 0, 0, 1, 1},
-  {&__pyx_n_s_compressed, __pyx_k_compressed, sizeof(__pyx_k_compressed), 0, 0, 1, 1},
   {&__pyx_n_s_compressed_size, __pyx_k_compressed_size, sizeof(__pyx_k_compressed_size), 0, 0, 1, 1},
   {&__pyx_n_s_data, __pyx_k_data, sizeof(__pyx_k_data), 0, 0, 1, 1},
-  {&__pyx_n_s_debug, __pyx_k_debug, sizeof(__pyx_k_debug), 0, 0, 1, 1},
   {&__pyx_n_s_decode, __pyx_k_decode, sizeof(__pyx_k_decode), 0, 0, 1, 1},
   {&__pyx_n_s_decompress, __pyx_k_decompress, sizeof(__pyx_k_decompress), 0, 0, 1, 1},
-  {&__pyx_n_s_decompressed, __pyx_k_decompressed, sizeof(__pyx_k_decompressed), 0, 0, 1, 1},
   {&__pyx_n_s_decompressed_samples, __pyx_k_decompressed_samples, sizeof(__pyx_k_decompressed_samples), 0, 0, 1, 1},
   {&__pyx_n_s_dest, __pyx_k_dest, sizeof(__pyx_k_dest), 0, 0, 1, 1},
   {&__pyx_n_s_dest_buffer, __pyx_k_dest_buffer, sizeof(__pyx_k_dest_buffer), 0, 0, 1, 1},
@@ -4404,7 +4206,6 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_ensure_contiguous_ndarray, __pyx_k_ensure_contiguous_ndarray, sizeof(__pyx_k_ensure_contiguous_ndarray), 0, 0, 1, 1},
   {&__pyx_n_s_flatten, __pyx_k_flatten, sizeof(__pyx_k_flatten), 0, 0, 1, 1},
   {&__pyx_n_u_float32, __pyx_k_float32, sizeof(__pyx_k_float32), 0, 1, 0, 1},
-  {&__pyx_n_s_flush, __pyx_k_flush, sizeof(__pyx_k_flush), 0, 0, 1, 1},
   {&__pyx_n_s_get_config, __pyx_k_get_config, sizeof(__pyx_k_get_config), 0, 0, 1, 1},
   {&__pyx_n_s_id, __pyx_k_id, sizeof(__pyx_k_id), 0, 0, 1, 1},
   {&__pyx_n_s_import, __pyx_k_import, sizeof(__pyx_k_import), 0, 0, 1, 1},
@@ -4412,8 +4213,6 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_u_int16, __pyx_k_int16, sizeof(__pyx_k_int16), 0, 1, 0, 1},
   {&__pyx_n_u_int32, __pyx_k_int32, sizeof(__pyx_k_int32), 0, 1, 0, 1},
   {&__pyx_n_u_int8, __pyx_k_int8, sizeof(__pyx_k_int8), 0, 1, 0, 1},
-  {&__pyx_kp_u_len_compressed, __pyx_k_len_compressed, sizeof(__pyx_k_len_compressed), 0, 1, 0, 0},
-  {&__pyx_kp_u_len_decompressed, __pyx_k_len_decompressed, sizeof(__pyx_k_len_decompressed), 0, 1, 0, 0},
   {&__pyx_n_s_level, __pyx_k_level, sizeof(__pyx_k_level), 0, 0, 1, 1},
   {&__pyx_n_s_main, __pyx_k_main, sizeof(__pyx_k_main), 0, 0, 1, 1},
   {&__pyx_n_s_max_block_size, __pyx_k_max_block_size, sizeof(__pyx_k_max_block_size), 0, 0, 1, 1},
@@ -4422,6 +4221,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_max_channels, __pyx_k_max_channels, sizeof(__pyx_k_max_channels), 0, 0, 1, 1},
   {&__pyx_n_s_metaclass, __pyx_k_metaclass, sizeof(__pyx_k_metaclass), 0, 0, 1, 1},
   {&__pyx_n_s_module, __pyx_k_module, sizeof(__pyx_k_module), 0, 0, 1, 1},
+  {&__pyx_n_s_n_decompressed_samples, __pyx_k_n_decompressed_samples, sizeof(__pyx_k_n_decompressed_samples), 0, 0, 1, 1},
   {&__pyx_n_s_name, __pyx_k_name, sizeof(__pyx_k_name), 0, 0, 1, 1},
   {&__pyx_n_s_nchannels, __pyx_k_nchannels, sizeof(__pyx_k_nchannels), 0, 0, 1, 1},
   {&__pyx_n_s_nchans, __pyx_k_nchans, sizeof(__pyx_k_nchans), 0, 0, 1, 1},
@@ -4439,7 +4239,6 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_pathlib, __pyx_k_pathlib, sizeof(__pyx_k_pathlib), 0, 0, 1, 1},
   {&__pyx_n_s_prepare, __pyx_k_prepare, sizeof(__pyx_k_prepare), 0, 0, 1, 1},
   {&__pyx_n_s_prepare_data, __pyx_k_prepare_data, sizeof(__pyx_k_prepare_data), 0, 0, 1, 1},
-  {&__pyx_n_s_print, __pyx_k_print, sizeof(__pyx_k_print), 0, 0, 1, 1},
   {&__pyx_n_s_pyx_vtable, __pyx_k_pyx_vtable, sizeof(__pyx_k_pyx_vtable), 0, 0, 1, 1},
   {&__pyx_n_s_qualname, __pyx_k_qualname, sizeof(__pyx_k_qualname), 0, 0, 1, 1},
   {&__pyx_n_s_register_codec, __pyx_k_register_codec, sizeof(__pyx_k_register_codec), 0, 0, 1, 1},
@@ -4459,8 +4258,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {0, 0, 0, 0, 0, 0, 0}
 };
 static CYTHON_SMALL_CODE int __Pyx_InitCachedBuiltins(void) {
-  __pyx_builtin_RuntimeError = __Pyx_GetBuiltinName(__pyx_n_s_RuntimeError); if (!__pyx_builtin_RuntimeError) __PYX_ERR(0, 107, __pyx_L1_error)
-  __pyx_builtin_print = __Pyx_GetBuiltinName(__pyx_n_s_print); if (!__pyx_builtin_print) __PYX_ERR(0, 248, __pyx_L1_error)
+  __pyx_builtin_RuntimeError = __Pyx_GetBuiltinName(__pyx_n_s_RuntimeError); if (!__pyx_builtin_RuntimeError) __PYX_ERR(0, 104, __pyx_L1_error)
   return 0;
   __pyx_L1_error:;
   return -1;
@@ -4470,107 +4268,107 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__Pyx_InitCachedConstants", 0);
 
-  /* "wavpack_numcodecs/wavpack.pyx":233
+  /* "wavpack_numcodecs/wavpack.pyx":232
  *         assert str(buf.dtype) in self.supported_dtypes, f"Unsupported dtype {buf.dtype}"
  *         if buf.ndim == 1:
  *             data = buf[:, None]             # <<<<<<<<<<<<<<
  *         elif buf.ndim == 2:
  *             _, nchannels = buf.shape
  */
-  __pyx_slice_ = PySlice_New(Py_None, Py_None, Py_None); if (unlikely(!__pyx_slice_)) __PYX_ERR(0, 233, __pyx_L1_error)
+  __pyx_slice_ = PySlice_New(Py_None, Py_None, Py_None); if (unlikely(!__pyx_slice_)) __PYX_ERR(0, 232, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_slice_);
   __Pyx_GIVEREF(__pyx_slice_);
-  __pyx_tuple__2 = PyTuple_Pack(2, __pyx_slice_, Py_None); if (unlikely(!__pyx_tuple__2)) __PYX_ERR(0, 233, __pyx_L1_error)
+  __pyx_tuple__2 = PyTuple_Pack(2, __pyx_slice_, Py_None); if (unlikely(!__pyx_tuple__2)) __PYX_ERR(0, 232, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__2);
   __Pyx_GIVEREF(__pyx_tuple__2);
 
-  /* "wavpack_numcodecs/wavpack.pyx":51
+  /* "wavpack_numcodecs/wavpack.pyx":48
  * 
  * 
  * def compress(source, int level, int num_samples, int num_chans, float bps, int dtype):             # <<<<<<<<<<<<<<
  *     """Compress data.
  * 
  */
-  __pyx_tuple__3 = PyTuple_Pack(14, __pyx_n_s_source, __pyx_n_s_level, __pyx_n_s_num_samples, __pyx_n_s_num_chans, __pyx_n_s_bps, __pyx_n_s_dtype, __pyx_n_s_source_ptr, __pyx_n_s_dest_ptr, __pyx_n_s_dest_start, __pyx_n_s_source_buffer, __pyx_n_s_source_size, __pyx_n_s_dest_size, __pyx_n_s_compressed_size, __pyx_n_s_dest); if (unlikely(!__pyx_tuple__3)) __PYX_ERR(0, 51, __pyx_L1_error)
+  __pyx_tuple__3 = PyTuple_Pack(14, __pyx_n_s_source, __pyx_n_s_level, __pyx_n_s_num_samples, __pyx_n_s_num_chans, __pyx_n_s_bps, __pyx_n_s_dtype, __pyx_n_s_source_ptr, __pyx_n_s_dest_ptr, __pyx_n_s_dest_start, __pyx_n_s_source_buffer, __pyx_n_s_source_size, __pyx_n_s_dest_size, __pyx_n_s_compressed_size, __pyx_n_s_dest); if (unlikely(!__pyx_tuple__3)) __PYX_ERR(0, 48, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__3);
   __Pyx_GIVEREF(__pyx_tuple__3);
-  __pyx_codeobj__4 = (PyObject*)__Pyx_PyCode_New(6, 0, 14, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__3, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_wavpack_numcodecs_wavpack_pyx, __pyx_n_s_compress, 51, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__4)) __PYX_ERR(0, 51, __pyx_L1_error)
+  __pyx_codeobj__4 = (PyObject*)__Pyx_PyCode_New(6, 0, 14, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__3, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_wavpack_numcodecs_wavpack_pyx, __pyx_n_s_compress, 48, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__4)) __PYX_ERR(0, 48, __pyx_L1_error)
 
-  /* "wavpack_numcodecs/wavpack.pyx":115
+  /* "wavpack_numcodecs/wavpack.pyx":112
  * 
  * 
  * def decompress(source, dest=None):             # <<<<<<<<<<<<<<
  *     """Decompress data.
  * 
  */
-  __pyx_tuple__5 = PyTuple_Pack(16, __pyx_n_s_source, __pyx_n_s_dest, __pyx_n_s_source_ptr, __pyx_n_s_source_start, __pyx_n_s_dest_ptr, __pyx_n_s_source_buffer, __pyx_n_s_dest_buffer, __pyx_n_s_source_size, __pyx_n_s_dest_size, __pyx_n_s_decompressed_samples, __pyx_n_s_num_chans, __pyx_n_s_num_chans_ptr, __pyx_n_s_bytes_per_sample, __pyx_n_s_bytes_per_sample_ptr, __pyx_n_s_max_bytes_per_sample, __pyx_n_s_arr); if (unlikely(!__pyx_tuple__5)) __PYX_ERR(0, 115, __pyx_L1_error)
+  __pyx_tuple__5 = PyTuple_Pack(17, __pyx_n_s_source, __pyx_n_s_dest, __pyx_n_s_source_ptr, __pyx_n_s_source_start, __pyx_n_s_dest_ptr, __pyx_n_s_source_buffer, __pyx_n_s_dest_buffer, __pyx_n_s_source_size, __pyx_n_s_dest_size, __pyx_n_s_decompressed_samples, __pyx_n_s_num_chans, __pyx_n_s_num_chans_ptr, __pyx_n_s_bytes_per_sample, __pyx_n_s_bytes_per_sample_ptr, __pyx_n_s_max_bytes_per_sample, __pyx_n_s_n_decompressed_samples, __pyx_n_s_arr); if (unlikely(!__pyx_tuple__5)) __PYX_ERR(0, 112, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__5);
   __Pyx_GIVEREF(__pyx_tuple__5);
-  __pyx_codeobj__6 = (PyObject*)__Pyx_PyCode_New(2, 0, 16, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__5, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_wavpack_numcodecs_wavpack_pyx, __pyx_n_s_decompress, 115, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__6)) __PYX_ERR(0, 115, __pyx_L1_error)
+  __pyx_codeobj__6 = (PyObject*)__Pyx_PyCode_New(2, 0, 17, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__5, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_wavpack_numcodecs_wavpack_pyx, __pyx_n_s_decompress, 112, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__6)) __PYX_ERR(0, 112, __pyx_L1_error)
 
   /* "wavpack_numcodecs/wavpack.pyx":187
  *     max_buffer_size = 0x7E000000
  * 
- *     def __init__(self, level=1, bps=None, debug=False):             # <<<<<<<<<<<<<<
+ *     def __init__(self, level=1, bps=None):             # <<<<<<<<<<<<<<
  *         """
  *         Numcodecs Codec implementation for WavPack (https://www.wavpack.com/) codec.
  */
-  __pyx_tuple__7 = PyTuple_Pack(4, __pyx_n_s_self, __pyx_n_s_level, __pyx_n_s_bps, __pyx_n_s_debug); if (unlikely(!__pyx_tuple__7)) __PYX_ERR(0, 187, __pyx_L1_error)
+  __pyx_tuple__7 = PyTuple_Pack(3, __pyx_n_s_self, __pyx_n_s_level, __pyx_n_s_bps); if (unlikely(!__pyx_tuple__7)) __PYX_ERR(0, 187, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__7);
   __Pyx_GIVEREF(__pyx_tuple__7);
-  __pyx_codeobj__8 = (PyObject*)__Pyx_PyCode_New(4, 0, 4, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__7, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_wavpack_numcodecs_wavpack_pyx, __pyx_n_s_init, 187, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__8)) __PYX_ERR(0, 187, __pyx_L1_error)
-  __pyx_tuple__9 = PyTuple_Pack(3, ((PyObject *)__pyx_int_1), ((PyObject *)Py_None), ((PyObject *)Py_False)); if (unlikely(!__pyx_tuple__9)) __PYX_ERR(0, 187, __pyx_L1_error)
+  __pyx_codeobj__8 = (PyObject*)__Pyx_PyCode_New(3, 0, 3, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__7, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_wavpack_numcodecs_wavpack_pyx, __pyx_n_s_init, 187, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__8)) __PYX_ERR(0, 187, __pyx_L1_error)
+  __pyx_tuple__9 = PyTuple_Pack(2, ((PyObject *)__pyx_int_1), ((PyObject *)Py_None)); if (unlikely(!__pyx_tuple__9)) __PYX_ERR(0, 187, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__9);
   __Pyx_GIVEREF(__pyx_tuple__9);
 
-  /* "wavpack_numcodecs/wavpack.pyx":221
- *         self.debug = debug
+  /* "wavpack_numcodecs/wavpack.pyx":220
+ *             self.bps = 0
  * 
  *     def get_config(self):             # <<<<<<<<<<<<<<
  *         # override to handle encoding dtypes
  *         return dict(
  */
-  __pyx_tuple__10 = PyTuple_Pack(1, __pyx_n_s_self); if (unlikely(!__pyx_tuple__10)) __PYX_ERR(0, 221, __pyx_L1_error)
+  __pyx_tuple__10 = PyTuple_Pack(1, __pyx_n_s_self); if (unlikely(!__pyx_tuple__10)) __PYX_ERR(0, 220, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__10);
   __Pyx_GIVEREF(__pyx_tuple__10);
-  __pyx_codeobj__11 = (PyObject*)__Pyx_PyCode_New(1, 0, 1, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__10, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_wavpack_numcodecs_wavpack_pyx, __pyx_n_s_get_config, 221, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__11)) __PYX_ERR(0, 221, __pyx_L1_error)
+  __pyx_codeobj__11 = (PyObject*)__Pyx_PyCode_New(1, 0, 1, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__10, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_wavpack_numcodecs_wavpack_pyx, __pyx_n_s_get_config, 220, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__11)) __PYX_ERR(0, 220, __pyx_L1_error)
 
-  /* "wavpack_numcodecs/wavpack.pyx":229
+  /* "wavpack_numcodecs/wavpack.pyx":228
  *         )
  * 
  *     def _prepare_data(self, buf):             # <<<<<<<<<<<<<<
  *         # checks
  *         assert str(buf.dtype) in self.supported_dtypes, f"Unsupported dtype {buf.dtype}"
  */
-  __pyx_tuple__13 = PyTuple_Pack(5, __pyx_n_s_self, __pyx_n_s_buf, __pyx_n_s_data, __pyx_n_s__12, __pyx_n_s_nchannels); if (unlikely(!__pyx_tuple__13)) __PYX_ERR(0, 229, __pyx_L1_error)
+  __pyx_tuple__13 = PyTuple_Pack(5, __pyx_n_s_self, __pyx_n_s_buf, __pyx_n_s_data, __pyx_n_s__12, __pyx_n_s_nchannels); if (unlikely(!__pyx_tuple__13)) __PYX_ERR(0, 228, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__13);
   __Pyx_GIVEREF(__pyx_tuple__13);
-  __pyx_codeobj__14 = (PyObject*)__Pyx_PyCode_New(2, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__13, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_wavpack_numcodecs_wavpack_pyx, __pyx_n_s_prepare_data, 229, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__14)) __PYX_ERR(0, 229, __pyx_L1_error)
+  __pyx_codeobj__14 = (PyObject*)__Pyx_PyCode_New(2, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__13, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_wavpack_numcodecs_wavpack_pyx, __pyx_n_s_prepare_data, 228, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__14)) __PYX_ERR(0, 228, __pyx_L1_error)
 
-  /* "wavpack_numcodecs/wavpack.pyx":245
+  /* "wavpack_numcodecs/wavpack.pyx":244
  *         return data
  * 
  *     def encode(self, buf):             # <<<<<<<<<<<<<<
  *         data = self._prepare_data(buf)
- *         if self.debug:
+ *         dtype = str(data.dtype)
  */
-  __pyx_tuple__15 = PyTuple_Pack(8, __pyx_n_s_self, __pyx_n_s_buf, __pyx_n_s_data, __pyx_n_s_dtype, __pyx_n_s_nsamples, __pyx_n_s_nchans, __pyx_n_s_dtype_id, __pyx_n_s_compressed); if (unlikely(!__pyx_tuple__15)) __PYX_ERR(0, 245, __pyx_L1_error)
+  __pyx_tuple__15 = PyTuple_Pack(7, __pyx_n_s_self, __pyx_n_s_buf, __pyx_n_s_data, __pyx_n_s_dtype, __pyx_n_s_nsamples, __pyx_n_s_nchans, __pyx_n_s_dtype_id); if (unlikely(!__pyx_tuple__15)) __PYX_ERR(0, 244, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__15);
   __Pyx_GIVEREF(__pyx_tuple__15);
-  __pyx_codeobj__16 = (PyObject*)__Pyx_PyCode_New(2, 0, 8, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__15, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_wavpack_numcodecs_wavpack_pyx, __pyx_n_s_encode, 245, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__16)) __PYX_ERR(0, 245, __pyx_L1_error)
+  __pyx_codeobj__16 = (PyObject*)__Pyx_PyCode_New(2, 0, 7, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__15, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_wavpack_numcodecs_wavpack_pyx, __pyx_n_s_encode, 244, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__16)) __PYX_ERR(0, 244, __pyx_L1_error)
 
-  /* "wavpack_numcodecs/wavpack.pyx":257
- *         return compressed
+  /* "wavpack_numcodecs/wavpack.pyx":251
+ *         return compress(data, self.level, nsamples, nchans, self.bps, dtype_id)
  * 
  *     def decode(self, buf, out=None):             # <<<<<<<<<<<<<<
  *         buf = ensure_contiguous_ndarray(buf, self.max_buffer_size)
- *         decompressed = decompress(buf, out)
+ *         return decompress(buf, out)
  */
-  __pyx_tuple__17 = PyTuple_Pack(4, __pyx_n_s_self, __pyx_n_s_buf, __pyx_n_s_out, __pyx_n_s_decompressed); if (unlikely(!__pyx_tuple__17)) __PYX_ERR(0, 257, __pyx_L1_error)
+  __pyx_tuple__17 = PyTuple_Pack(3, __pyx_n_s_self, __pyx_n_s_buf, __pyx_n_s_out); if (unlikely(!__pyx_tuple__17)) __PYX_ERR(0, 251, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__17);
   __Pyx_GIVEREF(__pyx_tuple__17);
-  __pyx_codeobj__18 = (PyObject*)__Pyx_PyCode_New(3, 0, 4, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__17, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_wavpack_numcodecs_wavpack_pyx, __pyx_n_s_decode, 257, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__18)) __PYX_ERR(0, 257, __pyx_L1_error)
-  __pyx_tuple__19 = PyTuple_Pack(1, ((PyObject *)Py_None)); if (unlikely(!__pyx_tuple__19)) __PYX_ERR(0, 257, __pyx_L1_error)
+  __pyx_codeobj__18 = (PyObject*)__Pyx_PyCode_New(3, 0, 3, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__17, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_wavpack_numcodecs_wavpack_pyx, __pyx_n_s_decode, 251, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__18)) __PYX_ERR(0, 251, __pyx_L1_error)
+  __pyx_tuple__19 = PyTuple_Pack(1, ((PyObject *)Py_None)); if (unlikely(!__pyx_tuple__19)) __PYX_ERR(0, 251, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__19);
   __Pyx_GIVEREF(__pyx_tuple__19);
   __Pyx_RefNannyFinishContext();
@@ -4587,7 +4385,6 @@ static CYTHON_SMALL_CODE int __Pyx_InitGlobals(void) {
   __pyx_int_2 = PyInt_FromLong(2); if (unlikely(!__pyx_int_2)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_int_3 = PyInt_FromLong(3); if (unlikely(!__pyx_int_3)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_int_4 = PyInt_FromLong(4); if (unlikely(!__pyx_int_4)) __PYX_ERR(0, 1, __pyx_L1_error)
-  __pyx_int_50 = PyInt_FromLong(50); if (unlikely(!__pyx_int_50)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_int_4096 = PyInt_FromLong(4096); if (unlikely(!__pyx_int_4096)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_int_131072 = PyInt_FromLong(131072L); if (unlikely(!__pyx_int_131072)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_int_2113929216 = PyInt_FromLong(2113929216L); if (unlikely(!__pyx_int_2113929216)) __PYX_ERR(0, 1, __pyx_L1_error)
@@ -4985,44 +4782,35 @@ if (!__Pyx_RefNanny) {
  * from pathlib import Path
  * import numpy as np             # <<<<<<<<<<<<<<
  * 
- * # controls the size of destination buffer for decompression
+ * 
  */
   __pyx_t_1 = __Pyx_Import(__pyx_n_s_numpy, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 20, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_np, __pyx_t_1) < 0) __PYX_ERR(0, 20, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "wavpack_numcodecs/wavpack.pyx":23
- * 
- * # controls the size of destination buffer for decompression
- * DECOMPRESSION_BUFFER_MULTIPLIER = 50             # <<<<<<<<<<<<<<
- * 
- * 
- */
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_DECOMPRESSION_BUFFER_MULTIPLIER, __pyx_int_50) < 0) __PYX_ERR(0, 23, __pyx_L1_error)
-
-  /* "wavpack_numcodecs/wavpack.pyx":38
+  /* "wavpack_numcodecs/wavpack.pyx":35
  * 
  * 
  * VERSION_STRING = WavpackGetLibraryVersionString()             # <<<<<<<<<<<<<<
  * VERSION_STRING = str(VERSION_STRING, 'ascii')
  * __version__ = VERSION_STRING
  */
-  __pyx_t_1 = __Pyx_PyBytes_FromString(WavpackGetLibraryVersionString()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 38, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyBytes_FromString(WavpackGetLibraryVersionString()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 35, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_VERSION_STRING, __pyx_t_1) < 0) __PYX_ERR(0, 38, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_VERSION_STRING, __pyx_t_1) < 0) __PYX_ERR(0, 35, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "wavpack_numcodecs/wavpack.pyx":39
+  /* "wavpack_numcodecs/wavpack.pyx":36
  * 
  * VERSION_STRING = WavpackGetLibraryVersionString()
  * VERSION_STRING = str(VERSION_STRING, 'ascii')             # <<<<<<<<<<<<<<
  * __version__ = VERSION_STRING
  * 
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_VERSION_STRING); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 39, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_VERSION_STRING); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 36, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 39, __pyx_L1_error)
+  __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 36, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_GIVEREF(__pyx_t_1);
   PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_t_1);
@@ -5030,62 +4818,62 @@ if (!__Pyx_RefNanny) {
   __Pyx_GIVEREF(__pyx_n_u_ascii);
   PyTuple_SET_ITEM(__pyx_t_2, 1, __pyx_n_u_ascii);
   __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)(&PyUnicode_Type)), __pyx_t_2, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 39, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)(&PyUnicode_Type)), __pyx_t_2, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 36, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_VERSION_STRING, __pyx_t_1) < 0) __PYX_ERR(0, 39, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_VERSION_STRING, __pyx_t_1) < 0) __PYX_ERR(0, 36, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "wavpack_numcodecs/wavpack.pyx":40
+  /* "wavpack_numcodecs/wavpack.pyx":37
  * VERSION_STRING = WavpackGetLibraryVersionString()
  * VERSION_STRING = str(VERSION_STRING, 'ascii')
  * __version__ = VERSION_STRING             # <<<<<<<<<<<<<<
  * 
  * 
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_VERSION_STRING); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 40, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_VERSION_STRING); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 37, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_version, __pyx_t_1) < 0) __PYX_ERR(0, 40, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_version, __pyx_t_1) < 0) __PYX_ERR(0, 37, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "wavpack_numcodecs/wavpack.pyx":44
+  /* "wavpack_numcodecs/wavpack.pyx":41
  * 
  * dtype_enum = {
  *     "int8": 0,             # <<<<<<<<<<<<<<
  *     "int16": 1,
  *     "int32": 2,
  */
-  __pyx_t_1 = __Pyx_PyDict_NewPresized(4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 44, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyDict_NewPresized(4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 41, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_int8, __pyx_int_0) < 0) __PYX_ERR(0, 44, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_int16, __pyx_int_1) < 0) __PYX_ERR(0, 44, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_int32, __pyx_int_2) < 0) __PYX_ERR(0, 44, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_float32, __pyx_int_3) < 0) __PYX_ERR(0, 44, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_dtype_enum, __pyx_t_1) < 0) __PYX_ERR(0, 43, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_int8, __pyx_int_0) < 0) __PYX_ERR(0, 41, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_int16, __pyx_int_1) < 0) __PYX_ERR(0, 41, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_int32, __pyx_int_2) < 0) __PYX_ERR(0, 41, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_float32, __pyx_int_3) < 0) __PYX_ERR(0, 41, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_dtype_enum, __pyx_t_1) < 0) __PYX_ERR(0, 40, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "wavpack_numcodecs/wavpack.pyx":51
+  /* "wavpack_numcodecs/wavpack.pyx":48
  * 
  * 
  * def compress(source, int level, int num_samples, int num_chans, float bps, int dtype):             # <<<<<<<<<<<<<<
  *     """Compress data.
  * 
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_17wavpack_numcodecs_7wavpack_1compress, NULL, __pyx_n_s_wavpack_numcodecs_wavpack); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 51, __pyx_L1_error)
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_17wavpack_numcodecs_7wavpack_1compress, NULL, __pyx_n_s_wavpack_numcodecs_wavpack); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 48, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_compress, __pyx_t_1) < 0) __PYX_ERR(0, 51, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_compress, __pyx_t_1) < 0) __PYX_ERR(0, 48, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "wavpack_numcodecs/wavpack.pyx":115
+  /* "wavpack_numcodecs/wavpack.pyx":112
  * 
  * 
  * def decompress(source, dest=None):             # <<<<<<<<<<<<<<
  *     """Decompress data.
  * 
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_17wavpack_numcodecs_7wavpack_3decompress, NULL, __pyx_n_s_wavpack_numcodecs_wavpack); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 115, __pyx_L1_error)
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_17wavpack_numcodecs_7wavpack_3decompress, NULL, __pyx_n_s_wavpack_numcodecs_wavpack); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 112, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_decompress, __pyx_t_1) < 0) __PYX_ERR(0, 115, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_decompress, __pyx_t_1) < 0) __PYX_ERR(0, 112, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "wavpack_numcodecs/wavpack.pyx":180
@@ -5163,14 +4951,14 @@ if (!__Pyx_RefNanny) {
  *     max_channels = 4096
  *     max_buffer_size = 0x7E000000             # <<<<<<<<<<<<<<
  * 
- *     def __init__(self, level=1, bps=None, debug=False):
+ *     def __init__(self, level=1, bps=None):
  */
   if (__Pyx_SetNameInClass(__pyx_t_3, __pyx_n_s_max_buffer_size, __pyx_int_2113929216) < 0) __PYX_ERR(0, 185, __pyx_L1_error)
 
   /* "wavpack_numcodecs/wavpack.pyx":187
  *     max_buffer_size = 0x7E000000
  * 
- *     def __init__(self, level=1, bps=None, debug=False):             # <<<<<<<<<<<<<<
+ *     def __init__(self, level=1, bps=None):             # <<<<<<<<<<<<<<
  *         """
  *         Numcodecs Codec implementation for WavPack (https://www.wavpack.com/) codec.
  */
@@ -5180,53 +4968,53 @@ if (!__Pyx_RefNanny) {
   if (__Pyx_SetNameInClass(__pyx_t_3, __pyx_n_s_init, __pyx_t_4) < 0) __PYX_ERR(0, 187, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-  /* "wavpack_numcodecs/wavpack.pyx":221
- *         self.debug = debug
+  /* "wavpack_numcodecs/wavpack.pyx":220
+ *             self.bps = 0
  * 
  *     def get_config(self):             # <<<<<<<<<<<<<<
  *         # override to handle encoding dtypes
  *         return dict(
  */
-  __pyx_t_4 = __Pyx_CyFunction_New(&__pyx_mdef_17wavpack_numcodecs_7wavpack_7WavPack_3get_config, 0, __pyx_n_s_WavPack_get_config, NULL, __pyx_n_s_wavpack_numcodecs_wavpack, __pyx_d, ((PyObject *)__pyx_codeobj__11)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 221, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_CyFunction_New(&__pyx_mdef_17wavpack_numcodecs_7wavpack_7WavPack_3get_config, 0, __pyx_n_s_WavPack_get_config, NULL, __pyx_n_s_wavpack_numcodecs_wavpack, __pyx_d, ((PyObject *)__pyx_codeobj__11)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 220, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  if (__Pyx_SetNameInClass(__pyx_t_3, __pyx_n_s_get_config, __pyx_t_4) < 0) __PYX_ERR(0, 221, __pyx_L1_error)
+  if (__Pyx_SetNameInClass(__pyx_t_3, __pyx_n_s_get_config, __pyx_t_4) < 0) __PYX_ERR(0, 220, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-  /* "wavpack_numcodecs/wavpack.pyx":229
+  /* "wavpack_numcodecs/wavpack.pyx":228
  *         )
  * 
  *     def _prepare_data(self, buf):             # <<<<<<<<<<<<<<
  *         # checks
  *         assert str(buf.dtype) in self.supported_dtypes, f"Unsupported dtype {buf.dtype}"
  */
-  __pyx_t_4 = __Pyx_CyFunction_New(&__pyx_mdef_17wavpack_numcodecs_7wavpack_7WavPack_5_prepare_data, 0, __pyx_n_s_WavPack__prepare_data, NULL, __pyx_n_s_wavpack_numcodecs_wavpack, __pyx_d, ((PyObject *)__pyx_codeobj__14)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 229, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_CyFunction_New(&__pyx_mdef_17wavpack_numcodecs_7wavpack_7WavPack_5_prepare_data, 0, __pyx_n_s_WavPack__prepare_data, NULL, __pyx_n_s_wavpack_numcodecs_wavpack, __pyx_d, ((PyObject *)__pyx_codeobj__14)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 228, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  if (__Pyx_SetNameInClass(__pyx_t_3, __pyx_n_s_prepare_data, __pyx_t_4) < 0) __PYX_ERR(0, 229, __pyx_L1_error)
+  if (__Pyx_SetNameInClass(__pyx_t_3, __pyx_n_s_prepare_data, __pyx_t_4) < 0) __PYX_ERR(0, 228, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-  /* "wavpack_numcodecs/wavpack.pyx":245
+  /* "wavpack_numcodecs/wavpack.pyx":244
  *         return data
  * 
  *     def encode(self, buf):             # <<<<<<<<<<<<<<
  *         data = self._prepare_data(buf)
- *         if self.debug:
+ *         dtype = str(data.dtype)
  */
-  __pyx_t_4 = __Pyx_CyFunction_New(&__pyx_mdef_17wavpack_numcodecs_7wavpack_7WavPack_7encode, 0, __pyx_n_s_WavPack_encode, NULL, __pyx_n_s_wavpack_numcodecs_wavpack, __pyx_d, ((PyObject *)__pyx_codeobj__16)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 245, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_CyFunction_New(&__pyx_mdef_17wavpack_numcodecs_7wavpack_7WavPack_7encode, 0, __pyx_n_s_WavPack_encode, NULL, __pyx_n_s_wavpack_numcodecs_wavpack, __pyx_d, ((PyObject *)__pyx_codeobj__16)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 244, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  if (__Pyx_SetNameInClass(__pyx_t_3, __pyx_n_s_encode, __pyx_t_4) < 0) __PYX_ERR(0, 245, __pyx_L1_error)
+  if (__Pyx_SetNameInClass(__pyx_t_3, __pyx_n_s_encode, __pyx_t_4) < 0) __PYX_ERR(0, 244, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-  /* "wavpack_numcodecs/wavpack.pyx":257
- *         return compressed
+  /* "wavpack_numcodecs/wavpack.pyx":251
+ *         return compress(data, self.level, nsamples, nchans, self.bps, dtype_id)
  * 
  *     def decode(self, buf, out=None):             # <<<<<<<<<<<<<<
  *         buf = ensure_contiguous_ndarray(buf, self.max_buffer_size)
- *         decompressed = decompress(buf, out)
+ *         return decompress(buf, out)
  */
-  __pyx_t_4 = __Pyx_CyFunction_New(&__pyx_mdef_17wavpack_numcodecs_7wavpack_7WavPack_9decode, 0, __pyx_n_s_WavPack_decode, NULL, __pyx_n_s_wavpack_numcodecs_wavpack, __pyx_d, ((PyObject *)__pyx_codeobj__18)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 257, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_CyFunction_New(&__pyx_mdef_17wavpack_numcodecs_7wavpack_7WavPack_9decode, 0, __pyx_n_s_WavPack_decode, NULL, __pyx_n_s_wavpack_numcodecs_wavpack, __pyx_d, ((PyObject *)__pyx_codeobj__18)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 251, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_CyFunction_SetDefaultsTuple(__pyx_t_4, __pyx_tuple__19);
-  if (__Pyx_SetNameInClass(__pyx_t_3, __pyx_n_s_decode, __pyx_t_4) < 0) __PYX_ERR(0, 257, __pyx_L1_error)
+  if (__Pyx_SetNameInClass(__pyx_t_3, __pyx_n_s_decode, __pyx_t_4) < 0) __PYX_ERR(0, 251, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
   /* "wavpack_numcodecs/wavpack.pyx":180
@@ -5244,19 +5032,19 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "wavpack_numcodecs/wavpack.pyx":264
- *         return decompressed
+  /* "wavpack_numcodecs/wavpack.pyx":256
+ * 
  * 
  * numcodecs.register_codec(WavPack)             # <<<<<<<<<<<<<<
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_numcodecs); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 264, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_numcodecs); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 256, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_register_codec); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 264, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_register_codec); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 256, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_WavPack); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 264, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_WavPack); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 256, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 264, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 256, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
@@ -6324,103 +6112,6 @@ done:
     return result;
 }
 
-/* SliceObject */
-static CYTHON_INLINE PyObject* __Pyx_PyObject_GetSlice(PyObject* obj,
-        Py_ssize_t cstart, Py_ssize_t cstop,
-        PyObject** _py_start, PyObject** _py_stop, PyObject** _py_slice,
-        int has_cstart, int has_cstop, CYTHON_UNUSED int wraparound) {
-#if CYTHON_USE_TYPE_SLOTS
-    PyMappingMethods* mp;
-#if PY_MAJOR_VERSION < 3
-    PySequenceMethods* ms = Py_TYPE(obj)->tp_as_sequence;
-    if (likely(ms && ms->sq_slice)) {
-        if (!has_cstart) {
-            if (_py_start && (*_py_start != Py_None)) {
-                cstart = __Pyx_PyIndex_AsSsize_t(*_py_start);
-                if ((cstart == (Py_ssize_t)-1) && PyErr_Occurred()) goto bad;
-            } else
-                cstart = 0;
-        }
-        if (!has_cstop) {
-            if (_py_stop && (*_py_stop != Py_None)) {
-                cstop = __Pyx_PyIndex_AsSsize_t(*_py_stop);
-                if ((cstop == (Py_ssize_t)-1) && PyErr_Occurred()) goto bad;
-            } else
-                cstop = PY_SSIZE_T_MAX;
-        }
-        if (wraparound && unlikely((cstart < 0) | (cstop < 0)) && likely(ms->sq_length)) {
-            Py_ssize_t l = ms->sq_length(obj);
-            if (likely(l >= 0)) {
-                if (cstop < 0) {
-                    cstop += l;
-                    if (cstop < 0) cstop = 0;
-                }
-                if (cstart < 0) {
-                    cstart += l;
-                    if (cstart < 0) cstart = 0;
-                }
-            } else {
-                if (!PyErr_ExceptionMatches(PyExc_OverflowError))
-                    goto bad;
-                PyErr_Clear();
-            }
-        }
-        return ms->sq_slice(obj, cstart, cstop);
-    }
-#endif
-    mp = Py_TYPE(obj)->tp_as_mapping;
-    if (likely(mp && mp->mp_subscript))
-#endif
-    {
-        PyObject* result;
-        PyObject *py_slice, *py_start, *py_stop;
-        if (_py_slice) {
-            py_slice = *_py_slice;
-        } else {
-            PyObject* owned_start = NULL;
-            PyObject* owned_stop = NULL;
-            if (_py_start) {
-                py_start = *_py_start;
-            } else {
-                if (has_cstart) {
-                    owned_start = py_start = PyInt_FromSsize_t(cstart);
-                    if (unlikely(!py_start)) goto bad;
-                } else
-                    py_start = Py_None;
-            }
-            if (_py_stop) {
-                py_stop = *_py_stop;
-            } else {
-                if (has_cstop) {
-                    owned_stop = py_stop = PyInt_FromSsize_t(cstop);
-                    if (unlikely(!py_stop)) {
-                        Py_XDECREF(owned_start);
-                        goto bad;
-                    }
-                } else
-                    py_stop = Py_None;
-            }
-            py_slice = PySlice_New(py_start, py_stop, Py_None);
-            Py_XDECREF(owned_start);
-            Py_XDECREF(owned_stop);
-            if (unlikely(!py_slice)) goto bad;
-        }
-#if CYTHON_USE_TYPE_SLOTS
-        result = mp->mp_subscript(obj, py_slice);
-#else
-        result = PyObject_GetItem(obj, py_slice);
-#endif
-        if (!_py_slice) {
-            Py_DECREF(py_slice);
-        }
-        return result;
-    }
-    PyErr_Format(PyExc_TypeError,
-        "'%.200s' object is unsliceable", Py_TYPE(obj)->tp_name);
-bad:
-    return NULL;
-}
-
 /* PyObjectSetAttrStr */
 #if CYTHON_USE_TYPE_SLOTS
 static CYTHON_INLINE int __Pyx_PyObject_SetAttrStr(PyObject* obj, PyObject* attr_name, PyObject* value) {
@@ -6699,81 +6390,6 @@ static CYTHON_INLINE PyObject* __Pyx_PyObject_CallNoArg(PyObject *func) {
     return __Pyx_PyObject_Call(func, __pyx_empty_tuple, NULL);
 }
 #endif
-
-/* CIntToPyUnicode */
-static CYTHON_INLINE PyObject* __Pyx_PyUnicode_From_Py_ssize_t(Py_ssize_t value, Py_ssize_t width, char padding_char, char format_char) {
-    char digits[sizeof(Py_ssize_t)*3+2];
-    char *dpos, *end = digits + sizeof(Py_ssize_t)*3+2;
-    const char *hex_digits = DIGITS_HEX;
-    Py_ssize_t length, ulength;
-    int prepend_sign, last_one_off;
-    Py_ssize_t remaining;
-#ifdef __Pyx_HAS_GCC_DIAGNOSTIC
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wconversion"
-#endif
-    const Py_ssize_t neg_one = (Py_ssize_t) -1, const_zero = (Py_ssize_t) 0;
-#ifdef __Pyx_HAS_GCC_DIAGNOSTIC
-#pragma GCC diagnostic pop
-#endif
-    const int is_unsigned = neg_one > const_zero;
-    if (format_char == 'X') {
-        hex_digits += 16;
-        format_char = 'x';
-    }
-    remaining = value;
-    last_one_off = 0;
-    dpos = end;
-    do {
-        int digit_pos;
-        switch (format_char) {
-        case 'o':
-            digit_pos = abs((int)(remaining % (8*8)));
-            remaining = (Py_ssize_t) (remaining / (8*8));
-            dpos -= 2;
-            memcpy(dpos, DIGIT_PAIRS_8 + digit_pos * 2, 2);
-            last_one_off = (digit_pos < 8);
-            break;
-        case 'd':
-            digit_pos = abs((int)(remaining % (10*10)));
-            remaining = (Py_ssize_t) (remaining / (10*10));
-            dpos -= 2;
-            memcpy(dpos, DIGIT_PAIRS_10 + digit_pos * 2, 2);
-            last_one_off = (digit_pos < 10);
-            break;
-        case 'x':
-            *(--dpos) = hex_digits[abs((int)(remaining % 16))];
-            remaining = (Py_ssize_t) (remaining / 16);
-            break;
-        default:
-            assert(0);
-            break;
-        }
-    } while (unlikely(remaining != 0));
-    if (last_one_off) {
-        assert(*dpos == '0');
-        dpos++;
-    }
-    length = end - dpos;
-    ulength = length;
-    prepend_sign = 0;
-    if (!is_unsigned && value <= neg_one) {
-        if (padding_char == ' ' || width <= length + 1) {
-            *(--dpos) = '-';
-            ++length;
-        } else {
-            prepend_sign = 1;
-        }
-        ++ulength;
-    }
-    if (width > ulength) {
-        ulength = width;
-    }
-    if (ulength == 1) {
-        return PyUnicode_FromOrdinal(*dpos);
-    }
-    return __Pyx_PyUnicode_BuildFromAscii(ulength, dpos, (int) length, prepend_sign, padding_char);
-}
 
 /* TypeImport */
 #ifndef __PYX_HAVE_RT_ImportType
@@ -8185,44 +7801,6 @@ static CYTHON_INLINE PyObject* __Pyx_PyInt_From_int(int value) {
         int one = 1; int little = (int)*(unsigned char *)&one;
         unsigned char *bytes = (unsigned char *)&value;
         return _PyLong_FromByteArray(bytes, sizeof(int),
-                                     little, !is_unsigned);
-    }
-}
-
-/* CIntToPy */
-static CYTHON_INLINE PyObject* __Pyx_PyInt_From_unsigned_long(unsigned long value) {
-#ifdef __Pyx_HAS_GCC_DIAGNOSTIC
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wconversion"
-#endif
-    const unsigned long neg_one = (unsigned long) -1, const_zero = (unsigned long) 0;
-#ifdef __Pyx_HAS_GCC_DIAGNOSTIC
-#pragma GCC diagnostic pop
-#endif
-    const int is_unsigned = neg_one > const_zero;
-    if (is_unsigned) {
-        if (sizeof(unsigned long) < sizeof(long)) {
-            return PyInt_FromLong((long) value);
-        } else if (sizeof(unsigned long) <= sizeof(unsigned long)) {
-            return PyLong_FromUnsignedLong((unsigned long) value);
-#ifdef HAVE_LONG_LONG
-        } else if (sizeof(unsigned long) <= sizeof(unsigned PY_LONG_LONG)) {
-            return PyLong_FromUnsignedLongLong((unsigned PY_LONG_LONG) value);
-#endif
-        }
-    } else {
-        if (sizeof(unsigned long) <= sizeof(long)) {
-            return PyInt_FromLong((long) value);
-#ifdef HAVE_LONG_LONG
-        } else if (sizeof(unsigned long) <= sizeof(PY_LONG_LONG)) {
-            return PyLong_FromLongLong((PY_LONG_LONG) value);
-#endif
-        }
-    }
-    {
-        int one = 1; int little = (int)*(unsigned char *)&one;
-        unsigned char *bytes = (unsigned char *)&value;
-        return _PyLong_FromByteArray(bytes, sizeof(unsigned long),
                                      little, !is_unsigned);
     }
 }
