@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from setuptools import setup, find_packages, Extension
 from pathlib import Path
+from subprocess import check_output
 import platform
 import shutil
 
@@ -12,8 +13,6 @@ except ImportError:
     have_cython = False
 else:
     have_cython = True
-
-print("HAVE_CYTHON", have_cython)
 
 
 def open_requirements(fname):
@@ -31,7 +30,8 @@ def get_build_extensions():
     if platform.system() == "Linux":
         libraries = ["wavpack"]
         if shutil.which("wavpack") is not None:
-            print("wavpack is installed!")
+            out = check_output(["wavpack", "--version"])
+            print(f"wavpack is installed!\n{out.decode()}")
             extra_link_args = ["-L/usr/local/lib/", "-L/usr/bin/"]
             runtime_library_dirs = ["/usr/local/lib/", "/usr/bin/"]
         else:
@@ -59,6 +59,7 @@ def get_build_extensions():
             shutil.copy(libfile, "wavpack_numcodecs")
 
     if have_cython:
+        print("Building with Cython")
         sources_compat_ext = ['wavpack_numcodecs/compat_ext.pyx']
         sources_wavpack_ext = ["wavpack_numcodecs/wavpack.pyx"]
     else:

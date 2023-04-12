@@ -29,7 +29,7 @@ cdef extern from "src/encoder.c":
 
 cdef extern from "src/decoder.c":
     size_t WavpackDecodeFile (void *source, size_t source_bytes, int *num_chans, int *bytes_per_sample, void *destin, 
-                              size_t destin_bytes)
+                              size_t destin_bytes) nogil
 
 
 VERSION_STRING = WavpackGetLibraryVersionString()
@@ -159,8 +159,9 @@ def decompress(source, dest=None):
             dest_ptr = dest_buffer.ptr
             dest_size = dest_buffer.nbytes
 
-        decompressed_samples = WavpackDecodeFile(source_ptr, source_size, num_chans_ptr,
-                                                 bytes_per_sample_ptr, dest_ptr, dest_size)
+        with nogil:
+            decompressed_samples = WavpackDecodeFile(source_ptr, source_size, num_chans_ptr,
+                                                     bytes_per_sample_ptr, dest_ptr, dest_size)
 
     finally:
 
