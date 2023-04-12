@@ -103,7 +103,7 @@ static WavpackStreamReader64 raw_reader = {
 // number of channels is written to the specified pointer, but it is assumed that the caller already knows
 // this. The number of composite samples (i.e., frames) is returned.
 
-#define BUFFER_SAMPLES 256
+#define BUFFER_SAMPLES 3750
 
 size_t WavpackDecodeFile (void *source, size_t source_bytes, int *num_chans, int *bytes_per_sample,
                           void *destin_char, size_t destin_bytes)
