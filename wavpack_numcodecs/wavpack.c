@@ -4,7 +4,7 @@
 {
     "distutils": {
         "depends": [
-            "wavpack_numcodecs/include/wavpack/wavpack_local.h",
+            "wavpack_numcodecs/include/wavpack/wavpack.h",
             "wavpack_numcodecs/src/decoder.c",
             "wavpack_numcodecs/src/encoder.c"
         ],
@@ -775,7 +775,7 @@ static CYTHON_INLINE float __PYX_NAN() {
 /* Early includes */
 #include <string.h>
 #include <stdio.h>
-#include "wavpack/wavpack_local.h"
+#include "wavpack/wavpack.h"
 #include "src/encoder.c"
 #include "src/decoder.c"
 #ifdef _OPENMP

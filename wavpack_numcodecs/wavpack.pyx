@@ -20,7 +20,7 @@ from pathlib import Path
 import numpy as np
 
 
-cdef extern from "wavpack/wavpack_local.h":
+cdef extern from "wavpack/wavpack.h":
     const char* WavpackGetLibraryVersionString()
 
 cdef extern from "src/encoder.c":
