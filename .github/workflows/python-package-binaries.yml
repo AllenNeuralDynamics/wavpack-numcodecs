@@ -28,9 +28,9 @@ jobs:
           pip install .
           pip install zarr
           pip install pytest
-      - name: Wavpack libraries version
-        run: |
-          python -c "from wavpack_numcodecs import wavpack_version; print(wavpack_version)"
+      # - name: Wavpack libraries version
+      #   run: |
+      #     python -c "from wavpack_numcodecs import wavpack_version; print(wavpack_version)"
       - name: Test with pytest 
         run: |
           pytest -v 
