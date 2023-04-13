@@ -34,7 +34,7 @@ cdef extern from "src/decoder.c":
 
 VERSION_STRING = WavpackGetLibraryVersionString()
 VERSION_STRING = str(VERSION_STRING, 'ascii')
-__version__ = VERSION_STRING
+wavpack_version = VERSION_STRING
 
 
 dtype_enum = {

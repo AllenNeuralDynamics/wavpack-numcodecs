@@ -18,7 +18,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: s-weigand/setup-conda@v1
         with:
-          python-version: 3.9
+          python-version: "3.9"
       - name: Install dependencies
         run: |
           pip install Cython
@@ -27,7 +27,7 @@ jobs:
           pip install pytest
       - name: Wavpack libraries version
         run:
-          python -c "from wavpack_numcodecs.wavpack import __version__ as version; print(version)"
+          python -c "from wavpack_numcodecs import wavpack_version; print(wavpack_version)"
       - name: Test with pytest 
         run: |
           pytest -v 

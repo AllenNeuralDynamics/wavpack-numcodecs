@@ -1623,7 +1623,6 @@ static const char __pyx_k_flatten[] = "flatten";
 static const char __pyx_k_float32[] = "float32";
 static const char __pyx_k_pathlib[] = "pathlib";
 static const char __pyx_k_prepare[] = "__prepare__";
-static const char __pyx_k_version[] = "__version__";
 static const char __pyx_k_wavpack[] = "wavpack";
 static const char __pyx_k_codec_id[] = "codec_id";
 static const char __pyx_k_compress[] = "compress";
@@ -1661,6 +1660,7 @@ static const char __pyx_k_max_block_size[] = "max_block_size";
 static const char __pyx_k_register_codec[] = "register_codec";
 static const char __pyx_k_compressed_size[] = "compressed_size";
 static const char __pyx_k_max_buffer_size[] = "max_buffer_size";
+static const char __pyx_k_wavpack_version[] = "wavpack_version";
 static const char __pyx_k_bytes_per_sample[] = "bytes_per_sample";
 static const char __pyx_k_numcodecs_compat[] = "numcodecs.compat";
 static const char __pyx_k_supported_dtypes[] = "supported_dtypes";
@@ -1765,10 +1765,10 @@ static PyObject *__pyx_n_s_source_size;
 static PyObject *__pyx_n_s_source_start;
 static PyObject *__pyx_n_s_supported_dtypes;
 static PyObject *__pyx_n_s_test;
-static PyObject *__pyx_n_s_version;
 static PyObject *__pyx_n_u_wavpack;
 static PyObject *__pyx_n_s_wavpack_numcodecs_wavpack;
 static PyObject *__pyx_kp_s_wavpack_numcodecs_wavpack_pyx;
+static PyObject *__pyx_n_s_wavpack_version;
 static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_compress(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_source, int __pyx_v_level, int __pyx_v_num_samples, int __pyx_v_num_chans, float __pyx_v_bps, int __pyx_v_dtype); /* proto */
 static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_2decompress(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_source, PyObject *__pyx_v_dest); /* proto */
 static PyObject *__pyx_pf_17wavpack_numcodecs_7wavpack_7WavPack___init__(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self, PyObject *__pyx_v_level, PyObject *__pyx_v_bps); /* proto */
@@ -4298,10 +4298,10 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_source_start, __pyx_k_source_start, sizeof(__pyx_k_source_start), 0, 0, 1, 1},
   {&__pyx_n_s_supported_dtypes, __pyx_k_supported_dtypes, sizeof(__pyx_k_supported_dtypes), 0, 0, 1, 1},
   {&__pyx_n_s_test, __pyx_k_test, sizeof(__pyx_k_test), 0, 0, 1, 1},
-  {&__pyx_n_s_version, __pyx_k_version, sizeof(__pyx_k_version), 0, 0, 1, 1},
   {&__pyx_n_u_wavpack, __pyx_k_wavpack, sizeof(__pyx_k_wavpack), 0, 1, 0, 1},
   {&__pyx_n_s_wavpack_numcodecs_wavpack, __pyx_k_wavpack_numcodecs_wavpack, sizeof(__pyx_k_wavpack_numcodecs_wavpack), 0, 0, 1, 1},
   {&__pyx_kp_s_wavpack_numcodecs_wavpack_pyx, __pyx_k_wavpack_numcodecs_wavpack_pyx, sizeof(__pyx_k_wavpack_numcodecs_wavpack_pyx), 0, 0, 1, 0},
+  {&__pyx_n_s_wavpack_version, __pyx_k_wavpack_version, sizeof(__pyx_k_wavpack_version), 0, 0, 1, 1},
   {0, 0, 0, 0, 0, 0, 0}
 };
 static CYTHON_SMALL_CODE int __Pyx_InitCachedBuiltins(void) {
@@ -4841,7 +4841,7 @@ if (!__Pyx_RefNanny) {
  * 
  * VERSION_STRING = WavpackGetLibraryVersionString()             # <<<<<<<<<<<<<<
  * VERSION_STRING = str(VERSION_STRING, 'ascii')
- * __version__ = VERSION_STRING
+ * wavpack_version = VERSION_STRING
  */
   __pyx_t_1 = __Pyx_PyBytes_FromString(WavpackGetLibraryVersionString()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 35, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
@@ -4852,7 +4852,7 @@ if (!__Pyx_RefNanny) {
  * 
  * VERSION_STRING = WavpackGetLibraryVersionString()
  * VERSION_STRING = str(VERSION_STRING, 'ascii')             # <<<<<<<<<<<<<<
- * __version__ = VERSION_STRING
+ * wavpack_version = VERSION_STRING
  * 
  */
   __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_VERSION_STRING); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 36, __pyx_L1_error)
@@ -4874,13 +4874,13 @@ if (!__Pyx_RefNanny) {
   /* "wavpack_numcodecs/wavpack.pyx":37
  * VERSION_STRING = WavpackGetLibraryVersionString()
  * VERSION_STRING = str(VERSION_STRING, 'ascii')
- * __version__ = VERSION_STRING             # <<<<<<<<<<<<<<
+ * wavpack_version = VERSION_STRING             # <<<<<<<<<<<<<<
  * 
  * 
  */
   __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_VERSION_STRING); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 37, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_version, __pyx_t_1) < 0) __PYX_ERR(0, 37, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_wavpack_version, __pyx_t_1) < 0) __PYX_ERR(0, 37, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "wavpack_numcodecs/wavpack.pyx":41
