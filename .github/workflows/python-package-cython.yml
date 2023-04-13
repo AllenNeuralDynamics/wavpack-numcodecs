@@ -46,6 +46,9 @@ jobs:
           ./configure
           sudo make install
           cd ..
+      - name: Python version
+        run: |
+          which python
       - name: Install dependencies
         run: |
           pip install Cython
@@ -53,7 +56,7 @@ jobs:
           pip install zarr
           pip install pytest
       - name: Wavpack libraries version
-        run:
+        run: |
           python -c "from wavpack_numcodecs import wavpack_version; print(wavpack_version)"
       - name: Test with pytest 
         run: |
