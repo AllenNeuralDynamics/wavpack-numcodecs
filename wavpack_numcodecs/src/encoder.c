@@ -47,7 +47,7 @@ static int write_block (void *id, void *data, int32_t length)
 #define BUFFER_SAMPLES 256
 
 size_t WavpackEncodeFile (void *source_char, size_t num_samples, size_t num_chans, int level, float bps, void *destin, 
-                          size_t destin_bytes, int dtype)
+                          size_t destin_bytes, int dtype, int num_threads)
 {   
     // cast void pointer
     dtype_enum dtype_chosen = (dtype_enum) dtype;
@@ -112,6 +112,7 @@ size_t WavpackEncodeFile (void *source_char, size_t num_samples, size_t num_chan
     config.bits_per_sample = (int) bytes_per_sample * 8;
     config.sample_rate = 32000;     // doesn't need to be correct, although it might be nice
     config.float_norm_exp = fp ? 127 : 0;
+    config.worker_threads = num_threads;
 
     config.block_samples = num_samples;
 
@@ -133,7 +134,7 @@ size_t WavpackEncodeFile (void *source_char, size_t num_samples, size_t num_chan
     }
 
     if (bps > 0.0) {
-        config.flags = CONFIG_HYBRID_FLAG;
+        config.flags |= CONFIG_HYBRID_FLAG;
         config.bitrate = bps;
     }
 

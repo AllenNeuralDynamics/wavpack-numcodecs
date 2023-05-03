@@ -12,12 +12,15 @@ from cpython.bytes cimport PyBytes_FromStringAndSize, PyBytes_AS_STRING
 from .compat_ext cimport Buffer
 from .compat_ext import Buffer
 
+import warnings
+import numpy as np
+from pathlib import Path
+from packaging.version import parse
+
 import numcodecs
 from numcodecs.compat import ensure_contiguous_ndarray
 from numcodecs.abc import Codec
 
-from pathlib import Path
-import numpy as np
 
 
 cdef extern from "wavpack/wavpack.h":
@@ -25,17 +28,18 @@ cdef extern from "wavpack/wavpack.h":
 
 cdef extern from "src/encoder.c":
     size_t WavpackEncodeFile (void *source, size_t num_samples, size_t num_chans, int level, float bps, void *destin, 
-                              size_t destin_bytes, int dtype)
+                              size_t destin_bytes, int dtype, int num_threads) nogil
 
 cdef extern from "src/decoder.c":
     size_t WavpackDecodeFile (void *source, size_t source_bytes, int *num_chans, int *bytes_per_sample, void *destin, 
-                              size_t destin_bytes) nogil
+                              size_t destin_bytes, int num_threads) nogil
 
 
 VERSION_STRING = WavpackGetLibraryVersionString()
 VERSION_STRING = str(VERSION_STRING, 'ascii')
 wavpack_version = VERSION_STRING
 
+SUPPORTS_PARALLEL = parse(wavpack_version) >= parse("5.6.4")
 
 dtype_enum = {
     "int8": 0,
@@ -45,7 +49,8 @@ dtype_enum = {
 }
 
 
-def compress(source, int level, int num_samples, int num_chans, float bps, int dtype):
+def compress(source, int level, int num_samples, int num_chans, float bps, int dtype,
+             int num_encode_threads):
     """Compress data.
 
     Parameters
@@ -64,6 +69,8 @@ def compress(source, int level, int num_samples, int num_chans, float bps, int d
         Bytes per sample
     dtype : int
         Integer to indicat which dtype the data is ("int8": 0, "int16": 1, "int32": 2, "float32": 3)
+    num_encode_threads : int
+        Number of threads to use for encoding
 
     Returns
     -------
@@ -78,6 +85,12 @@ def compress(source, int level, int num_samples, int num_chans, float bps, int d
         Buffer source_buffer
         unsigned long source_size, dest_size, compressed_size
         bytes dest
+        int level_c = level
+        int num_samples_c = num_samples
+        int num_chans_c = num_chans
+        float bps_c = bps
+        int dtype_c = dtype
+        int num_threads_c = num_encode_threads
 
 
     # setup source buffer
@@ -92,7 +105,8 @@ def compress(source, int level, int num_samples, int num_chans, float bps, int d
         dest_ptr = PyBytes_AS_STRING(dest)
         dest_size = source_size
 
-        compressed_size = WavpackEncodeFile(source_ptr, num_samples, num_chans, level, bps, dest_ptr, dest_size, dtype)
+        compressed_size = WavpackEncodeFile(source_ptr, num_samples_c, num_chans_c, level_c, bps_c,
+                                            dest_ptr, dest_size, dtype_c, num_threads_c)
 
     finally:
 
@@ -109,7 +123,7 @@ def compress(source, int level, int num_samples, int num_chans, float bps, int d
     return dest
 
 
-def decompress(source, dest=None):
+def decompress(source, dest=None, num_decode_threads=1):
     """Decompress data.
 
     Parameters
@@ -118,6 +132,8 @@ def decompress(source, dest=None):
         Compressed data. Can be any object supporting the buffer protocol.
     dest : array-like, optional
         Object to decompress into.
+    num_decode_threads : int, optional
+        Number of threads to use for decoding, by default 8
 
     Returns
     -------
@@ -137,6 +153,7 @@ def decompress(source, dest=None):
         int bytes_per_sample
         int *bytes_per_sample_ptr = &bytes_per_sample
         int max_bytes_per_sample = 4
+        int num_threads_c = num_decode_threads
 
     # setup source buffer
     source_buffer = Buffer(source, PyBUF_ANY_CONTIGUOUS)
@@ -145,7 +162,8 @@ def decompress(source, dest=None):
 
     # determine number of samples, num_channels, and bytes_per_sample
     n_decompressed_samples = WavpackDecodeFile(source_ptr, source_size, num_chans_ptr,
-                                               bytes_per_sample_ptr, dest_ptr, 0)
+                                               bytes_per_sample_ptr, dest_ptr, 0,
+                                               num_threads_c)
     try:
         # setup destination
         if dest is None:
@@ -161,7 +179,8 @@ def decompress(source, dest=None):
 
         with nogil:
             decompressed_samples = WavpackDecodeFile(source_ptr, source_size, num_chans_ptr,
-                                                     bytes_per_sample_ptr, dest_ptr, dest_size)
+                                                     bytes_per_sample_ptr, dest_ptr, dest_size,
+                                                     num_threads_c)
 
     finally:
 
@@ -185,7 +204,9 @@ class WavPack(Codec):
     max_channels = 4096
     max_buffer_size = 0x7E000000
 
-    def __init__(self, level=1, bps=None):
+    def __init__(self, level=1, bps=None, 
+                 num_encode_threads=1,
+                 num_decode_threads=8):
         """
         Numcodecs Codec implementation for WavPack (https://www.wavpack.com/) codec.
 
@@ -201,6 +222,12 @@ class WavPack(Codec):
             If the bps is not None or 0, the WavPack hybrid mode is used and compression is lossy. 
             The bps is between 2.25 and 24 (it can be a decimal, e.g. 3.5) and it 
             is the average number of bits used to encode each sample, by default None
+        num_encode_threads : int, optional
+            The number of threads to use during encoding. 
+            If using an external parallelization for encoding, 
+            it is recommended to use 1, by default 1
+        num_decode_threads : int, optional
+            The number of threads to use during decoding, by default 8
 
         Returns
         -------
@@ -217,13 +244,28 @@ class WavPack(Codec):
                 self.bps = 0
         else:
             self.bps = 0
-        
+
+        if num_encode_threads > 1 and not SUPPORTS_PARALLEL:
+            warnings.warn(
+                f"Multi-threading is supported for wavpack version>=5.6.4, "
+                f"but current version is {wavpack_version}. Parallel encoding will not be available."
+            )
+        if num_decode_threads > 1 and not SUPPORTS_PARALLEL:
+            warnings.warn(
+                f"Multi-threading is supported for wavpack version>=5.6.4, "
+                f"but current version is {wavpack_version}. Parallel decoding will not be available."
+            )
+        self.num_encode_threads = int(min(num_encode_threads, 15))
+        self.num_decode_threads = int(min(num_decode_threads, 15))
+
     def get_config(self):
         # override to handle encoding dtypes
         return dict(
             id=self.codec_id,
             level=self.level,
-            bps=float(self.bps)
+            bps=float(self.bps),
+            num_encode_threads=self.num_encode_threads,
+            num_decode_threads=self.num_encode_threads
         )
 
     def _prepare_data(self, buf):
@@ -247,11 +289,11 @@ class WavPack(Codec):
         dtype = str(data.dtype)
         nsamples, nchans = data.shape
         dtype_id = dtype_enum[dtype]
-        return compress(data, self.level, nsamples, nchans, self.bps, dtype_id)
+        return compress(data, self.level, nsamples, nchans, self.bps, dtype_id, self.num_encode_threads)
 
     def decode(self, buf, out=None):        
         buf = ensure_contiguous_ndarray(buf, self.max_buffer_size)
-        return decompress(buf, out)
+        return decompress(buf, out, self.num_decode_threads)
 
 
 numcodecs.register_codec(WavPack)

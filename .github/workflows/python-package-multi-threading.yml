@@ -1,0 +1,65 @@
+name: Python Package using Cython
+
+on:
+  pull_request:
+    branches: [main]
+    types: [synchronize, opened, reopened, ready_for_review]
+
+
+jobs:
+  build-and-test:
+    name: Test on (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ["ubuntu-latest", "macos-latest"]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: s-weigand/setup-conda@v1
+        with:
+          python-version: "3.9"
+      - name: Install WavPack (ubuntu)
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          sudo apt update
+          sudo apt install git
+          sudo apt install -y gettext
+
+          git clone  https://www.wavpack.com/wavpack-5.6.0.tar.bz2
+          cd WavPack
+          git checkout 05a49108ee9af791d4cdca5faa84349b518f4827
+          ./autogen.sh
+          make
+          sudo make install
+          cd ..
+
+          # check libraries
+          ls /usr/local/lib/ | grep wavpack
+      - name: Install WavPack (macos)
+        if: matrix.os == 'macos-latest'
+        run: |
+          conda install git
+
+          git clone https://www.wavpack.com/wavpack-5.6.0.tar.bz2
+          cd WavPack
+          git checkout 05a49108ee9af791d4cdca5faa84349b518f4827
+          ./autogen.sh
+          make
+          sudo make install
+          cd ..
+      - name: Python version
+        run: |
+          which python
+      - name: Install dependencies
+        run: |
+          pip install Cython
+          pip install .
+          pip install zarr
+          pip install pytest
+      - name: Test imports and version
+        run: |
+          pytest -s tests/test_imports.py
+      - name: Test with pytest 
+        run: |
+          pytest -v

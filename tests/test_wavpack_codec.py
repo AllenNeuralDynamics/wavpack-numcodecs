@@ -1,29 +1,39 @@
-from wavpack_numcodecs import WavPack
-import numpy as np
-import zarr
 import pytest
+import warnings
+
+import numpy as np
+from packaging.version import parse
+
+import zarr
+
+from wavpack_numcodecs import WavPack
+from wavpack_numcodecs import wavpack_version
 
 DEBUG = False
 
 dtypes = ["int8", "int16", "int32", "float32"]
 
-def run_all_options(data):
+def run_all_options(data, encode_threads=[1], decode_threads=[1]):
     dtype = data.dtype
     for level in [1, 2, 3, 4]:
         # @dbry lower bps fails for int32
         for bps in [None, 6, 4, 2.25]:
-            print(f"Dtype {dtype} - level {level} - bps {bps}")
-            cod = WavPack(level=level, bps=bps)
-            enc = cod.encode(data)
-            dec = cod.decode(enc)
+            for e_thr in encode_threads:
+                for d_thr in decode_threads:
+                    print(f"Dtype {dtype} - level {level} - bps {bps} - e. threads {e_thr} - d. threads {d_thr}")
+                    cod = WavPack(level=level, bps=bps,
+                                  num_encode_threads=e_thr,
+                                  num_decode_threads=d_thr)
+                    enc = cod.encode(data)
+                    dec = cod.decode(enc)
 
-            assert len(enc) < len(dec)
-            print("CR", len(dec) / len(enc))
+                    assert len(enc) < len(dec)
+                    print("CR", len(dec) / len(enc))
 
-            data_dec = np.frombuffer(dec, dtype=dtype).reshape(data.shape)
-            # lossless
-            if bps is None:
-                assert np.all(data_dec == data)
+                    data_dec = np.frombuffer(dec, dtype=dtype).reshape(data.shape)
+                    # lossless
+                    if bps is None:
+                        assert np.all(data_dec == data)
 
 
 def make_noisy_sin_signals(shape=(30000,), sin_f=100, sin_amp=50, noise_amp=5,
@@ -62,7 +72,33 @@ def generate_test_signals(dtype):
 
 
 @pytest.mark.numcodecs
-def test_wavpack_cython():
+def test_wavpack_numcodecs():
+    if parse(wavpack_version) >= parse("5.6.4"):
+        # Should NOE warn!
+        with warnings.catch_warnings():
+            warnings.simplefilter("error")
+            wv = WavPack(num_encode_threads=4, num_decode_threads=1)
+            wv = WavPack(num_encode_threads=1, num_decode_threads=4)
+            wv = WavPack(num_encode_threads=4, num_decode_threads=4)
+    else:
+        # Should warn!
+        with pytest.warns(UserWarning) as w:
+            wv = WavPack(num_encode_threads=4, num_decode_threads=1)
+        with pytest.warns(UserWarning) as w:
+            wv = WavPack(num_encode_threads=1, num_decode_threads=4)
+        with pytest.warns(UserWarning) as w:
+            wv = WavPack(num_encode_threads=4, num_decode_threads=4)
+
+@pytest.mark.numcodecs
+def test_wavpack_multi_threading():
+    if parse(wavpack_version) >= parse("5.6.4"):
+        print("Multi-threading available")
+        encode_threads = [1, 2]
+        decode_threads = [1, 2]
+    else:
+        print("Multi-threading not available")
+        encode_threads = [1]
+        decode_threads = [1]
     for dtype in dtypes:
         print(f"\n\nNUMCODECS: testing dtype {dtype}\n\n")
 
@@ -70,7 +106,9 @@ def test_wavpack_cython():
 
         for test_sig in test_signals:
             print(f"signal shape: {test_sig.shape}")
-            run_all_options(test_sig)
+            run_all_options(test_sig, encode_threads=encode_threads, decode_threads=decode_threads)
+
+
 
 @pytest.mark.zarr
 def test_wavpack_zarr():
@@ -126,5 +164,6 @@ def test_wavpack_zarr():
 
 
 if __name__ == '__main__':
-    test_wavpack_cython()
+    test_wavpack_numcodecs()
+    test_wavpack_multi_threading()
     test_wavpack_zarr()

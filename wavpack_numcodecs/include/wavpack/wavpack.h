@@ -201,7 +201,7 @@ typedef struct {
     float bitrate, shaping_weight;
     int bits_per_sample, bytes_per_sample;
     int qmode, flags, xmode, num_channels, float_norm_exp;
-    int32_t block_samples, extra_flags, sample_rate, channel_mask;
+    int32_t block_samples, worker_threads, sample_rate, channel_mask;
     unsigned char md5_checksum [16], md5_read;
     int num_tag_strings;                // this field is not used
     char **tag_strings;                 // this field is not used
@@ -255,6 +255,7 @@ typedef struct {
 #define QMODE_CHANS_UNASSIGNED  0x400   // user specified "..." in --channel-order option
 #define QMODE_IGNORE_LENGTH     0x800   // user specified to ignore length in file header
 #define QMODE_RAW_PCM           0x1000  // user specified raw PCM format (no header present)
+#define QMODE_EVEN_BYTE_DEPTH   0x2000  // user specified to force even byte bit-depth
 
 ////////////// Callbacks used for reading & writing WavPack streams //////////
 
@@ -326,6 +327,11 @@ WavpackContext *WavpackOpenFileInput (const char *infilename, char *error, int f
 #define OPEN_ALT_TYPES  0x400   // application is aware of alternate file types & qmode
                                 // (just affects retrieving wrappers & MD5 checksums)
 #define OPEN_NO_CHECKSUM 0x800  // don't verify block checksums before decoding
+
+// new for multithreaded
+
+#define OPEN_THREADS_SHFT 12     // specify number of worker threads here for multichannel file
+#define OPEN_THREADS_MASK 0xF000 // decode; 0 to disable, otherwise 2-15 (1 is useless)
 
 int WavpackGetMode (WavpackContext *wpc);
 
@@ -401,6 +407,7 @@ void WavpackSetFileInformation (WavpackContext *wpc, char *file_extension, unsig
 #define WP_FORMAT_CAF   2       // Apple CoreAudio
 #define WP_FORMAT_DFF   3       // Philips DSDIFF
 #define WP_FORMAT_DSF   4       // Sony DSD Format
+#define WP_FORMAT_AIF   5       // Apple AIFF
 
 int WavpackSetConfiguration (WavpackContext *wpc, WavpackConfig *config, uint32_t total_samples);
 int WavpackSetConfiguration64 (WavpackContext *wpc, WavpackConfig *config, int64_t total_samples, const unsigned char *chan_ids);
