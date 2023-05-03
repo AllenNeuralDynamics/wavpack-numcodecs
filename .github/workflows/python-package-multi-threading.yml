@@ -26,7 +26,7 @@ jobs:
           sudo apt install git
           sudo apt install -y gettext
 
-          git clone  https://www.wavpack.com/wavpack-5.6.0.tar.bz2
+          git clone https://github.com/dbry/WavPack
           cd WavPack
           git checkout 05a49108ee9af791d4cdca5faa84349b518f4827
           ./autogen.sh
@@ -41,7 +41,7 @@ jobs:
         run: |
           conda install git
 
-          git clone https://www.wavpack.com/wavpack-5.6.0.tar.bz2
+          git clone https://github.com/dbry/WavPack
           cd WavPack
           git checkout 05a49108ee9af791d4cdca5faa84349b518f4827
           ./autogen.sh
