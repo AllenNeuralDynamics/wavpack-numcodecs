@@ -72,7 +72,7 @@ def generate_test_signals(dtype):
 
 
 @pytest.mark.numcodecs
-def test_wavpack_numcodecs():
+def test_wavpack_multi_threading():
     if parse(wavpack_version) >= parse("5.6.4"):
         # Should NOE warn!
         with warnings.catch_warnings():
@@ -90,7 +90,7 @@ def test_wavpack_numcodecs():
             wv = WavPack(num_encode_threads=4, num_decode_threads=4)
 
 @pytest.mark.numcodecs
-def test_wavpack_multi_threading():
+def test_wavpack_multi_numcodecs():
     if parse(wavpack_version) >= parse("5.6.4"):
         print("Multi-threading available")
         encode_threads = [1, 2]

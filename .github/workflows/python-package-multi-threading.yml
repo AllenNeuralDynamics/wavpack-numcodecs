@@ -1,4 +1,4 @@
-name: Python Package using Cython
+name: Python Package with multi-threading
 
 on:
   pull_request:

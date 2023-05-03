@@ -245,6 +245,9 @@ class WavPack(Codec):
         else:
             self.bps = 0
 
+        assert num_encode_threads >= 0, "num_encode_threads must be positive!"
+        assert num_decode_threads >= 0, "num_decode_threads must be positive!"
+
         if num_encode_threads > 1 and not SUPPORTS_PARALLEL:
             warnings.warn(
                 f"Multi-threading is supported for wavpack version>=5.6.4, "
@@ -265,7 +268,7 @@ class WavPack(Codec):
             level=self.level,
             bps=float(self.bps),
             num_encode_threads=self.num_encode_threads,
-            num_decode_threads=self.num_encode_threads
+            num_decode_threads=self.num_decode_threads
         )
 
     def _prepare_data(self, buf):
