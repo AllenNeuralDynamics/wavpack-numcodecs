@@ -13,7 +13,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: ["ubuntu-latest", "macos-latest"]
+        os: ["ubuntu-latest"]
     steps:
       - uses: actions/checkout@v2
       - uses: s-weigand/setup-conda@v1
@@ -36,18 +36,6 @@ jobs:
 
           # check libraries
           ls /usr/local/lib/ | grep wavpack
-      - name: Install WavPack (macos)
-        if: matrix.os == 'macos-latest'
-        run: |
-          conda install git
-
-          git clone https://github.com/dbry/WavPack
-          cd WavPack
-          git checkout 05a49108ee9af791d4cdca5faa84349b518f4827
-          ./autogen.sh
-          make
-          sudo make install
-          cd ..
       - name: Python version
         run: |
           which python
