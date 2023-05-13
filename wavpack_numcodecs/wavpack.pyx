@@ -28,7 +28,8 @@ cdef extern from "wavpack/wavpack.h":
 
 cdef extern from "src/encoder.c":
     size_t WavpackEncodeFile (void *source, size_t num_samples, size_t num_chans, int level, float bps, void *destin, 
-                              size_t destin_bytes, int dtype, int num_threads) nogil
+                              size_t destin_bytes, int dtype, int dynamic_noise_shaping, float shaping_weight,
+                              int num_threads) nogil
 
 cdef extern from "src/decoder.c":
     size_t WavpackDecodeFile (void *source, size_t source_bytes, int *num_chans, int *bytes_per_sample, void *destin, 
@@ -50,7 +51,7 @@ dtype_enum = {
 
 
 def compress(source, int level, int num_samples, int num_chans, float bps, int dtype,
-             int num_encode_threads):
+             int dynamic_noise_shaping, float shaping_weight, int num_encode_threads):
     """Compress data.
 
     Parameters
@@ -69,6 +70,10 @@ def compress(source, int level, int num_samples, int num_chans, float bps, int d
         Bytes per sample
     dtype : int
         Integer to indicat which dtype the data is ("int8": 0, "int16": 1, "int32": 2, "float32": 3)
+    dynamic_noise_shaping : int
+        Whether to use dynamic noise shaping
+    shaping_weight : float
+        The shaping factor
     num_encode_threads : int
         Number of threads to use for encoding
 
@@ -89,6 +94,8 @@ def compress(source, int level, int num_samples, int num_chans, float bps, int d
         int num_samples_c = num_samples
         int num_chans_c = num_chans
         float bps_c = bps
+        int dynamic_noise_shaping_c = dynamic_noise_shaping
+        float shaping_weight_c = shaping_weight
         int dtype_c = dtype
         int num_threads_c = num_encode_threads
 
@@ -106,7 +113,8 @@ def compress(source, int level, int num_samples, int num_chans, float bps, int d
         dest_size = source_size
 
         compressed_size = WavpackEncodeFile(source_ptr, num_samples_c, num_chans_c, level_c, bps_c,
-                                            dest_ptr, dest_size, dtype_c, num_threads_c)
+                                            dest_ptr, dest_size, dtype_c, dynamic_noise_shaping_c, 
+                                            shaping_weight_c, num_threads_c)
 
     finally:
 
@@ -204,7 +212,9 @@ class WavPack(Codec):
     max_channels = 4096
     max_buffer_size = 0x7E000000
 
-    def __init__(self, level=1, bps=None, 
+    def __init__(self, level=1, bps=None,
+                 dynamic_noise_shaping=True,
+                 shaping_weight=0.0,
                  num_encode_threads=1,
                  num_decode_threads=8):
         """
@@ -222,6 +232,14 @@ class WavPack(Codec):
             If the bps is not None or 0, the WavPack hybrid mode is used and compression is lossy. 
             The bps is between 2.25 and 24 (it can be a decimal, e.g. 3.5) and it 
             is the average number of bits used to encode each sample, by default None
+        dynamic_noise_shaping : bool, optional
+            If True, dynamic noise shaping is enabled.
+            Dynamic noise shaping is used in hybrid mode (when `bps` is set) and attempts to 
+            move the noise up or down in frequency depending on the spectrum of the input, by default True
+        shaping_weight : float, optional
+            The shaping factor [-1, 1], used if `dynamic_noise_shaping` is False.
+            Negative values will move the noise to lower frequencies, positive ones to higher frequencies, 
+            by default 0.0
         num_encode_threads : int, optional
             The number of threads to use during encoding. 
             If using an external parallelization for encoding, 
@@ -245,6 +263,9 @@ class WavPack(Codec):
         else:
             self.bps = 0
 
+        self.dynamic_noise_shaping = dynamic_noise_shaping
+        self.shaping_weight = shaping_weight
+
         assert num_encode_threads >= 0, "num_encode_threads must be positive!"
         assert num_decode_threads >= 0, "num_decode_threads must be positive!"
 
@@ -267,6 +288,8 @@ class WavPack(Codec):
             id=self.codec_id,
             level=self.level,
             bps=float(self.bps),
+            dynamic_noise_shaping=self.dynamic_noise_shaping,
+            shaping_weight=self.shaping_weight,
             num_encode_threads=self.num_encode_threads,
             num_decode_threads=self.num_decode_threads
         )
@@ -292,7 +315,8 @@ class WavPack(Codec):
         dtype = str(data.dtype)
         nsamples, nchans = data.shape
         dtype_id = dtype_enum[dtype]
-        return compress(data, self.level, nsamples, nchans, self.bps, dtype_id, self.num_encode_threads)
+        return compress(data, self.level, nsamples, nchans, self.bps, dtype_id,
+                        self.dynamic_noise_shaping, self.shaping_weight, self.num_encode_threads)
 
     def decode(self, buf, out=None):        
         buf = ensure_contiguous_ndarray(buf, self.max_buffer_size)

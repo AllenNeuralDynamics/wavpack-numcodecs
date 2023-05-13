@@ -47,7 +47,8 @@ static int write_block (void *id, void *data, int32_t length)
 #define BUFFER_SAMPLES 256
 
 size_t WavpackEncodeFile (void *source_char, size_t num_samples, size_t num_chans, int level, float bps, void *destin, 
-                          size_t destin_bytes, int dtype, int num_threads)
+                          size_t destin_bytes, int dtype, int dynamic_noise_shaping, float shaping_weight,
+                          int num_threads)
 {   
     // cast void pointer
     dtype_enum dtype_chosen = (dtype_enum) dtype;
@@ -134,7 +135,12 @@ size_t WavpackEncodeFile (void *source_char, size_t num_samples, size_t num_chan
     }
 
     if (bps > 0.0) {
-        config.flags |= CONFIG_HYBRID_FLAG;
+        if (dynamic_noise_shaping == 0) {
+            config.flags |= CONFIG_HYBRID_FLAG | CONFIG_SHAPE_OVERRIDE;
+            config.shaping_weight = shaping_weight;
+        } else {
+            config.flags |= CONFIG_HYBRID_FLAG;
+        }
         config.bitrate = bps;
     }
 

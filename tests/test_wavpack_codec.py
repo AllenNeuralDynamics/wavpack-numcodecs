@@ -11,29 +11,45 @@ from wavpack_numcodecs import wavpack_version
 
 DEBUG = False
 
+
+if parse(wavpack_version) >= parse("5.6.4"):
+    print("Multi-threading available")
+    encode_threads = [1, 2]
+    decode_threads = [1, 2]
+else:
+    print("Multi-threading not available")
+    encode_threads = [1]
+    decode_threads = [1]
+
 dtypes = ["int8", "int16", "int32", "float32"]
 
-def run_all_options(data, encode_threads=[1], decode_threads=[1]):
+@pytest.fixture(scope="module")
+def generate_test_data():
+    test_signals = {}
+    for dtype in dtypes:
+        test_signals[dtype] = generate_test_signals(dtype)
+    return test_signals
+
+
+def run_option(data, level, bps, dns, shaping_weight, e_thr, d_thr):
     dtype = data.dtype
-    for level in [1, 2, 3, 4]:
-        # @dbry lower bps fails for int32
-        for bps in [None, 6, 4, 2.25]:
-            for e_thr in encode_threads:
-                for d_thr in decode_threads:
-                    print(f"Dtype {dtype} - level {level} - bps {bps} - e. threads {e_thr} - d. threads {d_thr}")
-                    cod = WavPack(level=level, bps=bps,
-                                  num_encode_threads=e_thr,
-                                  num_decode_threads=d_thr)
-                    enc = cod.encode(data)
-                    dec = cod.decode(enc)
+    print(f"Dtype {dtype} - level {level} - bps {bps} - dns {dns} - shaping_weight {shaping_weight} - "
+          f"e. threads {e_thr} - d. threads {d_thr}")
+    cod = WavPack(level=level, bps=bps,
+                  dynamic_noise_shaping=dns,
+                  shaping_weight=shaping_weight,
+                  num_encode_threads=e_thr,
+                  num_decode_threads=d_thr)
+    enc = cod.encode(data)
+    dec = cod.decode(enc)
 
-                    assert len(enc) < len(dec)
-                    print("CR", len(dec) / len(enc))
+    assert len(enc) < len(dec)
+    print("CR", len(dec) / len(enc))
 
-                    data_dec = np.frombuffer(dec, dtype=dtype).reshape(data.shape)
-                    # lossless
-                    if bps is None:
-                        assert np.all(data_dec == data)
+    data_dec = np.frombuffer(dec, dtype=dtype).reshape(data.shape)
+    # lossless
+    if bps is None:
+        assert np.all(data_dec == data)
 
 
 def make_noisy_sin_signals(shape=(30000,), sin_f=100, sin_amp=50, noise_amp=5,
@@ -89,77 +105,87 @@ def test_wavpack_multi_threading():
         with pytest.warns(UserWarning) as w:
             wv = WavPack(num_encode_threads=4, num_decode_threads=4)
 
+@pytest.mark.parametrize("dtype", dtypes)
+@pytest.mark.parametrize("level", [1, 2, 3, 4])
+@pytest.mark.parametrize("bps", [None, 6, 4, 2.25])
+@pytest.mark.parametrize("encode_thread", encode_threads)
+@pytest.mark.parametrize("decode_thread", decode_threads)
 @pytest.mark.numcodecs
-def test_wavpack_numcodecs():
-    if parse(wavpack_version) >= parse("5.6.4"):
-        print("Multi-threading available")
-        encode_threads = [1, 2]
-        decode_threads = [1, 2]
-    else:
-        print("Multi-threading not available")
-        encode_threads = [1]
-        decode_threads = [1]
-    for dtype in dtypes:
-        print(f"\n\nNUMCODECS: testing dtype {dtype}\n\n")
+def test_wavpack_numcodecs(generate_test_data, level, bps, dtype, 
+                           encode_thread, decode_thread):
+    
+    print(f"\n\nNUMCODECS: testing dtype {dtype}\n\n")
 
-        test_signals = generate_test_signals(dtype)
+    test_signals = generate_test_data[dtype]
+    for test_sig in test_signals:
+        print(f"signal shape: {test_sig.shape}")
+        run_option(test_sig, bps=bps, level=level,
+                   dns=True, shaping_weight=0,
+                   e_thr=encode_thread, d_thr=decode_thread)
 
-        for test_sig in test_signals:
-            print(f"signal shape: {test_sig.shape}")
-            run_all_options(test_sig, encode_threads=encode_threads, decode_threads=decode_threads)
+@pytest.mark.parametrize("dtype", dtypes)
+@pytest.mark.parametrize("dns", [False, True])
+@pytest.mark.parametrize("shaping_weight", [-0.5, 0, 0.5])
+@pytest.mark.numcodecs
+def test_wavpack_noise_shaping(generate_test_data, dtype, dns, shaping_weight):
+    
+    print(f"\n\nNUMCODECS: testing dtype {dtype}\n\n")
 
+    test_signals = generate_test_data[dtype]
+    for test_sig in test_signals:
+        print(f"signal shape: {test_sig.shape}")
+        run_option(test_sig, bps=2, level=2,
+                   dns=dns, shaping_weight=shaping_weight,
+                   e_thr=1, d_thr=1)
 
-
+@pytest.mark.parametrize("dtype", dtypes)
+@pytest.mark.parametrize("bps", [None, 3])
 @pytest.mark.zarr
-def test_wavpack_zarr():
-    for dtype in dtypes:
-        print(f"\n\nZARR: testing dtype {dtype}\n\n")
-        test_signals = generate_test_signals(dtype)
+def test_wavpack_zarr(generate_test_data, bps, dtype):
+    print(f"\n\nZARR: testing dtype {dtype}\n\n")
+    test_signals = generate_test_data[dtype]
 
+    for test_sig in test_signals:
+        compressor = WavPack(bps=bps)
 
-        for test_sig in test_signals:
-            bpss = [None, 3]
-            for bps in bpss:
-                compressor = WavPack(bps=bps)
+        print(f"signal shape: {test_sig.shape} - bps: {bps}")
+        if test_sig.ndim == 1:
+            z = zarr.array(test_sig, chunks=None, compressor=compressor)
+            assert z[:].shape == test_sig.shape
+            assert z[:100].shape == test_sig[:100].shape
+            assert z.nbytes > z.nbytes_stored
 
-                print(f"signal shape: {test_sig.shape} - bps: {bps}")
-                if test_sig.ndim == 1:
-                    z = zarr.array(test_sig, chunks=None, compressor=compressor)
-                    assert z[:].shape == test_sig.shape
-                    assert z[:100].shape == test_sig[:100].shape
-                    assert z.nbytes > z.nbytes_stored
+            z = zarr.array(test_sig, chunks=(1000), compressor=compressor)
+            assert z[:].shape == test_sig.shape
+            assert z[:100].shape == test_sig[:100].shape
 
-                    z = zarr.array(test_sig, chunks=(1000), compressor=compressor)
-                    assert z[:].shape == test_sig.shape
-                    assert z[:100].shape == test_sig[:100].shape
+        elif test_sig.ndim == 2:
+            z = zarr.array(test_sig, chunks=None, compressor=compressor)
+            assert z[:].shape == test_sig.shape
+            assert z[:100, :10].shape == test_sig[:100, :10].shape
+            assert z.nbytes > z.nbytes_stored
 
-                elif test_sig.ndim == 2:
-                    z = zarr.array(test_sig, chunks=None, compressor=compressor)
-                    assert z[:].shape == test_sig.shape
-                    assert z[:100, :10].shape == test_sig[:100, :10].shape
-                    assert z.nbytes > z.nbytes_stored
+            z = zarr.array(test_sig, chunks=(1000, None), compressor=compressor)
+            assert z[:].shape == test_sig.shape
+            assert z[:100, :10].shape == test_sig[:100, :10].shape
 
-                    z = zarr.array(test_sig, chunks=(1000, None), compressor=compressor)
-                    assert z[:].shape == test_sig.shape
-                    assert z[:100, :10].shape == test_sig[:100, :10].shape
+            z = zarr.array(test_sig, chunks=(None, 10), compressor=compressor)
+            assert z[:].shape == test_sig.shape
+            assert z[:100, :10].shape == test_sig[:100, :10].shape
 
-                    z = zarr.array(test_sig, chunks=(None, 10), compressor=compressor)
-                    assert z[:].shape == test_sig.shape
-                    assert z[:100, :10].shape == test_sig[:100, :10].shape
+        else: # 3d
+            z = zarr.array(test_sig, chunks=None, compressor=compressor)
+            assert z[:].shape == test_sig.shape
+            assert z[:100, :2, :2].shape == test_sig[:100, :2, :2].shape
+            assert z.nbytes > z.nbytes_stored
 
-                else: # 3d
-                    z = zarr.array(test_sig, chunks=None, compressor=compressor)
-                    assert z[:].shape == test_sig.shape
-                    assert z[:100, :2, :2].shape == test_sig[:100, :2, :2].shape
-                    assert z.nbytes > z.nbytes_stored
+            z = zarr.array(test_sig, chunks=(1000, 2, None), compressor=compressor)
+            assert z[:].shape == test_sig.shape
+            assert z[:100, :2, :2].shape == test_sig[:100, :2, :2].shape
 
-                    z = zarr.array(test_sig, chunks=(1000, 2, None), compressor=compressor)
-                    assert z[:].shape == test_sig.shape
-                    assert z[:100, :2, :2].shape == test_sig[:100, :2, :2].shape
-
-                    z = zarr.array(test_sig, chunks=(None, 2, 3), compressor=compressor)
-                    assert z[:].shape == test_sig.shape
-                    assert z[:100, :2, :2].shape == test_sig[:100, :2, :2].shape
+            z = zarr.array(test_sig, chunks=(None, 2, 3), compressor=compressor)
+            assert z[:].shape == test_sig.shape
+            assert z[:100, :2, :2].shape == test_sig[:100, :2, :2].shape
 
 
 
