@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-from setuptools import setup, find_packages, Extension
-from pathlib import Path
-from subprocess import check_output
 import platform
 import shutil
+from pathlib import Path
+from subprocess import check_output
 
+from setuptools import Extension, find_packages, setup
 
 try:
     from Cython.Build import cythonize
@@ -16,9 +16,9 @@ else:
 
 
 def open_requirements(fname):
-    with open(fname, mode='r') as f:
-        requires = f.read().split('\n')
-    requires = [e for e in requires if len(e) > 0 and not e.startswith('#')]
+    with open(fname, mode="r") as f:
+        requires = f.read().split("\n")
+    requires = [e for e in requires if len(e) > 0 and not e.startswith("#")]
     return requires
 
 
@@ -39,12 +39,15 @@ def get_build_extensions():
             extra_link_args = [f"-Lwavpack_numcodecs/libraries/linux-x86_64"]
             runtime_library_dirs = ["$ORIGIN/libraries/linux-x86_64"]
             # hack
-            shutil.copy("wavpack_numcodecs/libraries/linux-x86_64/libwavpack.so",
-                        "wavpack_numcodecs/libraries/linux-x86_64/libwavpack.so.1")
+            shutil.copy(
+                "wavpack_numcodecs/libraries/linux-x86_64/libwavpack.so",
+                "wavpack_numcodecs/libraries/linux-x86_64/libwavpack.so.1",
+            )
     elif platform.system() == "Darwin":
         libraries = ["wavpack"]
-        assert shutil.which("wavpack") is not None, ("wavpack need to be installed externally. "
-                                                     "You can use: brew install wavpack")
+        assert shutil.which("wavpack") is not None, (
+            "wavpack need to be installed externally. " "You can use: brew install wavpack"
+        )
         print("wavpack is installed!")
         extra_link_args = ["-L~/include/", "-L/usr/local/include/", "-L/usr/include"]
     else:  # windows
@@ -60,23 +63,22 @@ def get_build_extensions():
 
     if have_cython:
         print("Building with Cython")
-        sources_compat_ext = ['wavpack_numcodecs/compat_ext.pyx']
+        sources_compat_ext = ["wavpack_numcodecs/compat_ext.pyx"]
         sources_wavpack_ext = ["wavpack_numcodecs/wavpack.pyx"]
     else:
-        sources_compat_ext = ['wavpack_numcodecs/compat_ext.c']
+        sources_compat_ext = ["wavpack_numcodecs/compat_ext.c"]
         sources_wavpack_ext = ["wavpack_numcodecs/wavpack.c"]
 
     extensions = [
-        Extension('wavpack_numcodecs.compat_ext',
-                  sources=sources_compat_ext,
-                  extra_compile_args=[]),
-        Extension('wavpack_numcodecs.wavpack',
-                  sources=sources_wavpack_ext,
-                  include_dirs=include_dirs,
-                  libraries=libraries,
-                  extra_link_args=extra_link_args,
-                  runtime_library_dirs=runtime_library_dirs
-                  ),
+        Extension("wavpack_numcodecs.compat_ext", sources=sources_compat_ext, extra_compile_args=[]),
+        Extension(
+            "wavpack_numcodecs.wavpack",
+            sources=sources_wavpack_ext,
+            include_dirs=include_dirs,
+            libraries=libraries,
+            extra_link_args=extra_link_args,
+            runtime_library_dirs=runtime_library_dirs,
+        ),
     ]
 
     if have_cython:
@@ -87,13 +89,13 @@ def get_build_extensions():
 
 d = {}
 exec(open("wavpack_numcodecs/version.py").read(), None, d)
-version = d['version']
+version = d["version"]
 long_description = open("README.md").read()
 
-install_requires = open_requirements('requirements.txt')
+install_requires = open_requirements("requirements.txt")
 entry_points = {"numcodecs.codecs": ["wavpack = wavpack_numcodecs:WavPack"]}
 extensions = get_build_extensions()
-cmdclass = {'build_ext': build_ext} if have_cython else {}
+cmdclass = {"build_ext": build_ext} if have_cython else {}
 
 setup(
     name="wavpack_numcodecs",
@@ -114,5 +116,5 @@ setup(
     ext_modules=extensions,
     entry_points=entry_points,
     cmdclass=cmdclass,
-    include_package_data=True
+    include_package_data=True,
 )

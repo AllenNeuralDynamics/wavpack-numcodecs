@@ -12,6 +12,8 @@ from cpython.bytes cimport PyBytes_FromStringAndSize, PyBytes_AS_STRING
 from .compat_ext cimport Buffer
 from .compat_ext import Buffer
 
+from .globals import get_num_encoding_threads, get_num_decoding_threads
+
 import warnings
 import numpy as np
 from pathlib import Path
@@ -51,7 +53,7 @@ dtype_enum = {
 
 
 def compress(source, int level, int num_samples, int num_chans, float bps, int dtype,
-             int dynamic_noise_shaping, float shaping_weight, int num_encode_threads):
+             int dynamic_noise_shaping, float shaping_weight, int num_encoding_threads):
     """Compress data.
 
     Parameters
@@ -74,7 +76,7 @@ def compress(source, int level, int num_samples, int num_chans, float bps, int d
         Whether to use dynamic noise shaping
     shaping_weight : float
         The shaping factor
-    num_encode_threads : int
+    num_encoding_threads : int
         Number of threads to use for encoding
 
     Returns
@@ -97,7 +99,7 @@ def compress(source, int level, int num_samples, int num_chans, float bps, int d
         int dynamic_noise_shaping_c = dynamic_noise_shaping
         float shaping_weight_c = shaping_weight
         int dtype_c = dtype
-        int num_threads_c = num_encode_threads
+        int num_threads_c = num_encoding_threads
 
 
     # setup source buffer
@@ -131,7 +133,7 @@ def compress(source, int level, int num_samples, int num_chans, float bps, int d
     return dest
 
 
-def decompress(source, dest=None, num_decode_threads=1):
+def decompress(source, dest=None, num_decoding_threads=1):
     """Decompress data.
 
     Parameters
@@ -140,7 +142,7 @@ def decompress(source, dest=None, num_decode_threads=1):
         Compressed data. Can be any object supporting the buffer protocol.
     dest : array-like, optional
         Object to decompress into.
-    num_decode_threads : int, optional
+    num_decoding_threads : int, optional
         Number of threads to use for decoding, by default 8
 
     Returns
@@ -161,7 +163,7 @@ def decompress(source, dest=None, num_decode_threads=1):
         int bytes_per_sample
         int *bytes_per_sample_ptr = &bytes_per_sample
         int max_bytes_per_sample = 4
-        int num_threads_c = num_decode_threads
+        int num_threads_c = num_decoding_threads
 
     # setup source buffer
     source_buffer = Buffer(source, PyBUF_ANY_CONTIGUOUS)
@@ -215,8 +217,8 @@ class WavPack(Codec):
     def __init__(self, level=1, bps=None,
                  dynamic_noise_shaping=True,
                  shaping_weight=0.0,
-                 num_encode_threads=1,
-                 num_decode_threads=8):
+                 num_encoding_threads=1,
+                 num_decoding_threads=8):
         """
         Numcodecs Codec implementation for WavPack (https://www.wavpack.com/) codec.
 
@@ -240,11 +242,11 @@ class WavPack(Codec):
             The shaping factor [-1, 1], used if `dynamic_noise_shaping` is False.
             Negative values will move the noise to lower frequencies, positive ones to higher frequencies, 
             by default 0.0
-        num_encode_threads : int, optional
+        num_encoding_threads : int, optional
             The number of threads to use during encoding. 
             If using an external parallelization for encoding, 
             it is recommended to use 1, by default 1
-        num_decode_threads : int, optional
+        num_decoding_threads : int, optional
             The number of threads to use during decoding, by default 8
 
         Returns
@@ -266,21 +268,27 @@ class WavPack(Codec):
         self.dynamic_noise_shaping = dynamic_noise_shaping
         self.shaping_weight = shaping_weight
 
-        assert num_encode_threads >= 0, "num_encode_threads must be positive!"
-        assert num_decode_threads >= 0, "num_decode_threads must be positive!"
+        if get_num_encoding_threads() is None:
+            assert num_encoding_threads >= 0, "num_encoding_threads must be positive!"
+        else:
+            num_encoding_threads = get_num_encoding_threads()
+        if get_num_decoding_threads() is None:
+            assert num_decoding_threads >= 0, "num_decoding_threads must be positive!"
+        else:
+            num_decoding_threads = get_num_decoding_threads()
 
-        if num_encode_threads > 1 and not SUPPORTS_PARALLEL:
+        if num_encoding_threads > 1 and not SUPPORTS_PARALLEL:
             warnings.warn(
                 f"Multi-threading is supported for wavpack version>=5.6.4, "
                 f"but current version is {wavpack_version}. Parallel encoding will not be available."
             )
-        if num_decode_threads > 1 and not SUPPORTS_PARALLEL:
+        if num_decoding_threads > 1 and not SUPPORTS_PARALLEL:
             warnings.warn(
                 f"Multi-threading is supported for wavpack version>=5.6.4, "
                 f"but current version is {wavpack_version}. Parallel decoding will not be available."
             )
-        self.num_encode_threads = int(min(num_encode_threads, 15))
-        self.num_decode_threads = int(min(num_decode_threads, 15))
+        self.num_encoding_threads = int(min(num_encoding_threads, 15))
+        self.num_decoding_threads = int(min(num_decoding_threads, 15))
 
     def get_config(self):
         # override to handle encoding dtypes
@@ -290,8 +298,8 @@ class WavPack(Codec):
             bps=float(self.bps),
             dynamic_noise_shaping=self.dynamic_noise_shaping,
             shaping_weight=self.shaping_weight,
-            num_encode_threads=self.num_encode_threads,
-            num_decode_threads=self.num_decode_threads
+            num_encoding_threads=self.num_encoding_threads,
+            num_decoding_threads=self.num_decoding_threads
         )
 
     def _prepare_data(self, buf):
@@ -316,11 +324,11 @@ class WavPack(Codec):
         nsamples, nchans = data.shape
         dtype_id = dtype_enum[dtype]
         return compress(data, self.level, nsamples, nchans, self.bps, dtype_id,
-                        self.dynamic_noise_shaping, self.shaping_weight, self.num_encode_threads)
+                        self.dynamic_noise_shaping, self.shaping_weight, self.num_encoding_threads)
 
     def decode(self, buf, out=None):        
         buf = ensure_contiguous_ndarray(buf, self.max_buffer_size)
-        return decompress(buf, out, self.num_decode_threads)
+        return decompress(buf, out, self.num_decoding_threads)
 
 
 numcodecs.register_codec(WavPack)

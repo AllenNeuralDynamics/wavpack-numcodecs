@@ -1,13 +1,11 @@
-import pytest
 import warnings
 
 import numpy as np
+import pytest
+import zarr
 from packaging.version import parse
 
-import zarr
-
-from wavpack_numcodecs import WavPack
-from wavpack_numcodecs import wavpack_version
+from wavpack_numcodecs import WavPack, wavpack_version
 
 DEBUG = False
 
@@ -23,6 +21,7 @@ else:
 
 dtypes = ["int8", "int16", "int32", "float32"]
 
+
 @pytest.fixture(scope="module")
 def generate_test_data():
     test_signals = {}
@@ -33,13 +32,18 @@ def generate_test_data():
 
 def run_option(data, level, bps, dns, shaping_weight, e_thr, d_thr):
     dtype = data.dtype
-    print(f"Dtype {dtype} - level {level} - bps {bps} - dns {dns} - shaping_weight {shaping_weight} - "
-          f"e. threads {e_thr} - d. threads {d_thr}")
-    cod = WavPack(level=level, bps=bps,
-                  dynamic_noise_shaping=dns,
-                  shaping_weight=shaping_weight,
-                  num_encode_threads=e_thr,
-                  num_decode_threads=d_thr)
+    print(
+        f"Dtype {dtype} - level {level} - bps {bps} - dns {dns} - shaping_weight {shaping_weight} - "
+        f"e. threads {e_thr} - d. threads {d_thr}"
+    )
+    cod = WavPack(
+        level=level,
+        bps=bps,
+        dynamic_noise_shaping=dns,
+        shaping_weight=shaping_weight,
+        num_encoding_threads=e_thr,
+        num_decoding_threads=d_thr,
+    )
     enc = cod.encode(data)
     dec = cod.decode(enc)
 
@@ -52,8 +56,7 @@ def run_option(data, level, bps, dns, shaping_weight, e_thr, d_thr):
         assert np.all(data_dec == data)
 
 
-def make_noisy_sin_signals(shape=(30000,), sin_f=100, sin_amp=50, noise_amp=5,
-                           sample_rate=30000, dtype="int16"):
+def make_noisy_sin_signals(shape=(30000,), sin_f=100, sin_amp=50, noise_amp=5, sample_rate=30000, dtype="int16"):
     assert isinstance(shape, tuple)
     assert len(shape) <= 3
     if len(shape) == 1:
@@ -64,15 +67,13 @@ def make_noisy_sin_signals(shape=(30000,), sin_f=100, sin_amp=50, noise_amp=5,
         nsamples, nchannels = shape
         y = np.zeros(shape, dtype=dtype)
         for ch in range(nchannels):
-            y[:, ch] = make_noisy_sin_signals((nsamples,), sin_f, sin_amp, noise_amp,
-                                              sample_rate, dtype)
+            y[:, ch] = make_noisy_sin_signals((nsamples,), sin_f, sin_amp, noise_amp, sample_rate, dtype)
     else:
         nsamples, nchannels1, nchannels2 = shape
         y = np.zeros(shape, dtype=dtype)
         for ch1 in range(nchannels1):
             for ch2 in range(nchannels2):
-                y[:, ch1, ch2] = make_noisy_sin_signals((nsamples,), sin_f, sin_amp, noise_amp,
-                                                        sample_rate, dtype)
+                y[:, ch1, ch2] = make_noisy_sin_signals((nsamples,), sin_f, sin_amp, noise_amp, sample_rate, dtype)
     return y
 
 
@@ -93,17 +94,18 @@ def test_wavpack_multi_threading():
         # Should NOE warn!
         with warnings.catch_warnings():
             warnings.simplefilter("error")
-            wv = WavPack(num_encode_threads=4, num_decode_threads=1)
-            wv = WavPack(num_encode_threads=1, num_decode_threads=4)
-            wv = WavPack(num_encode_threads=4, num_decode_threads=4)
+            wv = WavPack(num_encoding_threads=4, num_decoding_threads=1)
+            wv = WavPack(num_encoding_threads=1, num_decoding_threads=4)
+            wv = WavPack(num_encoding_threads=4, num_decoding_threads=4)
     else:
         # Should warn!
         with pytest.warns(UserWarning) as w:
-            wv = WavPack(num_encode_threads=4, num_decode_threads=1)
+            wv = WavPack(num_encoding_threads=4, num_decoding_threads=1)
         with pytest.warns(UserWarning) as w:
-            wv = WavPack(num_encode_threads=1, num_decode_threads=4)
+            wv = WavPack(num_encoding_threads=1, num_decoding_threads=4)
         with pytest.warns(UserWarning) as w:
-            wv = WavPack(num_encode_threads=4, num_decode_threads=4)
+            wv = WavPack(num_encoding_threads=4, num_decoding_threads=4)
+
 
 @pytest.mark.parametrize("dtype", dtypes)
 @pytest.mark.parametrize("level", [1, 2, 3, 4])
@@ -111,32 +113,27 @@ def test_wavpack_multi_threading():
 @pytest.mark.parametrize("encode_thread", encode_threads)
 @pytest.mark.parametrize("decode_thread", decode_threads)
 @pytest.mark.numcodecs
-def test_wavpack_numcodecs(generate_test_data, level, bps, dtype, 
-                           encode_thread, decode_thread):
-    
+def test_wavpack_numcodecs(generate_test_data, level, bps, dtype, encode_thread, decode_thread):
     print(f"\n\nNUMCODECS: testing dtype {dtype}\n\n")
 
     test_signals = generate_test_data[dtype]
     for test_sig in test_signals:
         print(f"signal shape: {test_sig.shape}")
-        run_option(test_sig, bps=bps, level=level,
-                   dns=True, shaping_weight=0,
-                   e_thr=encode_thread, d_thr=decode_thread)
+        run_option(test_sig, bps=bps, level=level, dns=True, shaping_weight=0, e_thr=encode_thread, d_thr=decode_thread)
+
 
 @pytest.mark.parametrize("dtype", dtypes)
 @pytest.mark.parametrize("dns", [False, True])
 @pytest.mark.parametrize("shaping_weight", [-0.5, 0, 0.5])
 @pytest.mark.numcodecs
 def test_wavpack_noise_shaping(generate_test_data, dtype, dns, shaping_weight):
-    
     print(f"\n\nNUMCODECS: testing dtype {dtype}\n\n")
 
     test_signals = generate_test_data[dtype]
     for test_sig in test_signals:
         print(f"signal shape: {test_sig.shape}")
-        run_option(test_sig, bps=2, level=2,
-                   dns=dns, shaping_weight=shaping_weight,
-                   e_thr=1, d_thr=1)
+        run_option(test_sig, bps=2, level=2, dns=dns, shaping_weight=shaping_weight, e_thr=1, d_thr=1)
+
 
 @pytest.mark.parametrize("dtype", dtypes)
 @pytest.mark.parametrize("bps", [None, 3])
@@ -173,7 +170,7 @@ def test_wavpack_zarr(generate_test_data, bps, dtype):
             assert z[:].shape == test_sig.shape
             assert z[:100, :10].shape == test_sig[:100, :10].shape
 
-        else: # 3d
+        else:  # 3d
             z = zarr.array(test_sig, chunks=None, compressor=compressor)
             assert z[:].shape == test_sig.shape
             assert z[:100, :2, :2].shape == test_sig[:100, :2, :2].shape
@@ -188,8 +185,7 @@ def test_wavpack_zarr(generate_test_data, bps, dtype):
             assert z[:100, :2, :2].shape == test_sig[:100, :2, :2].shape
 
 
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     test_wavpack_numcodecs()
     test_wavpack_multi_threading()
     test_wavpack_zarr()
