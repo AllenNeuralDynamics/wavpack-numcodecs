@@ -103,10 +103,10 @@ static WavpackStreamReader64 raw_reader = {
 // number of channels is written to the specified pointer, but it is assumed that the caller already knows
 // this. The number of composite samples (i.e., frames) is returned.
 
-#define BUFFER_SAMPLES 256
+#define BUFFER_SAMPLES 3750
 
 size_t WavpackDecodeFile (void *source, size_t source_bytes, int *num_chans, int *bytes_per_sample,
-                          void *destin_char, size_t destin_bytes)
+                          void *destin_char, size_t destin_bytes, int num_threads)
 {
     size_t total_samples = 0, max_samples;
     int32_t *temp_buffer = NULL;
@@ -118,7 +118,7 @@ size_t WavpackDecodeFile (void *source, size_t source_bytes, int *num_chans, int
     memset (&raw_wv, 0, sizeof (WavpackReaderContext));
     raw_wv.dptr = raw_wv.sptr = (unsigned char *) source;
     raw_wv.eptr = raw_wv.dptr + source_bytes;
-    wpc = WavpackOpenFileInputEx64 (&raw_reader, &raw_wv, NULL, error, 0, 0);
+    wpc = WavpackOpenFileInputEx64 (&raw_reader, &raw_wv, NULL, error, num_threads << OPEN_THREADS_SHFT, 0);
 
     if (!wpc) {
         fprintf (stderr, "error opening file: %s\n", error);

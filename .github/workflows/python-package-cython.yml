@@ -18,7 +18,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: s-weigand/setup-conda@v1
         with:
-          python-version: 3.9
+          python-version: "3.9"
       - name: Install WavPack (ubuntu)
         if: matrix.os == 'ubuntu-latest'
         run: |
@@ -26,9 +26,9 @@ jobs:
           sudo apt install wget
           sudo apt install -y gettext
 
-          wget https://www.wavpack.com/wavpack-5.5.0.tar.bz2
-          tar -xf wavpack-5.5.0.tar.bz2
-          cd wavpack-5.5.0
+          wget https://www.wavpack.com/wavpack-5.6.0.tar.bz2
+          tar -xf wavpack-5.6.0.tar.bz2
+          cd wavpack-5.6.0
           ./configure
           sudo make install
           cd ..
@@ -40,18 +40,24 @@ jobs:
         run: |
           conda install wget
 
-          wget https://www.wavpack.com/wavpack-5.5.0.tar.bz2
-          tar -xf wavpack-5.5.0.tar.bz2
-          cd wavpack-5.5.0
+          wget https://www.wavpack.com/wavpack-5.6.0.tar.bz2
+          tar -xf wavpack-5.6.0.tar.bz2
+          cd wavpack-5.6.0
           ./configure
           sudo make install
           cd ..
+      - name: Python version
+        run: |
+          which python
       - name: Install dependencies
         run: |
           pip install Cython
           pip install .
           pip install zarr
           pip install pytest
+      - name: Test imports and version
+        run: |
+          pytest -s tests/test_imports.py
       - name: Test with pytest 
         run: |
           pytest -v
