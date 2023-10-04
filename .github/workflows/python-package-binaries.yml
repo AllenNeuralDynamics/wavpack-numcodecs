@@ -18,13 +18,19 @@ jobs:
       - uses: actions/checkout@v2
       - uses: s-weigand/setup-conda@v1
         with:
-          python-version: 3.9
+          python-version: "3.9"
+      - name: Python version
+        run: |
+          which python
       - name: Install dependencies
         run: |
           pip install Cython
           pip install .
           pip install zarr
           pip install pytest
+      - name: Test imports and version
+        run: |
+          pytest -s tests/test_imports.py
       - name: Test with pytest 
         run: |
           pytest -v 
