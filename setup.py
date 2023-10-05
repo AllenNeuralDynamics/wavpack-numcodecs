@@ -47,9 +47,9 @@ def get_build_extensions():
         libraries = ["wavpack"]
         assert shutil.which("wavpack") is not None, (
             "WavPack needs to be installed externally for MacOS platforms.\n"
-            "You can use homebrew: \n\t>>> brew install wavpack\n\nor compile it from source:\n"
+            "You can use homebrew: \n\t >>> brew install wavpack\nor compile it from source:\n"
             "\t >>> wget https://www.wavpack.com/wavpack-5.6.0.tar.bz2\n"
-            "\t >>> cd wavpack-5.6.0\n\t>>> ./configure\n\t >>> sudo make install\n\t >>> cd .."
+            "\t >>> cd wavpack-5.6.0\n\t >>> ./configure\n\t >>> sudo make install\n\t >>> cd .."
         )
         print("wavpack is installed!")
         extra_link_args = ["-L~/include/", "-L/usr/local/include/", "-L/usr/include"]
