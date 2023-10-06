@@ -31,7 +31,7 @@ def get_build_extensions():
         libraries = ["wavpack"]
         if shutil.which("wavpack") is not None:
             out = check_output(["wavpack", "--version"])
-            print(f"wavpack is installed!\n{out.decode()}")
+            print(f"WavPack is installed!\n{out.decode()}")
             extra_link_args = ["-L/usr/local/lib/", "-L/usr/bin/"]
             runtime_library_dirs = ["/usr/local/lib/", "/usr/bin/"]
         else:
@@ -46,10 +46,14 @@ def get_build_extensions():
     elif platform.system() == "Darwin":
         libraries = ["wavpack"]
         assert shutil.which("wavpack") is not None, (
-            "wavpack need to be installed externally. " "You can use: brew install wavpack"
+            "WavPack needs to be installed externally for MacOS platforms.\n"
+            "You can use homebrew: \n\t >>> brew install wavpack\nor compile it from source:\n"
+            "\t >>> wget https://www.wavpack.com/wavpack-5.6.0.tar.bz2\n"
+            "\t >>> cd wavpack-5.6.0\n\t >>> ./configure\n\t >>> sudo make install\n\t >>> cd .."
         )
         print("wavpack is installed!")
         extra_link_args = ["-L~/include/", "-L/usr/local/include/", "-L/usr/include"]
+        runtime_library_dirs = ["/opt/homebrew/lib/"]
     else:  # windows
         libraries = ["wavpackdll"]
         # add library folder to PATH and copy .dll in the src
