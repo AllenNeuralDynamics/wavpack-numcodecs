@@ -28,11 +28,16 @@ jobs:
 
           # check libraries
           ls /usr/local/lib/ | grep wavpack
+      - name: Set up Homebrew (macos)
+        if: matrix.os == 'macos-latest'
+        id: set-up-homebrew
+        uses: Homebrew/actions/setup-homebrew@master
       - name: Install WavPack (macos)
         if: matrix.os == 'macos-latest'
         run: |
-          chmod +x ./.github/scripts/install-wavpack-macos.sh
-          ./.github/scripts/install-wavpack-macos.sh
+          brew install wavpack
+          # check version
+          brew info wavpack
       - name: Python version
         run: |
           which python

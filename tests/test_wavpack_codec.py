@@ -89,22 +89,25 @@ def generate_test_signals(dtype):
 
 
 @pytest.mark.numcodecs
-def test_wavpack_multi_threading():
-    if parse(wavpack_version) >= parse("5.6.4"):
-        # Should NOT warn!
-        with warnings.catch_warnings():
-            warnings.simplefilter("error")
-            wv = WavPack(num_encoding_threads=4, num_decoding_threads=1)
-            wv = WavPack(num_encoding_threads=1, num_decoding_threads=4)
-            wv = WavPack(num_encoding_threads=4, num_decoding_threads=4)
-    else:
-        # Should warn!
-        with pytest.warns(UserWarning) as w:
-            wv = WavPack(num_encoding_threads=4, num_decoding_threads=1)
-        with pytest.warns(UserWarning) as w:
-            wv = WavPack(num_encoding_threads=1, num_decoding_threads=4)
-        with pytest.warns(UserWarning) as w:
-            wv = WavPack(num_encoding_threads=4, num_decoding_threads=4)
+@pytest.mark.skipif(parse(wavpack_version) < parse("5.6.4"), reason="Multi-threading not available")
+def test_wavpack_multi_threading_enabled():
+    # Should NOT warn!
+    with warnings.catch_warnings():
+        warnings.simplefilter("error")
+        wv = WavPack(num_encoding_threads=4, num_decoding_threads=1)
+        wv = WavPack(num_encoding_threads=1, num_decoding_threads=4)
+        wv = WavPack(num_encoding_threads=4, num_decoding_threads=4)
+
+@pytest.mark.numcodecs
+@pytest.mark.skipif(parse(wavpack_version) >= parse("5.6.4"), reason="Multi-threading available")
+def test_wavpack_multi_threading_disabled():
+    # Should warn!
+    with pytest.warns(UserWarning) as w:
+        wv = WavPack(num_encoding_threads=4, num_decoding_threads=1)
+    with pytest.warns(UserWarning) as w:
+        wv = WavPack(num_encoding_threads=1, num_decoding_threads=4)
+    with pytest.warns(UserWarning) as w:
+        wv = WavPack(num_encoding_threads=4, num_decoding_threads=4)
 
 
 @pytest.mark.parametrize("dtype", dtypes)
@@ -203,5 +206,6 @@ def test_wavpack_zarr(generate_test_data, bps, dtype):
 
 if __name__ == "__main__":
     test_wavpack_numcodecs()
-    test_wavpack_multi_threading()
+    test_wavpack_multi_threading_enabled()
+    test_wavpack_multi_threading_disabled()
     test_wavpack_zarr()
