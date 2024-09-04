@@ -55,7 +55,7 @@ def get_build_extensions():
         )
         print("wavpack is installed!")
         extra_link_args = ["-L~/include/", "-L/usr/local/include/", "-L/usr/include"]
-        runtime_library_dirs = ["/opt/homebrew/lib/"]
+        runtime_library_dirs = ["/opt/homebrew/lib/", "/opt/homebrew/Cellar"]
     else:  # windows
         libraries = ["wavpackdll"]
         # add library folder to PATH and copy .dll in the src
