@@ -20,7 +20,8 @@
         ],
         "name": "wavpack_numcodecs.wavpack",
         "runtime_library_dirs": [
-            "$ORIGIN/libraries/{LATEST_WAVPACK_VERSION}/linux-x86_64"
+            "$ORIGIN/libraries/{LATEST_WAVPACK_VERSION}/linux-x86_64",
+            "src/wavpack_numcodecs/libraries/5.7.0/linux-x86_64"
         ],
         "sources": [
             "src/wavpack_numcodecs/wavpack.pyx"

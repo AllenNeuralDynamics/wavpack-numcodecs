@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import platform
 import shutil
+import os
 from pathlib import Path
 from subprocess import check_output
 
@@ -33,15 +34,14 @@ def get_build_extensions():
         else:
             print("Using shipped libraries")
             extra_link_args = [f"-L{SRC_FOLDER}/libraries/{LATEST_WAVPACK_VERSION}/linux-x86_64"]
-            runtime_library_dirs = ["$ORIGIN/libraries/{LATEST_WAVPACK_VERSION}/linux-x86_64"]
+            runtime_library_dirs = [
+                "$ORIGIN/libraries/{LATEST_WAVPACK_VERSION}/linux-x86_64",
+                f"{SRC_FOLDER}/libraries/{LATEST_WAVPACK_VERSION}/linux-x86_64"
+            ]
             # hack
             shutil.copy(
                 f"{SRC_FOLDER}/libraries/{LATEST_WAVPACK_VERSION}/linux-x86_64/libwavpack.so",
                 f"{SRC_FOLDER}/libraries/{LATEST_WAVPACK_VERSION}/linux-x86_64/libwavpack.so.1",
-            )
-            shutil.copy(
-                f"{SRC_FOLDER}/libraries/{LATEST_WAVPACK_VERSION}/linux-x86_64/libwavpack.so",
-                f"{SRC_FOLDER}/libwavpack.so.1",
             )
     elif platform.system() == "Darwin":
         libraries = ["wavpack"]
@@ -66,7 +66,7 @@ def get_build_extensions():
             lib_path = f"{SRC_FOLDER}/libraries/{LATEST_WAVPACK_VERSION}/windows-x86_32"
         extra_link_args = [f"/LIBPATH:{lib_path}"]
         for libfile in Path(lib_path).iterdir():
-            shutil.copy(libfile, "wavpack_numcodecs")
+            shutil.copy(libfile, SRC_FOLDER)
 
     if have_cython:
         print("Building with Cython")
