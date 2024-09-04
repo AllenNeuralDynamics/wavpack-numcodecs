@@ -9,6 +9,20 @@
 This implementation enables one to use WavPack as a compressor in 
 [Zarr](https://zarr.readthedocs.io/en/stable/index.html).
 
+
+### Requirements
+
+To install `wavpack-numcodecs` on MacOS, you need to install `wavpack` with `brew`:
+
+```bash
+brew install wavpack
+```
+
+For Linux and Windows, the package comes with pre-built binaries of the most 
+[recent version Wavpack verison](https://github.com/dbry/WavPack/releases/tag/5.7.0).
+
+On Linux, if an existing `wavpack` installation is found, the package will use it. Otherwise, it will use the pre-built binaries available in the `wavpack_numcodecs/libraries` folder.
+
 ## Installation
 
 Install via `pip`:

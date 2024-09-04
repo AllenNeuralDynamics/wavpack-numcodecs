@@ -42,7 +42,7 @@ def get_build_extensions():
             # hack
             shutil.copy(
                 f"wavpack_numcodecs/libraries/{LATEST_WAVPACK_VERSION}/linux-x86_64/libwavpack.so",
-                f"wavpack_numcodecs/libraries/{LATEST_WAVPACK_VERSION}/linux-x86_64/libwavpack.so.1",
+                f"wavpack_numcodecs/libwavpack.so.1",
             )
     elif platform.system() == "Darwin":
         libraries = ["wavpack"]
@@ -56,6 +56,7 @@ def get_build_extensions():
         print("wavpack is installed!")
         extra_link_args = ["-L~/include/", "-L/usr/local/include/", "-L/usr/include"]
         runtime_library_dirs = ["/opt/homebrew/lib/", "/opt/homebrew/Cellar"]
+        extra_link_args += runtime_library_dirs
     else:  # windows
         libraries = ["wavpackdll"]
         # add library folder to PATH and copy .dll in the src
