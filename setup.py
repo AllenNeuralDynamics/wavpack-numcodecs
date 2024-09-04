@@ -14,6 +14,7 @@ except ImportError:
 else:
     have_cython = True
 
+LATEST_WAVPACK_VERSION = "5.7.0"
 
 def open_requirements(fname):
     with open(fname, mode="r") as f:
@@ -36,20 +37,21 @@ def get_build_extensions():
             runtime_library_dirs = ["/usr/local/lib/", "/usr/bin/"]
         else:
             print("Using shipped libraries")
-            extra_link_args = [f"-Lwavpack_numcodecs/libraries/linux-x86_64"]
-            runtime_library_dirs = ["$ORIGIN/libraries/linux-x86_64"]
+            extra_link_args = [f"-Lwavpack_numcodecs/libraries/{LATEST_WAVPACK_VERSION}/linux-x86_64"]
+            runtime_library_dirs = ["$ORIGIN/libraries/{LATEST_WAVPACK_VERSION}/linux-x86_64"]
             # hack
             shutil.copy(
-                "wavpack_numcodecs/libraries/linux-x86_64/libwavpack.so",
-                "wavpack_numcodecs/libraries/linux-x86_64/libwavpack.so.1",
+                f"wavpack_numcodecs/libraries/{LATEST_WAVPACK_VERSION}/linux-x86_64/libwavpack.so",
+                f"wavpack_numcodecs/libraries/{LATEST_WAVPACK_VERSION}/linux-x86_64/libwavpack.so.1",
             )
     elif platform.system() == "Darwin":
         libraries = ["wavpack"]
         assert shutil.which("wavpack") is not None, (
-            "WavPack needs to be installed externally for MacOS platforms.\n"
-            "You can use homebrew: \n\t >>> brew install wavpack\nor compile it from source:\n"
-            "\t >>> wget https://www.wavpack.com/wavpack-5.6.0.tar.bz2\n >>> tar -xf wavpack-5.6.0.tar.bz2"
-            "\t >>> cd wavpack-5.6.0\n\t >>> ./configure\n\t >>> sudo make install\n\t >>> cd .."
+            f"WavPack needs to be installed externally for MacOS platforms.\n"
+            f"You can use homebrew: \n\t >>> brew install wavpack\nor compile it from source:"
+            f"\n\t >>> wget https://www.wavpack.com/wavpack-{LATEST_WAVPACK_VERSION}.tar.bz2"
+            f"\n\t >>> tar -xf wavpack-{LATEST_WAVPACK_VERSION}.tar.bz2"
+            f"\n\t >>> cd wavpack-{LATEST_WAVPACK_VERSION}\n\t >>> ./configure\n\t >>> sudo make install\n\t >>> cd .."
         )
         print("wavpack is installed!")
         extra_link_args = ["-L~/include/", "-L/usr/local/include/", "-L/usr/include"]
@@ -58,9 +60,9 @@ def get_build_extensions():
         libraries = ["wavpackdll"]
         # add library folder to PATH and copy .dll in the src
         if "64" in platform.architecture()[0]:
-            lib_path = "wavpack_numcodecs/libraries/windows-x86_64"
+            lib_path = f"wavpack_numcodecs/libraries/{LATEST_WAVPACK_VERSION}/windows-x86_64"
         else:
-            lib_path = "wavpack_numcodecs/libraries/windows-x86_32"
+            lib_path = f"wavpack_numcodecs/libraries/{LATEST_WAVPACK_VERSION}/windows-x86_32"
         extra_link_args = [f"/LIBPATH:{lib_path}"]
         for libfile in Path(lib_path).iterdir():
             shutil.copy(libfile, "wavpack_numcodecs")
