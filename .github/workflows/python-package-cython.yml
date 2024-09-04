@@ -16,8 +16,8 @@ jobs:
         os: ["ubuntu-latest", "macos-latest"]
         python-version: ["3.9", "3.10", "3.11", "3.12"]
     steps:
-      - uses: actions/checkout@v2
-      - uses: s-weigand/setup-conda@v1
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install WavPack (ubuntu)
@@ -27,23 +27,27 @@ jobs:
           sudo apt install wget
           sudo apt install -y gettext
 
-          wget https://www.wavpack.com/wavpack-5.6.0.tar.bz2
-          tar -xf wavpack-5.6.0.tar.bz2
-          cd wavpack-5.6.0
+          wget https://www.wavpack.com/wavpack-5.7.0.tar.bz2
+          tar -xf wavpack-5.7.0.tar.bz2
+          cd wavpack-5.7.0
           ./configure
           sudo make install
           cd ..
 
           # check libraries
           ls /usr/local/lib/ | grep wavpack
+      - name: Set up Homebrew (macos)
+        if: matrix.os == 'macos-latest'
+        id: set-up-homebrew
+        uses: Homebrew/actions/setup-homebrew@master
       - name: Install WavPack (macos)
         if: matrix.os == 'macos-latest'
         run: |
-          conda install wget
+          brew install wget
 
-          wget https://www.wavpack.com/wavpack-5.6.0.tar.bz2
-          tar -xf wavpack-5.6.0.tar.bz2
-          cd wavpack-5.6.0
+          wget https://www.wavpack.com/wavpack-5.7.0.tar.bz2
+          tar -xf wavpack-5.7.0.tar.bz2
+          cd wavpack-5.7.0
           ./configure
           sudo make install
           cd ..
