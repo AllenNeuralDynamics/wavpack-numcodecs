@@ -23,34 +23,16 @@ jobs:
       - name: Install WavPack (ubuntu)
         if: matrix.os == 'ubuntu-latest'
         run: |
-          sudo apt update
-          sudo apt install wget
-          sudo apt install -y gettext
-
-          wget https://www.wavpack.com/wavpack-5.7.0.tar.bz2
-          tar -xf wavpack-5.7.0.tar.bz2
-          cd wavpack-5.7.0
-          ./configure
-          sudo make install
-          cd ..
+          chmod +x ./.github/scripts/install-wavpack-linux.sh
+          ./.github/scripts/install-wavpack-linux.sh
 
           # check libraries
           ls /usr/local/lib/ | grep wavpack
-      - name: Set up Homebrew (macos)
-        if: matrix.os == 'macos-latest'
-        id: set-up-homebrew
-        uses: Homebrew/actions/setup-homebrew@master
       - name: Install WavPack (macos)
         if: matrix.os == 'macos-latest'
         run: |
-          brew install wget
-
-          wget https://www.wavpack.com/wavpack-5.7.0.tar.bz2
-          tar -xf wavpack-5.7.0.tar.bz2
-          cd wavpack-5.7.0
-          ./configure
-          sudo make install
-          cd ..
+          chmod +x ./.github/scripts/install-wavpack-macos.sh
+          ./.github/scripts/install-wavpack-macos.sh
       - name: Python version
         run: |
           which python

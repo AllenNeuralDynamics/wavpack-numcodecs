@@ -13,7 +13,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: ["ubuntu-latest"]
+        os: ["ubuntu-latest", "macos-latest"]
         python-version: ["3.9", "3.10", "3.11", "3.12"]
     steps:
       - uses: actions/checkout@v4
@@ -23,20 +23,16 @@ jobs:
       - name: Install WavPack (ubuntu)
         if: matrix.os == 'ubuntu-latest'
         run: |
-          sudo apt update
-          sudo apt install git
-          sudo apt install -y gettext
-
-          git clone https://github.com/dbry/WavPack
-          cd WavPack
-          git checkout 05a49108ee9af791d4cdca5faa84349b518f4827
-          ./autogen.sh
-          make
-          sudo make install
-          cd ..
+          chmod +x ./.github/scripts/install-wavpack-linux.sh
+          ./.github/scripts/install-wavpack-linux.sh
 
           # check libraries
           ls /usr/local/lib/ | grep wavpack
+      - name: Install WavPack (macos)
+        if: matrix.os == 'macos-latest'
+        run: |
+          chmod +x ./.github/scripts/install-wavpack-macos.sh
+          ./.github/scripts/install-wavpack-macos.sh
       - name: Python version
         run: |
           which python
