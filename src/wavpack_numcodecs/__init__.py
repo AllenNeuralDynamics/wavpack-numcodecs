@@ -8,4 +8,6 @@ from .globals import (
     set_num_decoding_threads,
     set_num_encoding_threads,
 )
-from .version import version as __version__
+import importlib.metadata
+
+__version__ = importlib.metadata.version("wavpack_numcodecs")

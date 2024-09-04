@@ -1,0 +1,46 @@
+[project]
+name = "wavpack-numcodecs"
+version = "0.2.0"
+description = "Numcodecs implementation of WavPack audio codec."
+authors = [
+    {name = "Alessio Buccino", email = "alessiop.buccino@gmail.com"},
+    {name = "David Bryant", email = "david@wavpack.com"},
+]
+readme = "README.md"
+license = {text = "MIT"}
+keywords = ["example", "project"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "numpy",
+    "numcodecs",
+    "packaging"
+]
+
+[project.urls]
+"Homepage" = "https://github.com/AllenNeuralDynamics/wavpack-numcodecs"
+
+
+
+[build-system]
+requires = ["setuptools>=62.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+include-package-data = true
+package-data = {"wavpack_numcodecs" = ["**/*.pyx", "**/*.pxd", "**/*.c", "**/*.h", "**/*.so", "**/*.so.*", "**/*.dll"]}
+
+[tool.setuptools.exclude-package-data]
+wavpack_numcodecs = ["**/tests/test_*"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["wavpack_numcodecs*"]
+namespaces = false
+exclude = ["wavpack_numcodecs.*.tests"]
+
+[tool.black]
+line-length = 120
