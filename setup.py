@@ -48,7 +48,7 @@ def get_build_extensions():
         assert shutil.which("wavpack") is not None, (
             "WavPack needs to be installed externally for MacOS platforms.\n"
             "You can use homebrew: \n\t >>> brew install wavpack\nor compile it from source:\n"
-            "\t >>> wget https://www.wavpack.com/wavpack-5.6.0.tar.bz2\n"
+            "\t >>> wget https://www.wavpack.com/wavpack-5.6.0.tar.bz2\n >>> tar -xf wavpack-5.6.0.tar.bz2"
             "\t >>> cd wavpack-5.6.0\n\t >>> ./configure\n\t >>> sudo make install\n\t >>> cd .."
         )
         print("wavpack is installed!")

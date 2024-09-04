@@ -151,38 +151,54 @@ def test_wavpack_zarr(generate_test_data, bps, dtype):
             assert z[:].shape == test_sig.shape
             assert z[:100].shape == test_sig[:100].shape
             assert z.nbytes > z.nbytes_stored
+            if bps is None:
+                np.testing.assert_array_equal(z[:], test_sig)
 
             z = zarr.array(test_sig, chunks=(1000), compressor=compressor)
             assert z[:].shape == test_sig.shape
             assert z[:100].shape == test_sig[:100].shape
+            if bps is None:
+                np.testing.assert_array_equal(z[:], test_sig)
 
         elif test_sig.ndim == 2:
             z = zarr.array(test_sig, chunks=None, compressor=compressor)
             assert z[:].shape == test_sig.shape
             assert z[:100, :10].shape == test_sig[:100, :10].shape
             assert z.nbytes > z.nbytes_stored
+            if bps is None:
+                np.testing.assert_array_equal(z[:], test_sig)
 
             z = zarr.array(test_sig, chunks=(1000, None), compressor=compressor)
             assert z[:].shape == test_sig.shape
             assert z[:100, :10].shape == test_sig[:100, :10].shape
+            if bps is None:
+                np.testing.assert_array_equal(z[:], test_sig)
 
             z = zarr.array(test_sig, chunks=(None, 10), compressor=compressor)
             assert z[:].shape == test_sig.shape
             assert z[:100, :10].shape == test_sig[:100, :10].shape
+            if bps is None:
+                np.testing.assert_array_equal(z[:], test_sig)
 
         else:  # 3d
             z = zarr.array(test_sig, chunks=None, compressor=compressor)
             assert z[:].shape == test_sig.shape
             assert z[:100, :2, :2].shape == test_sig[:100, :2, :2].shape
             assert z.nbytes > z.nbytes_stored
+            if bps is None:
+                np.testing.assert_array_equal(z[:], test_sig)
 
             z = zarr.array(test_sig, chunks=(1000, 2, None), compressor=compressor)
             assert z[:].shape == test_sig.shape
             assert z[:100, :2, :2].shape == test_sig[:100, :2, :2].shape
+            if bps is None:
+                np.testing.assert_array_equal(z[:], test_sig)
 
             z = zarr.array(test_sig, chunks=(None, 2, 3), compressor=compressor)
             assert z[:].shape == test_sig.shape
             assert z[:100, :2, :2].shape == test_sig[:100, :2, :2].shape
+            if bps is None:
+                np.testing.assert_array_equal(z[:], test_sig)
 
 
 if __name__ == "__main__":
