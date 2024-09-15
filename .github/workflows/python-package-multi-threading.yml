@@ -8,34 +8,36 @@ on:
 
 jobs:
   build-and-test:
-    name: Test on (${{ matrix.os }})
+    name: Test on ${{ matrix.os }} - Python ${{ matrix.python-version }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
-        os: ["ubuntu-latest"]
+        os: ["ubuntu-latest", "macos-latest"]
+        python-version: ["3.9", "3.10", "3.11", "3.12"]
     steps:
-      - uses: actions/checkout@v2
-      - uses: s-weigand/setup-conda@v1
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
-          python-version: "3.9"
+          python-version: ${{ matrix.python-version }}
       - name: Install WavPack (ubuntu)
         if: matrix.os == 'ubuntu-latest'
         run: |
-          sudo apt update
-          sudo apt install git
-          sudo apt install -y gettext
-
-          git clone https://github.com/dbry/WavPack
-          cd WavPack
-          git checkout 05a49108ee9af791d4cdca5faa84349b518f4827
-          ./autogen.sh
-          make
-          sudo make install
-          cd ..
+          chmod +x ./.github/scripts/install-wavpack-linux.sh
+          ./.github/scripts/install-wavpack-linux.sh
 
           # check libraries
           ls /usr/local/lib/ | grep wavpack
+      - name: Set up Homebrew (macos)
+        if: matrix.os == 'macos-latest'
+        id: set-up-homebrew
+        uses: Homebrew/actions/setup-homebrew@master
+      - name: Install WavPack (macos)
+        if: matrix.os == 'macos-latest'
+        run: |
+          brew install wavpack
+          # check version
+          brew info wavpack
       - name: Python version
         run: |
           which python

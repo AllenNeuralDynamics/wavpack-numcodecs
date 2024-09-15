@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 import platform
 import shutil
+import os
 from pathlib import Path
 from subprocess import check_output
 
-from setuptools import Extension, find_packages, setup
+from setuptools import Extension, setup
 
 try:
     from Cython.Build import cythonize
@@ -14,16 +15,12 @@ except ImportError:
 else:
     have_cython = True
 
-
-def open_requirements(fname):
-    with open(fname, mode="r") as f:
-        requires = f.read().split("\n")
-    requires = [e for e in requires if len(e) > 0 and not e.startswith("#")]
-    return requires
+LATEST_WAVPACK_VERSION = "5.7.0"
+SRC_FOLDER = "src/wavpack_numcodecs"
 
 
 def get_build_extensions():
-    include_dirs = ["wavpack_numcodecs/include"]
+    include_dirs = [f"{SRC_FOLDER}/include"]
     runtime_library_dirs = []
     extra_link_args = []
 
@@ -36,42 +33,48 @@ def get_build_extensions():
             runtime_library_dirs = ["/usr/local/lib/", "/usr/bin/"]
         else:
             print("Using shipped libraries")
-            extra_link_args = [f"-Lwavpack_numcodecs/libraries/linux-x86_64"]
-            runtime_library_dirs = ["$ORIGIN/libraries/linux-x86_64"]
+            extra_link_args = [f"-L{SRC_FOLDER}/libraries/{LATEST_WAVPACK_VERSION}/linux-x86_64"]
+            runtime_library_dirs = [
+                "$ORIGIN/libraries/{LATEST_WAVPACK_VERSION}/linux-x86_64",
+                f"{SRC_FOLDER}/libraries/{LATEST_WAVPACK_VERSION}/linux-x86_64"
+            ]
             # hack
             shutil.copy(
-                "wavpack_numcodecs/libraries/linux-x86_64/libwavpack.so",
-                "wavpack_numcodecs/libraries/linux-x86_64/libwavpack.so.1",
+                f"{SRC_FOLDER}/libraries/{LATEST_WAVPACK_VERSION}/linux-x86_64/libwavpack.so",
+                f"{SRC_FOLDER}/libraries/{LATEST_WAVPACK_VERSION}/linux-x86_64/libwavpack.so.1",
             )
     elif platform.system() == "Darwin":
         libraries = ["wavpack"]
         assert shutil.which("wavpack") is not None, (
-            "WavPack needs to be installed externally for MacOS platforms.\n"
-            "You can use homebrew: \n\t >>> brew install wavpack\nor compile it from source:\n"
-            "\t >>> wget https://www.wavpack.com/wavpack-5.6.0.tar.bz2\n"
-            "\t >>> cd wavpack-5.6.0\n\t >>> ./configure\n\t >>> sudo make install\n\t >>> cd .."
+            f"WavPack needs to be installed externally for MacOS platforms.\n"
+            f"You can use homebrew: \n\t >>> brew install wavpack\nor compile it from source:"
+            f"\n\t >>> wget https://www.wavpack.com/wavpack-{LATEST_WAVPACK_VERSION}.tar.bz2"
+            f"\n\t >>> tar -xf wavpack-{LATEST_WAVPACK_VERSION}.tar.bz2"
+            f"\n\t >>> cd wavpack-{LATEST_WAVPACK_VERSION}\n\t >>> ./configure\n\t >>> sudo make install\n\t >>> cd .."
         )
         print("wavpack is installed!")
         extra_link_args = ["-L~/include/", "-L/usr/local/include/", "-L/usr/include"]
-        runtime_library_dirs = ["/opt/homebrew/lib/"]
+        runtime_library_dirs = ["/opt/homebrew/lib/", "/opt/homebrew/Cellar"]
+        for rt_dir in runtime_library_dirs:
+            extra_link_args.append(f"-L{rt_dir}")
     else:  # windows
         libraries = ["wavpackdll"]
         # add library folder to PATH and copy .dll in the src
         if "64" in platform.architecture()[0]:
-            lib_path = "wavpack_numcodecs/libraries/windows-x86_64"
+            lib_path = f"{SRC_FOLDER}/libraries/{LATEST_WAVPACK_VERSION}/windows-x86_64"
         else:
-            lib_path = "wavpack_numcodecs/libraries/windows-x86_32"
+            lib_path = f"{SRC_FOLDER}/libraries/{LATEST_WAVPACK_VERSION}/windows-x86_32"
         extra_link_args = [f"/LIBPATH:{lib_path}"]
         for libfile in Path(lib_path).iterdir():
-            shutil.copy(libfile, "wavpack_numcodecs")
+            shutil.copy(libfile, SRC_FOLDER)
 
     if have_cython:
         print("Building with Cython")
-        sources_compat_ext = ["wavpack_numcodecs/compat_ext.pyx"]
-        sources_wavpack_ext = ["wavpack_numcodecs/wavpack.pyx"]
+        sources_compat_ext = [f"{SRC_FOLDER}/compat_ext.pyx"]
+        sources_wavpack_ext = [f"{SRC_FOLDER}/wavpack.pyx"]
     else:
-        sources_compat_ext = ["wavpack_numcodecs/compat_ext.c"]
-        sources_wavpack_ext = ["wavpack_numcodecs/wavpack.c"]
+        sources_compat_ext = [f"{SRC_FOLDER}/compat_ext.c"]
+        sources_wavpack_ext = [f"{SRC_FOLDER}/wavpack.c"]
 
     extensions = [
         Extension("wavpack_numcodecs.compat_ext", sources=sources_compat_ext, extra_compile_args=[]),
@@ -91,34 +94,12 @@ def get_build_extensions():
     return extensions
 
 
-d = {}
-exec(open("wavpack_numcodecs/version.py").read(), None, d)
-version = d["version"]
-long_description = open("README.md").read()
-
-install_requires = open_requirements("requirements.txt")
 entry_points = {"numcodecs.codecs": ["wavpack = wavpack_numcodecs:WavPack"]}
 extensions = get_build_extensions()
 cmdclass = {"build_ext": build_ext} if have_cython else {}
 
 setup(
-    name="wavpack_numcodecs",
-    version=version,
-    author="Alessio Buccino, David Bryant",
-    author_email="alessiop.buccino@gmail.com",
-    description="Numcodecs implementation of WavPack audio codec.",
-    long_description=long_description,
-    long_description_content_type="text/markdown",
-    url="https://github.com/AllenNeuralDynamics/wavpack-numcodecs",
-    install_requires=install_requires,
-    classifiers=[
-        "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: MIT License",
-        "Operating System :: OS Independent",
-    ],
-    packages=find_packages(),
     ext_modules=extensions,
-    entry_points=entry_points,
     cmdclass=cmdclass,
-    include_package_data=True,
+    entry_points=entry_points,
 )
