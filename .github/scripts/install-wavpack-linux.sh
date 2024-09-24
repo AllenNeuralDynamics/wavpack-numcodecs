@@ -9,20 +9,20 @@ else
 fi
 
 # Check if TARGET_FOLDER argument is provided
-if [ -n "$2" ]; then
+if [ -z "$2" ]; then
+    TARGET_FOLDER=$(pwd)
+else
     TARGET_FOLDER=$2
-    # Create the target folder if it doesn't exist
-    mkdir -p "$TARGET_FOLDER"
-    # Change directory to the target folder
-    cd "$TARGET_FOLDER"
-    echo "Changed directory to $TARGET_FOLDER"
 fi
+
+cd "$TARGET_FOLDER"
+
 
 sudo apt update
 sudo apt install wget
 sudo apt install -y gettext
 
-echo "Installing WavPack $WAVPACK_VERSION..."
+echo "Installing WavPack $WAVPACK_VERSION into $TARGET_FOLDER"
 
 wget "https://www.wavpack.com/wavpack-${WAVPACK_VERSION}.tar.bz2"
 tar -xf wavpack-$WAVPACK_VERSION.tar.bz2
