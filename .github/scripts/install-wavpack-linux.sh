@@ -16,14 +16,14 @@ else
     mkdir -p "$TARGET_FOLDER"
 fi
 
+CWD=$(pwd)
 cd "$TARGET_FOLDER"
 
+echo "Installing WavPack $WAVPACK_VERSION into $TARGET_FOLDER"
 
 sudo apt update
 sudo apt install wget
 sudo apt install -y gettext
-
-echo "Installing WavPack $WAVPACK_VERSION into $TARGET_FOLDER"
 
 wget "https://www.wavpack.com/wavpack-${WAVPACK_VERSION}.tar.bz2"
 tar -xf wavpack-$WAVPACK_VERSION.tar.bz2
@@ -31,3 +31,5 @@ cd wavpack-$WAVPACK_VERSION
 ./configure
 sudo make install
 cd ..
+
+cd "$CWD"
