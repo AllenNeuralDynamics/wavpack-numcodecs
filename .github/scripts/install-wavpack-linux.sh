@@ -21,7 +21,9 @@ sudo apt update
 sudo apt install wget
 sudo apt install -y gettext
 
-wget "https://www.wavpack.com/wavpack-$WAVPACK_VERSION.tar.bz2"
+echo "Installing WavPack $WAVPACK_VERSION..."
+
+wget "https://www.wavpack.com/wavpack-${WAVPACK_VERSION}.tar.bz2"
 tar -xf wavpack-$WAVPACK_VERSION.tar.bz2
 cd wavpack-$WAVPACK_VERSION
 ./configure
