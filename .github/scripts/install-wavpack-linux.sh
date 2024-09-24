@@ -13,6 +13,7 @@ if [ -z "$2" ]; then
     TARGET_FOLDER=$(pwd)
 else
     TARGET_FOLDER=$2
+    mkdir -p "$TARGET_FOLDER"
 fi
 
 cd "$TARGET_FOLDER"
