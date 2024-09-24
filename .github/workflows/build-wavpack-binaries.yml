@@ -24,7 +24,8 @@ jobs:
           echo "GLIBC_VERSION=$GLIBC_VERSION" >> $GITHUB_ENV
       - name: Build wavpack libraries
         run: |
-          WAVPACK_LATEST_VERSION="$(cat .github/wavpack_latest_version.txt)"
+          WAVPACK_LATEST_VERSION="$(cat ./.github/wavpack_latest_version.txt)"
+          echo "wavpack latest version: $WAVPACK_LATEST_VERSION"
           TARGET_FOLDER="./wavpack_src"
           chmod +x ./.github/scripts/install-wavpack-linux.sh
           ./.github/scripts/install-wavpack-linux.sh $TARGET_FOLDER

@@ -13,7 +13,7 @@ sudo apt update
 sudo apt install wget
 sudo apt install -y gettext
 
-WAVPACK_LATEST_VERSION="$(cat .github/wavpack_latest_version.txt)"
+WAVPACK_LATEST_VERSION="$(cat ./.github/wavpack_latest_version.txt)"
 
 wget "https://www.wavpack.com/wavpack-$WAVPACK_LATEST_VERSION.tar.bz2"
 tar -xf wavpack-$WAVPACK_LATEST_VERSION.tar.bz2
