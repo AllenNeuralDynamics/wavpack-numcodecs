@@ -35,8 +35,7 @@ def get_build_extensions():
             print("Using shipped libraries")
             extra_link_args = [f"-L{SRC_FOLDER}/libraries/{LATEST_WAVPACK_VERSION}/linux-x86_64"]
             runtime_library_dirs = [
-                "$ORIGIN/libraries/{LATEST_WAVPACK_VERSION}/linux-x86_64",
-                f"{SRC_FOLDER}/libraries/{LATEST_WAVPACK_VERSION}/linux-x86_64"
+                f"$ORIGIN/libraries/{LATEST_WAVPACK_VERSION}/linux-x86_64"
             ]
             # hack
             shutil.copy(
