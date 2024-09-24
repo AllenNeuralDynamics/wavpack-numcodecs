@@ -13,7 +13,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: ["ubuntu-latest"]
+        os: ["ubuntu-22.04", "ubuntu-20.04", "ubuntu-24.04"]
         python-version: ["3.9", "3.10", "3.11", "3.12"]
     steps:
       - uses: actions/checkout@v4
@@ -23,12 +23,15 @@ jobs:
       - name: Python version
         run: |
           which python
+      - name: ldd version
+        run: |
+          ldd --version
       - name: Install dependencies
         run: |
           pip install Cython
-          pip install .
           pip install zarr
           pip install pytest
+          pip install .
       - name: Installed wavpack version
         run: |
           python -c "import wavpack_numcodecs; print(wavpack_numcodecs.wavpack_version)"
