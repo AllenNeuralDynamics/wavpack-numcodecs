@@ -23,8 +23,9 @@ jobs:
       - name: Install WavPack (ubuntu)
         if: matrix.os == 'ubuntu-latest'
         run: |
+          WAVPACK_LATEST_VERSION="$(cat ./.github/wavpack_latest_version.txt)"
           chmod +x ./.github/scripts/install-wavpack-linux.sh
-          ./.github/scripts/install-wavpack-linux.sh
+          ./.github/scripts/install-wavpack-linux.sh $WAVPACK_LATEST_VERSION
 
           # check libraries
           ls /usr/local/lib/ | grep wavpack
@@ -43,7 +44,6 @@ jobs:
           which python
       - name: Install dependencies
         run: |
-          pip install Cython
           pip install .[test]
       - name: Test imports and version
         run: |
