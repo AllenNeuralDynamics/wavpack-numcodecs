@@ -20,9 +20,21 @@ dependencies = [
     "packaging"
 ]
 
+[project.optional-dependencies]
+test = [
+    "pytest",
+    "zarr",
+    "Cython"
+]
+
+test_no_cython = [
+    "pytest",
+    "zarr"
+]
+
+
 [project.urls]
 "Homepage" = "https://github.com/AllenNeuralDynamics/wavpack-numcodecs"
-
 
 
 [build-system]
