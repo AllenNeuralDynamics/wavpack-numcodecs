@@ -15,6 +15,7 @@ if [ -n "$2" ]; then
     mkdir -p "$TARGET_FOLDER"
     # Change directory to the target folder
     cd "$TARGET_FOLDER"
+    echo "Changed directory to $TARGET_FOLDER"
 fi
 
 sudo apt update

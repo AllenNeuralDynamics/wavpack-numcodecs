@@ -28,7 +28,7 @@ jobs:
           echo "wavpack latest version: $WAVPACK_LATEST_VERSION"
           TARGET_FOLDER="./wavpack_src"
           chmod +x ./.github/scripts/install-wavpack-linux.sh
-          ./.github/scripts/install-wavpack-linux.sh $TARGET_FOLDER
+          ./.github/scripts/install-wavpack-linux.sh $WAVPACK_LATEST_VERSION $TARGET_FOLDER
 
           # copy the built library to the libraries/folder
           LIB_FOLDER_NAME="$WAVPACK_LATEST_VERSION/linux-x86_64-glibc$GLIBC_VERSION"
