@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import platform
 import shutil
-import os
 from pathlib import Path
 from subprocess import check_output
 
@@ -33,14 +32,30 @@ def get_build_extensions():
             runtime_library_dirs = ["/usr/local/lib/", "/usr/bin/"]
         else:
             print("Using shipped libraries")
-            extra_link_args = [f"-L{SRC_FOLDER}/libraries/{LATEST_WAVPACK_VERSION}/linux-x86_64"]
+            wavpack_libraries_folder = Path(f"{SRC_FOLDER}/libraries/{LATEST_WAVPACK_VERSION}")
+            available_glibc_builds = [
+                p.name for p in wavpack_libraries_folder.iterdir() if p.is_dir() and "linux" in p.name
+            ]
+            available_glibc_versions = [
+                p[p.find("glibc") + len("glibc") :] for p in available_glibc_builds
+            ]
+
+            glibc_version = platform.libc_ver()[1]
+            if glibc_version not in available_glibc_versions:
+                raise RuntimeError(
+                    f"Could not find a matching glibc version for the shipped libraries. "
+                    f"Available builds: {available_glibc_versions}"
+                )
+            distr_folder = f"linux-x86_64_glibc{glibc_version}"
+
+            extra_link_args = [f"-L{wavpack_libraries_folder}/{distr_folder}"]
             runtime_library_dirs = [
-                f"$ORIGIN/libraries/{LATEST_WAVPACK_VERSION}/linux-x86_64"
+                f"$ORIGIN/libraries/{LATEST_WAVPACK_VERSION}/{distr_folder}",
             ]
             # hack
             shutil.copy(
-                f"{SRC_FOLDER}/libraries/{LATEST_WAVPACK_VERSION}/linux-x86_64/libwavpack.so",
-                f"{SRC_FOLDER}/libraries/{LATEST_WAVPACK_VERSION}/linux-x86_64/libwavpack.so.1",
+                f"{wavpack_libraries_folder}/{distr_folder}/libwavpack.so",
+                f"{wavpack_libraries_folder}/{distr_folder}/libwavpack.so.1",
             )
     elif platform.system() == "Darwin":
         libraries = ["wavpack"]

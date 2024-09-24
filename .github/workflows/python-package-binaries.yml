@@ -28,10 +28,7 @@ jobs:
           ldd --version
       - name: Install dependencies
         run: |
-          pip install Cython
-          pip install zarr
-          pip install pytest
-          pip install .
+          pip install .[test]
       - name: Installed wavpack version
         run: |
           python -c "import wavpack_numcodecs; print(wavpack_numcodecs.wavpack_version)"

@@ -44,9 +44,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install Cython
-          pip install .
-          pip install zarr
-          pip install pytest
+          pip install .[test]
       - name: Test imports and version
         run: |
           pytest -s tests/test_imports.py

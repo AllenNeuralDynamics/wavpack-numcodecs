@@ -1,0 +1,57 @@
+name: Python Package using pre-built Linux binaries
+
+on: 
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    name: Build wavpack binaries for ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ["ubuntu-20.04", "ubuntu-22.04", "ubuntu-24.04"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: ldd version
+        run: |
+          ldd --version
+          GLIBC_VERSION=$(ldd --version | head -n 1 | awk '{print $NF}')
+          echo "GLIBC Version: $GLIBC_VERSION"
+          echo "GLIBC_VERSION=$GLIBC_VERSION" >> $GITHUB_ENV
+      - name: Build wavpack libraries
+        run: |
+          WAVPACK_LATEST_VERSION="$(cat .github/wavpack_latest_version.txt)"
+          TARGET_FOLDER="./wavpack_src"
+          chmod +x ./.github/scripts/install-wavpack-linux.sh
+          ./.github/scripts/install-wavpack-linux.sh $TARGET_FOLDER
+
+          # copy the built library to the libraries/folder
+          LIB_FOLDER_NAME="$WAVPACK_LATEST_VERSION/linux-x86_64-glibc$GLIBC_VERSION"
+          echo "LIB_FOLDER_NAME=$LIB_FOLDER_NAME" >> $GITHUB_ENV
+          WAVPACK_NUMCODECS_LIB_PATH="src/wavpack_numcodecs/libraries/$LIB_FOLDER_NAME"
+          # find compiled library
+          LIBWAVPACK_PATH="$(find $TARGET_FOLDER/src/.libs -type f | grep libwavpack.so)"
+          mv $LIBWAVPACK_PATH $WAVPACK_NUMCODECS_LIB_PATH/libwavpack.so
+          rm -r $TARGET_FOLDER
+      - name: Install wavpack numcodecs
+        run: |
+          pip install .[test]
+      - name: Test imports
+        run: |
+          pytest -s tests/test_imports.py
+      - name: Test with pytest 
+        run: |
+          pytest -v
+      - name: Make PR with updated binaries
+        uses: peter-evans/create-pull-request@v3
+        with:
+          commit-message: "Update $LIB_FOLDER_NAME wavpack binaries"
+          title: "Update wavpack binaries"
+          body: "This PR updates the wavpack binaries."
+          branch: "update-wavpack-binaries"
+          base: "main"
+          add-paths: "src/wavpack_numcodecs/libraries"
