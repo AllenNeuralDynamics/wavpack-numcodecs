@@ -23,6 +23,8 @@ For Linux and Windows, the package comes with pre-built binaries of the most
 
 On Linux, if an existing `wavpack` installation is found, the package will use it. Otherwise, it will use the pre-built binaries available in the `wavpack_numcodecs/libraries` folder.
 
+On Windows, you need to have the "Microsoft C++ Build Tools" installed. You can download it and install it from [here](https://visualstudio.microsoft.com/visual-cpp-build-tools/).
+
 ## Installation
 
 Install via `pip`:
