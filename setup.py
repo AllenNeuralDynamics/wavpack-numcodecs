@@ -46,7 +46,7 @@ def get_build_extensions():
                     f"Could not find a matching glibc version for the shipped libraries. "
                     f"Available builds: {available_glibc_versions}"
                 )
-            distr_folder = f"linux-x86_64_glibc{glibc_version}"
+            distr_folder = f"linux-x86_64-glibc{glibc_version}"
 
             extra_link_args = [f"-L{wavpack_libraries_folder}/{distr_folder}"]
             runtime_library_dirs = [

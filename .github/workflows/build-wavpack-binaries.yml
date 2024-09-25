@@ -23,35 +23,41 @@ jobs:
           echo "GLIBC Version: $GLIBC_VERSION"
           echo "GLIBC_VERSION=$GLIBC_VERSION" >> $GITHUB_ENV
       - name: Build wavpack libraries
+        id: build-wavpack
         run: |
-          WAVPACK_LATEST_VERSION="$(cat .github/wavpack_latest_version.txt)"
-          TARGET_FOLDER="./wavpack_src"
+          WAVPACK_LATEST_VERSION="$(cat ./.github/wavpack_latest_version.txt)"
+          echo "wavpack latest version: $WAVPACK_LATEST_VERSION"
+          TARGET_FOLDER="$(pwd)/wavpack_src"
           chmod +x ./.github/scripts/install-wavpack-linux.sh
-          ./.github/scripts/install-wavpack-linux.sh $TARGET_FOLDER
+          ./.github/scripts/install-wavpack-linux.sh $WAVPACK_LATEST_VERSION $TARGET_FOLDER
 
           # copy the built library to the libraries/folder
           LIB_FOLDER_NAME="$WAVPACK_LATEST_VERSION/linux-x86_64-glibc$GLIBC_VERSION"
-          echo "LIB_FOLDER_NAME=$LIB_FOLDER_NAME" >> $GITHUB_ENV
+          echo "LIB_FOLDER_NAME=$LIB_FOLDER_NAME" >> "$GITHUB_OUTPUT"
           WAVPACK_NUMCODECS_LIB_PATH="src/wavpack_numcodecs/libraries/$LIB_FOLDER_NAME"
+          echo "WAVPACK_NUMCODECS_LIB_PATH=$WAVPACK_NUMCODECS_LIB_PATH" >> $GITHUB_ENV
           # find compiled library
-          LIBWAVPACK_PATH="$(find $TARGET_FOLDER/src/.libs -type f | grep libwavpack.so)"
-          mv $LIBWAVPACK_PATH $WAVPACK_NUMCODECS_LIB_PATH/libwavpack.so
-          rm -r $TARGET_FOLDER
+          LIBWAVPACK_PATH="$(find $TARGET_FOLDER/wavpack-$WAVPACK_LATEST_VERSION/src/.libs -type f | grep libwavpack.so)"
+          mkdir -p $WAVPACK_NUMCODECS_LIB_PATH
+          cp $LIBWAVPACK_PATH $WAVPACK_NUMCODECS_LIB_PATH/libwavpack.so
+          sudo rm -f -r $TARGET_FOLDER
       - name: Install wavpack numcodecs
         run: |
           pip install .[test]
       - name: Test imports
         run: |
           pytest -s tests/test_imports.py
-      - name: Test with pytest 
+      - name: Create commits
         run: |
-          pytest -v
+          git config user.name 'Alessio Buccino'
+          git config user.email 'alejoe91@users.noreply.github.com'
+          git config core.fileMode false
+          git add -f $WAVPACK_NUMCODECS_LIB_PATH/libwavpack.so
+          git commit -m "Updated ${{ steps.build-wavpack.outputs.LIB_FOLDER_NAME }} wavpack binaries"
       - name: Make PR with updated binaries
-        uses: peter-evans/create-pull-request@v3
+        uses: peter-evans/create-pull-request@v7
         with:
-          commit-message: "Update $LIB_FOLDER_NAME wavpack binaries"
-          title: "Update wavpack binaries"
-          body: "This PR updates the wavpack binaries."
-          branch: "update-wavpack-binaries"
+          title: "Update wavpack binaries for ${{ steps.build-wavpack.outputs.LIB_FOLDER_NAME }}"
+          body: "This PR updates the wavpack binaries for ${{ steps.build-wavpack.outputs.LIB_FOLDER_NAME }}"
+          branch-suffix: short-commit-hash
           base: "main"
-          add-paths: "src/wavpack_numcodecs/libraries"
