@@ -35,7 +35,7 @@ jobs:
           echo "LIB_FOLDER_NAME=$LIB_FOLDER_NAME" >> $GITHUB_ENV
           WAVPACK_NUMCODECS_LIB_PATH="src/wavpack_numcodecs/libraries/$LIB_FOLDER_NAME"
           # find compiled library
-          LIBWAVPACK_PATH="$(find $TARGET_FOLDER/WavPack/src/.libs -type f | grep libwavpack.so)"
+          LIBWAVPACK_PATH="$(find $TARGET_FOLDER/wavpack-$WAVPACK_LATEST_VERSION/src/.libs -type f | grep libwavpack.so)"
           mv $LIBWAVPACK_PATH $WAVPACK_NUMCODECS_LIB_PATH/libwavpack.so
           rm -r $TARGET_FOLDER
       - name: Install wavpack numcodecs
