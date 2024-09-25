@@ -26,7 +26,7 @@ jobs:
         run: |
           WAVPACK_LATEST_VERSION="$(cat ./.github/wavpack_latest_version.txt)"
           echo "wavpack latest version: $WAVPACK_LATEST_VERSION"
-          TARGET_FOLDER="./wavpack_src"
+          TARGET_FOLDER="$(pwd)/wavpack_src"
           chmod +x ./.github/scripts/install-wavpack-linux.sh
           ./.github/scripts/install-wavpack-linux.sh $WAVPACK_LATEST_VERSION $TARGET_FOLDER
 
