@@ -23,6 +23,7 @@ jobs:
           echo "GLIBC Version: $GLIBC_VERSION"
           echo "GLIBC_VERSION=$GLIBC_VERSION" >> $GITHUB_ENV
       - name: Build wavpack libraries
+        id: build-wavpack
         run: |
           WAVPACK_LATEST_VERSION="$(cat ./.github/wavpack_latest_version.txt)"
           echo "wavpack latest version: $WAVPACK_LATEST_VERSION"
@@ -32,7 +33,7 @@ jobs:
 
           # copy the built library to the libraries/folder
           LIB_FOLDER_NAME="$WAVPACK_LATEST_VERSION/linux-x86_64-glibc$GLIBC_VERSION"
-          echo "LIB_FOLDER_NAME=$LIB_FOLDER_NAME" >> $GITHUB_ENV
+          echo "LIB_FOLDER_NAME=$LIB_FOLDER_NAME" >> "$GITHUB_OUTPUT"
           WAVPACK_NUMCODECS_LIB_PATH="src/wavpack_numcodecs/libraries/$LIB_FOLDER_NAME"
           echo "WAVPACK_NUMCODECS_LIB_PATH=$WAVPACK_NUMCODECS_LIB_PATH" >> $GITHUB_ENV
           # find compiled library
@@ -50,12 +51,14 @@ jobs:
         run: |
           git config user.name 'Alessio Buccino'
           git config user.email 'alejoe91@users.noreply.github.com'
+          git config core.fileMode false
           git add -f $WAVPACK_NUMCODECS_LIB_PATH/libwavpack.so
-          git commit -m "Updated $LIB_FOLDER_NAME wavpack binaries"
+          git restore 
+          git commit -m "Updated ${{ steps.build-wavpack.outputs.LIB_FOLDER_NAME }} wavpack binaries"
       - name: Make PR with updated binaries
         uses: peter-evans/create-pull-request@v7
         with:
-          title: "Update wavpack binaries for $LIB_FOLDER_NAME"
-          body: "This PR updates the wavpack binaries for $LIB_FOLDER_NAME."
-          branch: "update-wavpack-binaries-$LIB_FOLDER_NAME"
+          title: "Update wavpack binaries for ${{ steps.build-wavpack.outputs.LIB_FOLDER_NAME }}"
+          body: "This PR updates the wavpack binaries for ${{ steps.build-wavpack.outputs.LIB_FOLDER_NAME }}"
+          branch-suffix: short-commit-hash
           base: "main"
