@@ -63,7 +63,7 @@ installed.
 
 # Developmers guide
 
-## How to upgrade WavPack installation
+## How to upgrade WavPack installation and make a new release
 
 To upgrade the WavPack installation, you need to:
 
@@ -71,6 +71,8 @@ To upgrade the WavPack installation, you need to:
 2. Extract the content of the downloaded file.
 3. Create a new folder in the `src/wavpack_numcodecs/libraries` folder with the name of the version of the WavPack you are installing.
 4. Add the Windows .dll and .lib files to the `windows-x86_32` and `windows-x86_64` folders, respectievely.
-5. Build the Linux shared library and copy the `.so` file to the `linux-x86_64` folder.
-6. Set the `LATET_WAVPACK_VERSION` variable in the `setup.py` to match the version of the WavPack you are installing.
-7. Update the version of the CI workflows in the `.github/workflows/` folder.
+5. Update the version of the CI workflows in the `.github/wavpack_latest_version.txt` file and set the `LATEST_WAVPACK_VERSION` variable in the `setup.py` to match the version of the WavPack you are installing.
+6. Make a PR with the changes and merge it.
+7. Manually trigger the `Build wavpack binaries` workflow in the Actions tab of the repository. This will automatically build the binaries for different Linux versions and make PRs with the changes to the `main` branch.
+8. Merge the automated PRs to update the Linux binaries.
+9. Update the version of the package in the `pyproject.toml` file and tag the repo to automatically make a new release.
