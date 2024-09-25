@@ -19,7 +19,7 @@ fi
 CWD=$(pwd)
 cd "$TARGET_FOLDER"
 
-echo "Installing WavPack $WAVPACK_VERSION into $TARGET_FOLDER"
+echo "Installing WavPack $WAVPACK_VERSION into $TARGET_FOLDER - CWD: $CWD"
 
 sudo apt update
 sudo apt install wget
@@ -32,4 +32,5 @@ cd wavpack-$WAVPACK_VERSION
 sudo make install
 cd ..
 
+echo "WavPack $WAVPACK_VERSION installed into $TARGET_FOLDER Changing directory to: $CWD"
 cd "$CWD"
