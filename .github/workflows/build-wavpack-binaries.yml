@@ -36,6 +36,7 @@ jobs:
           WAVPACK_NUMCODECS_LIB_PATH="src/wavpack_numcodecs/libraries/$LIB_FOLDER_NAME"
           # find compiled library
           LIBWAVPACK_PATH="$(find $TARGET_FOLDER/wavpack-$WAVPACK_LATEST_VERSION/src/.libs -type f | grep libwavpack.so)"
+          mkdir -p $WAVPACK_NUMCODECS_LIB_PATH
           mv $LIBWAVPACK_PATH $WAVPACK_NUMCODECS_LIB_PATH/libwavpack.so
           rm -r $TARGET_FOLDER
       - name: Install wavpack numcodecs
