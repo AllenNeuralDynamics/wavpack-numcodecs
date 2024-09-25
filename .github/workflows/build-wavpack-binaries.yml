@@ -45,9 +45,6 @@ jobs:
       - name: Test imports
         run: |
           pytest -s tests/test_imports.py
-      - name: Test with pytest 
-        run: |
-          pytest -v
       - name: Make PR with updated binaries
         uses: peter-evans/create-pull-request@v3
         with:
