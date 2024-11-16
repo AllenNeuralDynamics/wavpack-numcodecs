@@ -43,7 +43,7 @@ build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
 include-package-data = true
-package-data = {"wavpack_numcodecs" = ["**/*.pyx", "**/*.pxd", "**/*.c", "**/*.h", "**/*.so", "**/*.so.*", "**/*.dll"]}
+package-data = {"wavpack_numcodecs" = ["**/*.pyx", "**/*.pxd", "**/*.c", "**/*.h", "**/*.so", "**/*.so.*", "**/*.dll", "**/*.lib"]}
 
 [tool.setuptools.exclude-package-data]
 wavpack_numcodecs = ["**/tests/test_*"]
@@ -56,3 +56,9 @@ exclude = ["wavpack_numcodecs.*.tests"]
 
 [tool.black]
 line-length = 120
+
+[tool.pytest.ini_options]
+markers = [
+    "numcodecs",
+    "zarr"
+]
