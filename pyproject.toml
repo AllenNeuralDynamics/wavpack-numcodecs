@@ -36,6 +36,8 @@ test_no_cython = [
 [project.urls]
 "Homepage" = "https://github.com/AllenNeuralDynamics/wavpack-numcodecs"
 
+[project.entry-points."numcodecs.codecs"]
+wavpack = "wavpack_numcodecs:WavPack"
 
 [build-system]
 requires = ["setuptools>=62.0"]

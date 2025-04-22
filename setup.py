@@ -108,12 +108,10 @@ def get_build_extensions():
     return extensions
 
 
-entry_points = {"numcodecs.codecs": ["wavpack = wavpack_numcodecs:WavPack"]}
 extensions = get_build_extensions()
 cmdclass = {"build_ext": build_ext} if have_cython else {}
 
 setup(
     ext_modules=extensions,
     cmdclass=cmdclass,
-    entry_points=entry_points,
 )
