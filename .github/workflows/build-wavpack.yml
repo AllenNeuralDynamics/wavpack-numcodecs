@@ -26,40 +26,8 @@ jobs:
     - name: Create Dockerfile for glibc build
       run: |
         cat > Dockerfile.build << 'EOF'
-        ARG GLIBC_VERSION
-        FROM ubuntu:22.04 as base
-        # Install common dependencies for all builds
-        RUN apt-get update && apt-get install -y \
-            build-essential \
-            wget \
-            bzip2 \
-            automake \
-            libtool \
-            gcc-multilib \
-            gawk \
-            bison \
-            python3 \
-            gettext \
-            texinfo \
-            pkg-config \
-            file \
-            patchelf \
-            && ln -s /usr/bin/python3 /usr/bin/python \
-            && rm -rf /var/lib/apt/lists/*
-
-        # Map glibc versions to Ubuntu versions for the system libc
-        FROM ubuntu:20.04 as glibc-builder-2.31
-        FROM ubuntu:21.04 as glibc-builder-2.33
-        FROM ubuntu:22.04 as glibc-builder-2.35
-        FROM ubuntu:22.10 as glibc-builder-2.36
-        FROM ubuntu:23.04 as glibc-builder-2.37
-        FROM ubuntu:24.04 as glibc-builder-2.39
-
-        FROM glibc-builder-${GLIBC_VERSION} as builder
-        COPY --from=base /usr/bin /usr/bin
-        COPY --from=base /usr/lib /usr/lib
-        COPY --from=base /usr/include /usr/include
-        COPY --from=base /lib /lib
+        ARG UBUNTU_VERSION
+        FROM ubuntu:${UBUNTU_VERSION}
         ARG GLIBC_VERSION
         ENV GLIBC_VERSION=${GLIBC_VERSION}
 
@@ -167,11 +135,30 @@ jobs:
             /var/lib/apt/lists/*
         EOF
 
+    - name: Set Ubuntu version
+      id: ubuntu-version
+      run: |
+        case ${{ matrix.glibc_version }} in
+          2.31)
+            echo "version=20.04" >> $GITHUB_OUTPUT
+            ;;
+          2.33|2.35)
+            echo "version=22.04" >> $GITHUB_OUTPUT
+            ;;
+          2.36|2.37)
+            echo "version=23.10" >> $GITHUB_OUTPUT
+            ;;
+          2.39)
+            echo "version=24.04" >> $GITHUB_OUTPUT
+            ;;
+        esac
+
     - name: Build Docker image and extract libraries
       run: |
         docker build \
           --build-arg GLIBC_VERSION=${{ matrix.glibc_version }} \
           --build-arg WAVPACK_VERSION=${{ matrix.wavpack_version }} \
+          --build-arg UBUNTU_VERSION=${{ steps.ubuntu-version.outputs.version }} \
           -f Dockerfile.build \
           -t wavpack-builder .
         
