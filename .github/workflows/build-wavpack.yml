@@ -153,6 +153,7 @@ jobs:
       run: |
         docker build \
           --build-arg GLIBC_VERSION=${{ matrix.glibc_version }} \
+          --build-arg UBUNTU_VERSION=${{ matrix.ubuntu_version }} \
           --build-arg WAVPACK_VERSION=${{ matrix.wavpack_version }} \
           -f Dockerfile.build \
           -t wavpack-builder .
