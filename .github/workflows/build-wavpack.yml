@@ -11,19 +11,7 @@ jobs:
       fail-fast: false
       max-parallel: 4
       matrix:
-        include:
-          - glibc_version: '2.31'
-            ubuntu_version: '20.04'
-          - glibc_version: '2.33'
-            ubuntu_version: '21.04'
-          - glibc_version: '2.35'
-            ubuntu_version: '22.04'
-          - glibc_version: '2.36'
-            ubuntu_version: '22.10'
-          - glibc_version: '2.37'
-            ubuntu_version: '23.04'
-          - glibc_version: '2.39'
-            ubuntu_version: '24.04'
+        glibc_version: ['2.31', '2.33', '2.35', '2.36', '2.37', '2.39']
         wavpack_version: ['5.7.0']  # Stick to stable version for now
 
     env:
@@ -38,12 +26,41 @@ jobs:
     - name: Create Dockerfile for glibc build
       run: |
         cat > Dockerfile.build << 'EOF'
-        ARG UBUNTU_VERSION
         ARG GLIBC_VERSION
-        FROM ubuntu:${UBUNTU_VERSION} as glibc-builder
+        FROM ubuntu:22.04 as base
+        # Install common dependencies for all builds
+        RUN apt-get update && apt-get install -y \
+            build-essential \
+            wget \
+            bzip2 \
+            automake \
+            libtool \
+            gcc-multilib \
+            gawk \
+            bison \
+            python3 \
+            gettext \
+            texinfo \
+            pkg-config \
+            file \
+            patchelf \
+            && ln -s /usr/bin/python3 /usr/bin/python \
+            && rm -rf /var/lib/apt/lists/*
 
+        # Map glibc versions to Ubuntu versions for the system libc
+        FROM ubuntu:20.04 as glibc-builder-2.31
+        FROM ubuntu:21.04 as glibc-builder-2.33
+        FROM ubuntu:22.04 as glibc-builder-2.35
+        FROM ubuntu:22.10 as glibc-builder-2.36
+        FROM ubuntu:23.04 as glibc-builder-2.37
+        FROM ubuntu:24.04 as glibc-builder-2.39
+
+        FROM glibc-builder-${GLIBC_VERSION} as builder
+        COPY --from=base /usr/bin /usr/bin
+        COPY --from=base /usr/lib /usr/lib
+        COPY --from=base /usr/include /usr/include
+        COPY --from=base /lib /lib
         ARG GLIBC_VERSION
-        ARG UBUNTU_VERSION
         ENV GLIBC_VERSION=${GLIBC_VERSION}
 
         # Install build dependencies
@@ -79,12 +96,13 @@ jobs:
             && mkdir glibc-build \
             && cd glibc-build \
             && echo "Configuring glibc..." \
-            && ../glibc-${GLIBC_VERSION}/configure \
+            && CFLAGS="-O2 -U_FORTIFY_SOURCE" ../glibc-${GLIBC_VERSION}/configure \
                 --prefix=/home/builder/glibc-install \
                 --disable-werror \
                 --enable-add-ons \
                 --with-headers=/usr/include \
                 --without-selinux \
+                --disable-stack-protector \
                 > ../configure.log 2>&1 || (cat ../configure.log && false) \
             && echo "Building glibc..." \
             && make -j$(nproc) > ../make.log 2>&1 || (cat ../make.log && false) \
@@ -153,7 +171,6 @@ jobs:
       run: |
         docker build \
           --build-arg GLIBC_VERSION=${{ matrix.glibc_version }} \
-          --build-arg UBUNTU_VERSION=${{ matrix.ubuntu_version }} \
           --build-arg WAVPACK_VERSION=${{ matrix.wavpack_version }} \
           -f Dockerfile.build \
           -t wavpack-builder .
