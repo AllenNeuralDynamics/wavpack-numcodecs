@@ -14,7 +14,7 @@ except ImportError:
 else:
     have_cython = True
 
-LATEST_WAVPACK_VERSION = "5.7.0"
+LATEST_WAVPACK_VERSION = "5.8.0"
 SRC_FOLDER = "src/wavpack_numcodecs"
 
 
