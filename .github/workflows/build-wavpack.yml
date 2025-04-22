@@ -31,7 +31,7 @@ jobs:
         ARG GLIBC_VERSION
         ENV GLIBC_VERSION=${GLIBC_VERSION}
 
-        # Install build dependencies
+        # Install all dependencies upfront before any building
         RUN apt-get update && apt-get install -y \
             build-essential \
             wget \
@@ -47,6 +47,9 @@ jobs:
             pkg-config \
             file \
             patchelf \
+            make \
+            gcc \
+            autoconf \
             && ln -s /usr/bin/python3 /usr/bin/python \
             && rm -rf /var/lib/apt/lists/*
 
@@ -55,7 +58,14 @@ jobs:
         USER builder
         WORKDIR /home/builder
 
-        # Download and build glibc
+        ARG WAVPACK_VERSION
+        # Download WavPack source first
+        RUN set -x \
+            && echo "Downloading WavPack ${WAVPACK_VERSION}..." \
+            && wget https://github.com/dbry/WavPack/releases/download/${WAVPACK_VERSION}/wavpack-${WAVPACK_VERSION}.tar.bz2 \
+            && tar xjf wavpack-${WAVPACK_VERSION}.tar.bz2
+
+        # Build glibc
         RUN set -x \
             && echo "Building glibc version ${GLIBC_VERSION}" \
             && wget https://ftp.gnu.org/gnu/glibc/glibc-${GLIBC_VERSION}.tar.bz2 \
@@ -64,13 +74,14 @@ jobs:
             && mkdir glibc-build \
             && cd glibc-build \
             && echo "Configuring glibc..." \
-            && CFLAGS="-O2 -U_FORTIFY_SOURCE" ../glibc-${GLIBC_VERSION}/configure \
+            && CFLAGS="-O2 -U_FORTIFY_SOURCE" CPPFLAGS="-U_FORTIFY_SOURCE" ../glibc-${GLIBC_VERSION}/configure \
                 --prefix=/home/builder/glibc-install \
                 --disable-werror \
                 --enable-add-ons \
                 --with-headers=/usr/include \
                 --without-selinux \
                 --disable-stack-protector \
+                --enable-kernel=3.2 \
                 > ../configure.log 2>&1 || (cat ../configure.log && false) \
             && echo "Building glibc..." \
             && make -j$(nproc) > ../make.log 2>&1 || (cat ../make.log && false) \
@@ -81,34 +92,16 @@ jobs:
         # Verify glibc installation
         RUN /home/builder/glibc-install/lib/libc.so.6 --version
 
-        USER root
-
         ENV PATH=/home/builder/glibc-install/bin:$PATH \
             LD_LIBRARY_PATH=/home/builder/glibc-install/lib:$LD_LIBRARY_PATH \
             CFLAGS="-I/home/builder/glibc-install/include" \
             LDFLAGS="-L/home/builder/glibc-install/lib"
 
-        # Add additional build dependencies for WavPack
-        USER root
-        RUN apt-get update && apt-get install -y \
-            make \
-            gcc \
-            libtool \
-            autoconf \
-            && rm -rf /var/lib/apt/lists/*
-
-        # Now build WavPack
-        ARG WAVPACK_VERSION
-        USER builder
-        RUN set -x \
-            && echo "Downloading WavPack ${WAVPACK_VERSION}..." \
-            && wget https://github.com/dbry/WavPack/releases/download/${WAVPACK_VERSION}/wavpack-${WAVPACK_VERSION}.tar.bz2 \
-            && tar xjf wavpack-${WAVPACK_VERSION}.tar.bz2 \
-            && cd wavpack-${WAVPACK_VERSION} \
+        # Build WavPack using the newly built glibc
+        RUN cd wavpack-${WAVPACK_VERSION} \
             && echo "Running autoconf..." \
             && autoreconf -fi \
             && echo "Configuring WavPack..." \
-            && unset LD_LIBRARY_PATH \
             && ./configure --enable-shared \
                          --prefix=/home/builder/wavpack-install \
                          > ../wavpack-configure.log 2>&1 || (cat ../wavpack-configure.log && false) \
