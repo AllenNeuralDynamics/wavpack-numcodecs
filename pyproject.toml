@@ -29,7 +29,7 @@ test = [
 
 test_no_cython = [
     "pytest",
-    "zarr"
+    "zarr<3.0.0"
 ]
 
 
