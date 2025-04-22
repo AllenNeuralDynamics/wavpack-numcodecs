@@ -5,12 +5,13 @@ on:
 
 jobs:
   build-and-test:
-    name: Build wavpack binaries for ${{ matrix.os }}
+    name: Build wavpack ${{ matrix.wavpack_version }} binaries for ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
         os: ["ubuntu-22.04", "ubuntu-24.04"]
+        wavpack_version: ["5.7.0", "5.8.0"]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -25,19 +26,19 @@ jobs:
       - name: Build wavpack libraries
         id: build-wavpack
         run: |
-          WAVPACK_LATEST_VERSION="$(cat ./.github/wavpack_latest_version.txt)"
-          echo "wavpack latest version: $WAVPACK_LATEST_VERSION"
+          WAVPACK_VERSION=${{ matrix.wavpack_version }}
+          echo "wavpack latest version: $WAVPACK_VERSION"
           TARGET_FOLDER="$(pwd)/wavpack_src"
           chmod +x ./.github/scripts/install-wavpack-linux.sh
-          ./.github/scripts/install-wavpack-linux.sh $WAVPACK_LATEST_VERSION $TARGET_FOLDER
+          ./.github/scripts/install-wavpack-linux.sh $WAVPACK_VERSION $TARGET_FOLDER
 
           # copy the built library to the libraries/folder
-          LIB_FOLDER_NAME="$WAVPACK_LATEST_VERSION/linux-x86_64-glibc$GLIBC_VERSION"
+          LIB_FOLDER_NAME="$WAVPACK_VERSION/linux-x86_64-glibc$GLIBC_VERSION"
           echo "LIB_FOLDER_NAME=$LIB_FOLDER_NAME" >> "$GITHUB_OUTPUT"
           WAVPACK_NUMCODECS_LIB_PATH="src/wavpack_numcodecs/libraries/$LIB_FOLDER_NAME"
           echo "WAVPACK_NUMCODECS_LIB_PATH=$WAVPACK_NUMCODECS_LIB_PATH" >> $GITHUB_ENV
           # find compiled library
-          LIBWAVPACK_PATH="$(find $TARGET_FOLDER/wavpack-$WAVPACK_LATEST_VERSION/src/.libs -type f | grep libwavpack.so)"
+          LIBWAVPACK_PATH="$(find $TARGET_FOLDER/wavpack-$WAVPACK_VERSION/src/.libs -type f | grep libwavpack.so)"
           mkdir -p $WAVPACK_NUMCODECS_LIB_PATH
           cp $LIBWAVPACK_PATH $WAVPACK_NUMCODECS_LIB_PATH/libwavpack.so
           sudo rm -f -r $TARGET_FOLDER

@@ -14,7 +14,7 @@ except ImportError:
 else:
     have_cython = True
 
-LATEST_WAVPACK_VERSION = "5.7.0"
+LATEST_WAVPACK_VERSION = "5.8.0"
 SRC_FOLDER = "src/wavpack_numcodecs"
 
 
@@ -108,12 +108,10 @@ def get_build_extensions():
     return extensions
 
 
-entry_points = {"numcodecs.codecs": ["wavpack = wavpack_numcodecs:WavPack"]}
 extensions = get_build_extensions()
 cmdclass = {"build_ext": build_ext} if have_cython else {}
 
 setup(
     ext_modules=extensions,
     cmdclass=cmdclass,
-    entry_points=entry_points,
 )
