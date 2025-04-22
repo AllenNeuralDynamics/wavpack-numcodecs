@@ -100,15 +100,15 @@ jobs:
         # Build WavPack using the newly built glibc
         RUN cd wavpack-${WAVPACK_VERSION} \
             && echo "Running autoconf..." \
-            && autoreconf -fi \
+            && (unset LD_LIBRARY_PATH && autoreconf -fi) \
             && echo "Configuring WavPack..." \
-            && ./configure --enable-shared \
+            && LD_LIBRARY_PATH=/home/builder/glibc-install/lib ./configure --enable-shared \
                          --prefix=/home/builder/wavpack-install \
                          > ../wavpack-configure.log 2>&1 || (cat ../wavpack-configure.log && false) \
             && echo "Building WavPack..." \
-            && make > ../wavpack-make.log 2>&1 || (cat ../wavpack-make.log && false) \
+            && LD_LIBRARY_PATH=/home/builder/glibc-install/lib make > ../wavpack-make.log 2>&1 || (cat ../wavpack-make.log && false) \
             && echo "Installing WavPack..." \
-            && make install > ../wavpack-install.log 2>&1 || (cat ../wavpack-install.log && false)
+            && LD_LIBRARY_PATH=/home/builder/glibc-install/lib make install > ../wavpack-install.log 2>&1 || (cat ../wavpack-install.log && false)
 
         USER root
 
