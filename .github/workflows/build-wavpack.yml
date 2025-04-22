@@ -11,8 +11,23 @@ jobs:
       fail-fast: false
       max-parallel: 4
       matrix:
-        glibc_version: ['2.31', '2.33', '2.35', '2.36', '2.37', '2.39']  # Common versions from Ubuntu LTS releases
+        include:
+          - glibc_version: '2.31'
+            ubuntu_version: '20.04'
+          - glibc_version: '2.33'
+            ubuntu_version: '21.04'
+          - glibc_version: '2.35'
+            ubuntu_version: '22.04'
+          - glibc_version: '2.36'
+            ubuntu_version: '22.10'
+          - glibc_version: '2.37'
+            ubuntu_version: '23.04'
+          - glibc_version: '2.39'
+            ubuntu_version: '24.04'
         wavpack_version: ['5.7.0']  # Stick to stable version for now
+
+    env:
+      DEBIAN_FRONTEND: noninteractive
 
     steps:
     - uses: actions/checkout@v4
@@ -23,10 +38,12 @@ jobs:
     - name: Create Dockerfile for glibc build
       run: |
         cat > Dockerfile.build << 'EOF'
+        ARG UBUNTU_VERSION
         ARG GLIBC_VERSION
-        FROM ubuntu:22.04 as glibc-builder
+        FROM ubuntu:${UBUNTU_VERSION} as glibc-builder
 
         ARG GLIBC_VERSION
+        ARG UBUNTU_VERSION
         ENV GLIBC_VERSION=${GLIBC_VERSION}
 
         # Install build dependencies
@@ -85,16 +102,34 @@ jobs:
             CFLAGS="-I/home/builder/glibc-install/include" \
             LDFLAGS="-L/home/builder/glibc-install/lib"
 
+        # Add additional build dependencies for WavPack
+        USER root
+        RUN apt-get update && apt-get install -y \
+            make \
+            gcc \
+            libtool \
+            autoconf \
+            && rm -rf /var/lib/apt/lists/*
+
         # Now build WavPack
         ARG WAVPACK_VERSION
         USER builder
-        RUN wget https://github.com/dbry/WavPack/releases/download/${WAVPACK_VERSION}/wavpack-${WAVPACK_VERSION}.tar.bz2 \
+        RUN set -x \
+            && echo "Downloading WavPack ${WAVPACK_VERSION}..." \
+            && wget https://github.com/dbry/WavPack/releases/download/${WAVPACK_VERSION}/wavpack-${WAVPACK_VERSION}.tar.bz2 \
             && tar xjf wavpack-${WAVPACK_VERSION}.tar.bz2 \
             && cd wavpack-${WAVPACK_VERSION} \
-            && ./configure --enable-shared --prefix=/home/builder/wavpack-install \
-                         --with-libtool-sysroot=/home/builder/glibc-install \
-            && make \
-            && make install
+            && echo "Running autoconf..." \
+            && autoreconf -fi \
+            && echo "Configuring WavPack..." \
+            && unset LD_LIBRARY_PATH \
+            && ./configure --enable-shared \
+                         --prefix=/home/builder/wavpack-install \
+                         > ../wavpack-configure.log 2>&1 || (cat ../wavpack-configure.log && false) \
+            && echo "Building WavPack..." \
+            && make > ../wavpack-make.log 2>&1 || (cat ../wavpack-make.log && false) \
+            && echo "Installing WavPack..." \
+            && make install > ../wavpack-install.log 2>&1 || (cat ../wavpack-install.log && false)
 
         USER root
 
