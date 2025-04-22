@@ -62,7 +62,7 @@ jobs:
         # Download WavPack source first
         RUN set -x \
             && echo "Downloading WavPack ${WAVPACK_VERSION}..." \
-            && wget https://github.com/dbry/WavPack/releases/download/${WAVPACK_VERSION}/wavpack-${WAVPACK_VERSION}.tar.bz2 \
+            && wget https://www.wavpack.com/wavpack-${WAVPACK_VERSION}.tar.bz2 \
             && tar xjf wavpack-${WAVPACK_VERSION}.tar.bz2
 
         # Build glibc
@@ -138,10 +138,7 @@ jobs:
           2.33|2.35)
             echo "version=22.04" >> $GITHUB_OUTPUT
             ;;
-          2.36|2.37)
-            echo "version=23.10" >> $GITHUB_OUTPUT
-            ;;
-          2.39)
+          2.36|2.37|2.39)
             echo "version=24.04" >> $GITHUB_OUTPUT
             ;;
         esac
