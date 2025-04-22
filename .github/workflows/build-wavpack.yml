@@ -1,0 +1,85 @@
+name: Build WavPack Libraries
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build WavPack for glibc ${{ matrix.glibc_version }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        glibc_version: ['2.31', '2.32', '2.33', '2.34', '2.35', '2.36', '2.37', 2.38', '2.39', '2.40', '2.41']
+        wavpack_version: ['5.7.0']
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+    - name: Create Dockerfile for glibc build
+      run: |
+        cat > Dockerfile.build << 'EOF'
+        ARG GLIBC_VERSION
+        FROM ubuntu:22.04 as glibc-builder
+
+        ARG GLIBC_VERSION
+        ENV GLIBC_VERSION=${GLIBC_VERSION}
+
+        # Install build dependencies
+        RUN apt-get update && apt-get install -y \
+            build-essential \
+            wget \
+            bzip2 \
+            automake \
+            libtool \
+            gcc-multilib \
+            && rm -rf /var/lib/apt/lists/*
+
+        # Download and build glibc
+        RUN wget https://ftp.gnu.org/gnu/glibc/glibc-${GLIBC_VERSION}.tar.bz2 \
+            && tar xjf glibc-${GLIBC_VERSION}.tar.bz2 \
+            && mkdir glibc-build \
+            && cd glibc-build \
+            && ../glibc-${GLIBC_VERSION}/configure --prefix=/usr \
+            && make -j$(nproc) \
+            && make install
+
+        # Now build WavPack
+        ARG WAVPACK_VERSION
+        RUN wget https://github.com/dbry/WavPack/releases/download/${WAVPACK_VERSION}/wavpack-${WAVPACK_VERSION}.tar.bz2 \
+            && tar xjf wavpack-${WAVPACK_VERSION}.tar.bz2 \
+            && cd wavpack-${WAVPACK_VERSION} \
+            && ./configure --enable-shared --prefix=/usr/local \
+            && make \
+            && make install
+
+        # Create output directory
+        RUN mkdir -p /output/linux-x86_64-glibc${GLIBC_VERSION} \
+            && cp /usr/local/lib/libwavpack.so* /output/linux-x86_64-glibc${GLIBC_VERSION}/ \
+            && cp /usr/local/lib/libwavpack.so /output/linux-x86_64-glibc${GLIBC_VERSION}/libwavpack.so.1
+        EOF
+
+    - name: Build Docker image and extract libraries
+      run: |
+        docker build \
+          --build-arg GLIBC_VERSION=${{ matrix.glibc_version }} \
+          --build-arg WAVPACK_VERSION=${{ matrix.wavpack_version }} \
+          -f Dockerfile.build \
+          -t wavpack-builder .
+        
+        mkdir -p src/wavpack_numcodecs/libraries/${{ matrix.wavpack_version }}
+        docker create --name wavpack-container wavpack-builder
+        docker cp wavpack-container:/output/. src/wavpack_numcodecs/libraries/${{ matrix.wavpack_version }}/
+        docker rm wavpack-container
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: wavpack-libs-glibc${{ matrix.glibc_version }}
+        path: src/wavpack_numcodecs/libraries/${{ matrix.wavpack_version }}/linux-x86_64-glibc${{ matrix.glibc_version }}
+
+    - name: List built files
+      run: |
+        ls -la src/wavpack_numcodecs/libraries/${{ matrix.wavpack_version }}/linux-x86_64-glibc${{ matrix.glibc_version }}

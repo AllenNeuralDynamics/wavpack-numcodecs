@@ -43,7 +43,7 @@ def get_build_extensions():
             glibc_version = platform.libc_ver()[1]
             if glibc_version not in available_glibc_versions:
                 raise RuntimeError(
-                    f"Could not find a matching glibc version for the shipped libraries. "
+                    f"Could not find a matching the system's glibc version {glibc_version}. "
                     f"Available builds: {available_glibc_versions}"
                 )
             distr_folder = f"linux-x86_64-glibc{glibc_version}"
