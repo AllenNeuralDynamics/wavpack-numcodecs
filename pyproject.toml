@@ -23,7 +23,7 @@ dependencies = [
 [project.optional-dependencies]
 test = [
     "pytest",
-    "zarr",
+    "zarr<3.0.0",
     "Cython"
 ]
 
