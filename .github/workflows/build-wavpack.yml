@@ -8,9 +8,11 @@ jobs:
     name: Build WavPack for glibc ${{ matrix.glibc_version }}
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
+      max-parallel: 4
       matrix:
-        glibc_version: ['2.31', '2.32', '2.33', '2.34', '2.35', '2.36', '2.37', '2.38', '2.39', '2.40', '2.41']
-        wavpack_version: ['5.7.0', '5.8.0']
+        glibc_version: ['2.31', '2.33', '2.35', '2.36', '2.37', '2.39']  # Common versions from Ubuntu LTS releases
+        wavpack_version: ['5.7.0']  # Stick to stable version for now
 
     steps:
     - uses: actions/checkout@v4
@@ -35,30 +37,81 @@ jobs:
             automake \
             libtool \
             gcc-multilib \
+            gawk \
+            bison \
+            python3 \
+            gettext \
+            texinfo \
+            pkg-config \
+            file \
+            patchelf \
+            && ln -s /usr/bin/python3 /usr/bin/python \
             && rm -rf /var/lib/apt/lists/*
 
+        # Create a dedicated user for building
+        RUN useradd -m builder
+        USER builder
+        WORKDIR /home/builder
+
         # Download and build glibc
-        RUN wget https://ftp.gnu.org/gnu/glibc/glibc-${GLIBC_VERSION}.tar.bz2 \
+        RUN set -x \
+            && echo "Building glibc version ${GLIBC_VERSION}" \
+            && wget https://ftp.gnu.org/gnu/glibc/glibc-${GLIBC_VERSION}.tar.bz2 \
+            && echo "Extracting glibc source..." \
             && tar xjf glibc-${GLIBC_VERSION}.tar.bz2 \
             && mkdir glibc-build \
             && cd glibc-build \
-            && ../glibc-${GLIBC_VERSION}/configure --prefix=/usr \
-            && make -j$(nproc) \
-            && make install
+            && echo "Configuring glibc..." \
+            && ../glibc-${GLIBC_VERSION}/configure \
+                --prefix=/home/builder/glibc-install \
+                --disable-werror \
+                --enable-add-ons \
+                --with-headers=/usr/include \
+                --without-selinux \
+                > ../configure.log 2>&1 || (cat ../configure.log && false) \
+            && echo "Building glibc..." \
+            && make -j$(nproc) > ../make.log 2>&1 || (cat ../make.log && false) \
+            && echo "Installing glibc..." \
+            && make install > ../install.log 2>&1 || (cat ../install.log && false) \
+            && echo "glibc build completed successfully"
+
+        # Verify glibc installation
+        RUN /home/builder/glibc-install/lib/libc.so.6 --version
+
+        USER root
+
+        ENV PATH=/home/builder/glibc-install/bin:$PATH \
+            LD_LIBRARY_PATH=/home/builder/glibc-install/lib:$LD_LIBRARY_PATH \
+            CFLAGS="-I/home/builder/glibc-install/include" \
+            LDFLAGS="-L/home/builder/glibc-install/lib"
 
         # Now build WavPack
         ARG WAVPACK_VERSION
+        USER builder
         RUN wget https://github.com/dbry/WavPack/releases/download/${WAVPACK_VERSION}/wavpack-${WAVPACK_VERSION}.tar.bz2 \
             && tar xjf wavpack-${WAVPACK_VERSION}.tar.bz2 \
             && cd wavpack-${WAVPACK_VERSION} \
-            && ./configure --enable-shared --prefix=/usr/local \
+            && ./configure --enable-shared --prefix=/home/builder/wavpack-install \
+                         --with-libtool-sysroot=/home/builder/glibc-install \
             && make \
             && make install
 
-        # Create output directory
+        USER root
+
+        # Create output directory with the built libraries
         RUN mkdir -p /output/linux-x86_64-glibc${GLIBC_VERSION} \
-            && cp /usr/local/lib/libwavpack.so* /output/linux-x86_64-glibc${GLIBC_VERSION}/ \
-            && cp /usr/local/lib/libwavpack.so /output/linux-x86_64-glibc${GLIBC_VERSION}/libwavpack.so.1
+            && cp /home/builder/wavpack-install/lib/libwavpack.so* /output/linux-x86_64-glibc${GLIBC_VERSION}/ \
+            && cp /home/builder/wavpack-install/lib/libwavpack.so /output/linux-x86_64-glibc${GLIBC_VERSION}/libwavpack.so.1 \
+            && patchelf --set-rpath '$ORIGIN' /output/linux-x86_64-glibc${GLIBC_VERSION}/*.so* \
+            && echo "Built libraries:" \
+            && ls -l /output/linux-x86_64-glibc${GLIBC_VERSION}/ \
+            && ldd /output/linux-x86_64-glibc${GLIBC_VERSION}/libwavpack.so
+
+        # Clean up build files to reduce image size
+        RUN rm -rf \
+            /home/builder/glibc-* \
+            /home/builder/wavpack-* \
+            /var/lib/apt/lists/*
         EOF
 
     - name: Build Docker image and extract libraries
