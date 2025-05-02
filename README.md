@@ -19,11 +19,26 @@ brew install wavpack
 ```
 
 For Linux and Windows, the package comes with pre-built binaries of the most 
-[recent version Wavpack version](https://github.com/dbry/WavPack/releases/tag/5.7.0).
+[recent version Wavpack version](https://github.com/dbry/WavPack/releases/tag/5.8.0).
+
+On Windows, you need to have the "Microsoft C++ Build Tools" installed. You can download it and install it from [here](https://visualstudio.microsoft.com/visual-cpp-build-tools/).
 
 On Linux, if an existing `wavpack` installation is found, the package will use it. Otherwise, it will use the pre-built binaries available in the `wavpack_numcodecs/libraries` folder.
 
-On Windows, you need to have the "Microsoft C++ Build Tools" installed. You can download it and install it from [here](https://visualstudio.microsoft.com/visual-cpp-build-tools/).
+> [!IMPORTANT]
+> The pre-built binaries for Linux are pre-compiled against ``glibc`` libraries that come with Ubuntu LTS recent versions 
+> (2.35 for LTS 22.04 and 2.39 for LTS 24.04). 
+> If your system has a different version of ``glibc``, you need to install `wavpack` manually with:
+
+```bash
+WAVPACK_VERSION=5.8.0
+wget "https://www.wavpack.com/wavpack-${WAVPACK_VERSION}.tar.bz2"
+tar -xf wavpack-$WAVPACK_VERSION.tar.bz2
+cd wavpack-$WAVPACK_VERSION
+./configure
+sudo make install
+cd ..
+```
 
 ## Installation
 

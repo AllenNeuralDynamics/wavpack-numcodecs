@@ -1,6 +1,6 @@
 [project]
 name = "wavpack-numcodecs"
-version = "0.2.2"
+version = "0.2.3"
 description = "Numcodecs implementation of WavPack audio codec."
 authors = [
     {name = "Alessio Buccino", email = "alessiop.buccino@gmail.com"},
