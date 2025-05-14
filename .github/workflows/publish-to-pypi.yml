@@ -18,10 +18,8 @@ jobs:
           python-version: 3.11
       - name: Install dependencies for testing
         run: |
-          pip install pytest
-          pip install zarr
           pip install setuptools wheel twine
-          pip install .
+          pip install .[test]
       - name: Test core with pytest
         run: |
           pytest -v
