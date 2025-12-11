@@ -12,8 +12,10 @@ from wavpack_numcodecs import WavPack
 
 DEBUG = False
 
+ZARR_V3 = False
 if parse(zarr.__version__) >= parse("3.0.0"):
     zarr.config.set({"default_zarr_version": 3})
+    ZARR_V3 = True
 
 if parse(wavpack_version) >= parse("5.6.4"):
     print("Multi-threading available")
@@ -167,7 +169,10 @@ def test_wavpack_zarr(generate_test_data, bps, dtype):
             z[:] = test_sig
             assert z[:].shape == test_sig.shape
             assert z[:100].shape == test_sig[:100].shape
-            assert z.nbytes > z.nbytes_stored()
+            if ZARR_V3:
+                assert z.nbytes > z.nbytes_stored()
+            else:
+                assert z.nbytes > z.nbytes_stored
             if bps is None:
                 np.testing.assert_array_equal(z[:], test_sig)
 
@@ -196,7 +201,10 @@ def test_wavpack_zarr(generate_test_data, bps, dtype):
             z[:] = test_sig
             assert z[:].shape == test_sig.shape
             assert z[:100, :10].shape == test_sig[:100, :10].shape
-            assert z.nbytes > z.nbytes_stored()
+            if ZARR_V3:
+                assert z.nbytes > z.nbytes_stored()
+            else:
+                assert z.nbytes > z.nbytes_stored
             if bps is None:
                 np.testing.assert_array_equal(z[:], test_sig)
             
@@ -238,7 +246,10 @@ def test_wavpack_zarr(generate_test_data, bps, dtype):
             z[:] = test_sig
             assert z[:].shape == test_sig.shape
             assert z[:100, :2, :2].shape == test_sig[:100, :2, :2].shape
-            assert z.nbytes > z.nbytes_stored()
+            if ZARR_V3:
+                assert z.nbytes > z.nbytes_stored()
+            else:
+                assert z.nbytes > z.nbytes_stored
             if bps is None:
                 np.testing.assert_array_equal(z[:], test_sig)
 
