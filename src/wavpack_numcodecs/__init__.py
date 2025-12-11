@@ -16,11 +16,11 @@ if HAVE_ZARR:
         USE_ZARR_V3 = True
     
 if USE_ZARR_V3:
-    from numcodecs import register_codec
-    from wavpack_numcodecs.wavpack import WavPack
-else:
     from zarr.registry import register_codec
     from wavpack_numcodecs.wavpackv3 import WavPack
+else:
+    from numcodecs import register_codec
+    from wavpack_numcodecs.wavpack import WavPack
 
 register_codec("wavpack", WavPack)
 
