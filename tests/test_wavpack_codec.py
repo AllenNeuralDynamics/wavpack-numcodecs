@@ -149,8 +149,76 @@ def test_wavpack_noise_shaping(generate_test_data, dtype, dns, shaping_weight):
 
 @pytest.mark.parametrize("dtype", dtypes)
 @pytest.mark.parametrize("bps", [None, 3])
+@pytest.mark.skipif(ZARR_V3, reason="These are tests for Zarr V2")
 @pytest.mark.zarr
-def test_wavpack_zarr(generate_test_data, bps, dtype):
+def test_wavpack_zarr_v2(generate_test_data, bps, dtype):
+    print(f"\n\nZARR: testing dtype {dtype}\n\n")
+    test_signals = generate_test_data[dtype]
+
+    for test_sig in test_signals:
+        compressor = WavPack(bps=bps)
+
+        print(f"signal shape: {test_sig.shape} - bps: {bps}")
+        if test_sig.ndim == 1:
+            z = zarr.array(test_sig, chunks=None, compressor=compressor)
+            assert z[:].shape == test_sig.shape
+            assert z[:100].shape == test_sig[:100].shape
+            assert z.nbytes > z.nbytes_stored
+            if bps is None:
+                np.testing.assert_array_equal(z[:], test_sig)
+
+            z = zarr.array(test_sig, chunks=(1000), compressor=compressor)
+            assert z[:].shape == test_sig.shape
+            assert z[:100].shape == test_sig[:100].shape
+            if bps is None:
+                np.testing.assert_array_equal(z[:], test_sig)
+
+        elif test_sig.ndim == 2:
+            z = zarr.array(test_sig, chunks=None, compressor=compressor)
+            assert z[:].shape == test_sig.shape
+            assert z[:100, :10].shape == test_sig[:100, :10].shape
+            assert z.nbytes > z.nbytes_stored
+            if bps is None:
+                np.testing.assert_array_equal(z[:], test_sig)
+
+            z = zarr.array(test_sig, chunks=(1000, None), compressor=compressor)
+            assert z[:].shape == test_sig.shape
+            assert z[:100, :10].shape == test_sig[:100, :10].shape
+            if bps is None:
+                np.testing.assert_array_equal(z[:], test_sig)
+
+            z = zarr.array(test_sig, chunks=(None, 10), compressor=compressor)
+            assert z[:].shape == test_sig.shape
+            assert z[:100, :10].shape == test_sig[:100, :10].shape
+            if bps is None:
+                np.testing.assert_array_equal(z[:], test_sig)
+
+        else:  # 3d
+            z = zarr.array(test_sig, chunks=None, compressor=compressor)
+            assert z[:].shape == test_sig.shape
+            assert z[:100, :2, :2].shape == test_sig[:100, :2, :2].shape
+            assert z.nbytes > z.nbytes_stored
+            if bps is None:
+                np.testing.assert_array_equal(z[:], test_sig)
+
+            z = zarr.array(test_sig, chunks=(1000, 2, None), compressor=compressor)
+            assert z[:].shape == test_sig.shape
+            assert z[:100, :2, :2].shape == test_sig[:100, :2, :2].shape
+            if bps is None:
+                np.testing.assert_array_equal(z[:], test_sig)
+
+            z = zarr.array(test_sig, chunks=(None, 2, 3), compressor=compressor)
+            assert z[:].shape == test_sig.shape
+            assert z[:100, :2, :2].shape == test_sig[:100, :2, :2].shape
+            if bps is None:
+                np.testing.assert_array_equal(z[:], test_sig)
+
+
+@pytest.mark.parametrize("dtype", dtypes)
+@pytest.mark.parametrize("bps", [None, 3])
+@pytest.mark.skipif(not ZARR_V3, reason="These are tests for Zarr V3")
+@pytest.mark.zarr
+def test_wavpack_zarr_v2(generate_test_data, bps, dtype):
     print(f"\n\nZARR: testing dtype {dtype}\n\n")
     test_signals = generate_test_data[dtype]
 
@@ -164,15 +232,11 @@ def test_wavpack_zarr(generate_test_data, bps, dtype):
                 chunks=test_sig.shape, 
                 dtype=test_sig.dtype,
                 codecs=[compressor],
-                zarr_format=3
             )
             z[:] = test_sig
             assert z[:].shape == test_sig.shape
             assert z[:100].shape == test_sig[:100].shape
-            if ZARR_V3:
-                assert z.nbytes > z.nbytes_stored()
-            else:
-                assert z.nbytes > z.nbytes_stored
+            assert z.nbytes > z.nbytes_stored()
             if bps is None:
                 np.testing.assert_array_equal(z[:], test_sig)
 
@@ -181,7 +245,6 @@ def test_wavpack_zarr(generate_test_data, bps, dtype):
                 chunks=(1000,),
                 dtype=test_sig.dtype,
                 codecs=[compressor],
-                zarr_format=3
             )
             z[:] = test_sig
             assert z[:].shape == test_sig.shape
@@ -196,15 +259,11 @@ def test_wavpack_zarr(generate_test_data, bps, dtype):
                 chunks=test_sig_shape,
                 dtype=test_sig.dtype,
                 codecs=[compressor],
-                zarr_format=3
             )
             z[:] = test_sig
             assert z[:].shape == test_sig.shape
             assert z[:100, :10].shape == test_sig[:100, :10].shape
-            if ZARR_V3:
-                assert z.nbytes > z.nbytes_stored()
-            else:
-                assert z.nbytes > z.nbytes_stored
+            assert z.nbytes > z.nbytes_stored()
             if bps is None:
                 np.testing.assert_array_equal(z[:], test_sig)
             
@@ -213,7 +272,6 @@ def test_wavpack_zarr(generate_test_data, bps, dtype):
                 chunks=(1000, test_sig_shape[1]),
                 dtype=test_sig.dtype,
                 codecs=[compressor],
-                zarr_format=3
             )
             z[:] = test_sig
             assert z[:].shape == test_sig.shape
@@ -226,7 +284,6 @@ def test_wavpack_zarr(generate_test_data, bps, dtype):
                 chunks=(test_sig_shape[0], 10),
                 dtype=test_sig.dtype,
                 codecs=[compressor],
-                zarr_format=3
             )
             z[:] = test_sig
             assert z[:].shape == test_sig.shape
@@ -241,15 +298,11 @@ def test_wavpack_zarr(generate_test_data, bps, dtype):
                 chunks=test_sig_shape,
                 dtype=test_sig.dtype,
                 codecs=[compressor],
-                zarr_format=3
             )
             z[:] = test_sig
             assert z[:].shape == test_sig.shape
             assert z[:100, :2, :2].shape == test_sig[:100, :2, :2].shape
-            if ZARR_V3:
-                assert z.nbytes > z.nbytes_stored()
-            else:
-                assert z.nbytes > z.nbytes_stored
+            assert z.nbytes > z.nbytes_stored()
             if bps is None:
                 np.testing.assert_array_equal(z[:], test_sig)
 
@@ -258,7 +311,6 @@ def test_wavpack_zarr(generate_test_data, bps, dtype):
                 chunks=(1000, 2, test_sig_shape[2]),
                 dtype=test_sig.dtype,
                 codecs=[compressor],
-                zarr_format=3
             )
             z[:] = test_sig
             assert z[:].shape == test_sig.shape
@@ -271,7 +323,6 @@ def test_wavpack_zarr(generate_test_data, bps, dtype):
                 chunks=(test_sig_shape[0], 2, 3),
                 dtype=test_sig.dtype,
                 codecs=[compressor],
-                zarr_format=3
             )
             z[:] = test_sig
             assert z[:].shape == test_sig.shape
@@ -279,9 +330,7 @@ def test_wavpack_zarr(generate_test_data, bps, dtype):
             if bps is None:
                 np.testing.assert_array_equal(z[:], test_sig)
 
-
 if __name__ == "__main__":
     test_wavpack_numcodecs()
     test_wavpack_multi_threading_enabled()
     test_wavpack_multi_threading_disabled()
-    test_wavpack_zarr()
