@@ -68,15 +68,23 @@ data = ... # any numpy array
 # instantiate WavPack compressor
 wv_compressor = WavPack(level=2, bps=None)
 
-z = zarr.array(data, compressor=wv_compressor)
+# v2
+group = zarr.group()
+z = group.create_dataset(name="wv_dset", data=data, compressor=wv_compressor)
+
+# v3
+zarr.config.set({"default_zarr_version": 3})
+group = zarr.group()
+z = group.create(name="wv_dset3", data=data, codecs=[wv_compressor])
 
 data_read = z[:]
 ```
 Available `**kwargs` can be browsed with: `WavPack?`
 
-**NOTE:** 
-In order to reload in zarr an array saved with the `WavPack`, you just need to have the `wavpack_numcodecs` package
+> **_NOTE 1:_**  In order to reload in zarr an array saved with the `WavPack`, you just need to have the `wavpack_numcodecs` package
 installed.
+
+> **_NOTE 2:_** The Zarr v3 implementation is an `ArrayBytesCodec`. The `zarr.create_array` function only supports `ArrayArrayCodec` objects for `filters` and `BytesBytesCodecs` for `compressors`. Hence, we need to use the `zarr.create` function instead, which support any list of codecs (including `ArrayBytesCodec` objects).
 
 # Developmers guide
 
