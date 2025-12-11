@@ -12,8 +12,8 @@ from wavpack_numcodecs import WavPack
 
 DEBUG = False
 
-zarr.config.set({"default_zarr_version": 3})
-
+if parse(zarr.__version__) >= parse("3.0.0"):
+    zarr.config.set({"default_zarr_version": 3})
 
 if parse(wavpack_version) >= parse("5.6.4"):
     print("Multi-threading available")
