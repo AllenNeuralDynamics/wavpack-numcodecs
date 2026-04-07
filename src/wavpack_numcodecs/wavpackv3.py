@@ -41,6 +41,9 @@ class WavPack(ArrayBytesCodec):
         elif not isinstance(chunk_array, np.ndarray):
             chunk_array = np.asarray(chunk_array)
 
+        if not chunk_array.data.contiguous:
+            chunk_array = np.ascontiguousarray(chunk_array)
+
         encoded = await asyncio.to_thread(self._codec.encode, chunk_array)
         return chunk_spec.prototype.buffer.from_bytes(encoded)
 
@@ -69,29 +72,18 @@ class WavPack(ArrayBytesCodec):
         return input_byte_length
 
     @classmethod
-    def from_dict(cls, data: dict) -> "WavPack":
+    def from_config(cls, config) -> "WavPack":
         """Create codec from configuration dictionary."""
-        config = data.get("configuration", {})
-        return cls(
-            level=config.get("level", 1),
-            bps=config.get("bps"),
-            dynamic_noise_shaping=config.get("dynamic_noise_shaping", True),
-            shaping_weight=config.get("shaping_weight", 0.0),
-            num_encoding_threads=config.get("num_encoding_threads", 1),
-            num_decoding_threads=config.get("num_decoding_threads", 8),
-        )
+        return WavPackV2.from_config(config)
 
-    def to_dict(self) -> dict:
+    def get_config(self) -> dict:
         """Convert codec to configuration dictionary."""
-        config = self._codec.get_config()
-        return {
-            "name": "wavpack",
-            "configuration": {
-                "level": config.get("level", 1),
-                "bps": config.get("bps"),
-                "dynamic_noise_shaping": config.get("dynamic_noise_shaping", True),
-                "shaping_weight": config.get("shaping_weight", 0.0),
-                "num_encoding_threads": config.get("num_encoding_threads", 1),
-                "num_decoding_threads": config.get("num_decoding_threads", 8),
-            },
-        }
+        return self._codec.get_config()
+
+    def __eq__(self, other):
+        # override in sub-class if need special equality comparison
+        try:
+            return self.get_config() == other.get_config()
+        except AttributeError:
+            return False
+
