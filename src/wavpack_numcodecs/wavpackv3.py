@@ -11,6 +11,8 @@ if TYPE_CHECKING:
 
 
 class WavPack(ArrayBytesCodec):
+    codec_id = "wavpack"
+
     def __init__(
         self,
         level: int = 1,
@@ -74,7 +76,8 @@ class WavPack(ArrayBytesCodec):
     @classmethod
     def from_config(cls, config) -> "WavPack":
         """Create codec from configuration dictionary."""
-        return WavPackV2.from_config(config)
+        config = {k: v for k, v in config.items() if k != "id"}
+        return cls(**config)
 
     def get_config(self) -> dict:
         """Convert codec to configuration dictionary."""
