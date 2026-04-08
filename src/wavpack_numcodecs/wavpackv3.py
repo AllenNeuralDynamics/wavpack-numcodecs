@@ -73,20 +73,21 @@ class WavPack(ArrayBytesCodec):
         # Return a conservative estimate
         return input_byte_length
 
+    def to_dict(self) -> dict:
+        """Serialize to zarr v3 codec metadata (uses 'name' key)."""
+        config = self._codec.get_config()
+        return {
+            "name": self.codec_id,
+            "level": config["level"],
+            "bps": config["bps"] if config["bps"] else None,
+            "dynamic_noise_shaping": config["dynamic_noise_shaping"],
+            "shaping_weight": config["shaping_weight"],
+            "num_encoding_threads": config["num_encoding_threads"],
+            "num_decoding_threads": config["num_decoding_threads"],
+        }
+
     @classmethod
-    def from_config(cls, config) -> "WavPack":
-        """Create codec from configuration dictionary."""
-        config = {k: v for k, v in config.items() if k != "id"}
-        return cls(**config)
-
-    def get_config(self) -> dict:
-        """Convert codec to configuration dictionary."""
-        return self._codec.get_config()
-
-    def __eq__(self, other):
-        # override in sub-class if need special equality comparison
-        try:
-            return self.get_config() == other.get_config()
-        except AttributeError:
-            return False
-
+    def from_dict(cls, data: dict) -> "WavPack":
+        """Reconstruct from zarr v3 codec metadata."""
+        data = {k: v for k, v in data.items() if k != "name"}
+        return cls(**data)
