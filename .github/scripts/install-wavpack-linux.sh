@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 
 # Check if WAVPACK_VERSION argument is provided
 if [ -z "$1" ]; then
@@ -25,7 +26,34 @@ sudo apt update
 sudo apt install wget
 sudo apt install -y gettext
 
-wget "https://www.wavpack.com/wavpack-${WAVPACK_VERSION}.tar.bz2"
+TARBALL="wavpack-${WAVPACK_VERSION}.tar.bz2"
+
+# www.wavpack.com sporadically returns "415 Unsupported Media Type" for a plain
+# GET (WAF/CDN quirk), so retry with backoff and fall back to the identical
+# tarball published on GitHub Releases.
+MIRRORS=(
+    "https://www.wavpack.com/${TARBALL}"
+    "https://github.com/dbry/WavPack/releases/download/${WAVPACK_VERSION}/${TARBALL}"
+)
+
+downloaded=0
+for url in "${MIRRORS[@]}"; do
+    echo "Attempting download from: $url"
+    if wget --tries=5 --waitretry=10 --retry-connrefused \
+            --retry-on-http-error=415,429,500,502,503,504 \
+            --header="User-Agent: Mozilla/5.0" \
+            -O "$TARBALL" "$url"; then
+        downloaded=1
+        break
+    fi
+    echo "Download failed from $url, trying next mirror..."
+done
+
+if [ "$downloaded" -ne 1 ]; then
+    echo "Error: failed to download $TARBALL from all mirrors."
+    exit 1
+fi
+
 tar -xf wavpack-$WAVPACK_VERSION.tar.bz2
 cd wavpack-$WAVPACK_VERSION
 ./configure
