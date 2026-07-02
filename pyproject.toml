@@ -32,7 +32,6 @@ test_no_cython = [
     "zarr"
 ]
 
-
 [project.urls]
 "Homepage" = "https://github.com/AllenNeuralDynamics/wavpack-numcodecs"
 
