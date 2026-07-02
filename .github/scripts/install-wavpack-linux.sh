@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # Check if WAVPACK_VERSION argument is provided
-if [ -z "$1" ]; then
+if [ -z "${1:-}" ]; then
     echo "Error: WAVPACK_VERSION argument is required."
     exit 1
 else
@@ -10,7 +10,7 @@ else
 fi
 
 # Check if TARGET_FOLDER argument is provided
-if [ -z "$2" ]; then
+if [ -z "${2:-}" ]; then
     TARGET_FOLDER=$(pwd)
 else
     TARGET_FOLDER=$2
