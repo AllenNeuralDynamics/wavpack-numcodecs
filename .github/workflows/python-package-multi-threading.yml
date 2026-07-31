@@ -8,13 +8,14 @@ on:
 
 jobs:
   build-and-test:
-    name: Test on ${{ matrix.os }} - Python ${{ matrix.python-version }}
+    name: Test on ${{ matrix.os }} - Python ${{ matrix.python-version }} - Zarr ${{ matrix.zarr-version }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
         os: ["ubuntu-latest", "macos-latest"]
-        python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+        python-version: ["3.11", "3.13"]
+        zarr-version: ["2.18.4", "3.1.6"]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -45,6 +46,13 @@ jobs:
       - name: Install dependencies
         run: |
           pip install .[test]
+      - name: Install Zarr
+        run: |
+          pip install zarr==${{ matrix.zarr-version }}
+      - name: Downgrade numcodecs
+        if: matrix.zarr-version == '2.18.4'
+        run: |
+          pip install "numcodecs<0.16.0"
       - name: Test imports and version
         run: |
           pytest -s tests/test_imports.py

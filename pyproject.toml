@@ -1,6 +1,6 @@
 [project]
 name = "wavpack-numcodecs"
-version = "0.2.3"
+version = "0.3.0"
 description = "Numcodecs implementation of WavPack audio codec."
 authors = [
     {name = "Alessio Buccino", email = "alessiop.buccino@gmail.com"},
@@ -23,21 +23,20 @@ dependencies = [
 [project.optional-dependencies]
 test = [
     "pytest",
-    "zarr<3.0.0",
+    "zarr",
     "Cython"
 ]
 
 test_no_cython = [
     "pytest",
-    "zarr<3.0.0"
+    "zarr"
 ]
-
 
 [project.urls]
 "Homepage" = "https://github.com/AllenNeuralDynamics/wavpack-numcodecs"
 
 [project.entry-points."numcodecs.codecs"]
-wavpack = "wavpack_numcodecs:WavPack"
+wavpack = "wavpack_numcodecs.wavpack:WavPack"
 
 [build-system]
 requires = ["setuptools>=62.0"]
