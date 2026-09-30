@@ -33,7 +33,7 @@ jobs:
       - name: Set up Homebrew (macos)
         if: matrix.os == 'macos-latest'
         id: set-up-homebrew
-        uses: Homebrew/actions/setup-homebrew@master
+        uses: Homebrew/actions/setup-homebrew@main
       - name: Install WavPack (macos)
         if: matrix.os == 'macos-latest'
         run: |
