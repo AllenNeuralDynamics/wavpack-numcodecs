@@ -37,6 +37,8 @@ test_no_cython = [
 
 [project.entry-points."numcodecs.codecs"]
 wavpack = "wavpack_numcodecs.wavpack:WavPack"
+[project.entry-points."zarr.codecs"]
+wavpack = "wavpack_numcodecs.wavpackv3:WavPack"
 
 [build-system]
 requires = ["setuptools>=62.0"]
