@@ -329,6 +329,3 @@ class WavPack(Codec):
     def decode(self, buf, out=None):        
         buf = ensure_contiguous_ndarray(buf, self.max_buffer_size)
         return decompress(buf, out, self.num_decoding_threads)
-
-
-numcodecs.register_codec(WavPack)
