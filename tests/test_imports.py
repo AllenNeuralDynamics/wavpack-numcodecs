@@ -2,7 +2,7 @@ def test_imports():
     from wavpack_numcodecs import wavpack_version
 
     print(f"\nWavpack library verison: {wavpack_version}")
-    from wavpack_numcodecs import WavPack
+    from wavpack_numcodecs.wavpack import WavPack
 
     wv0 = WavPack(level=2)
     print(wv0)
@@ -11,8 +11,8 @@ def test_imports():
 
 
 def test_global_settings():
+    from wavpack_numcodecs.wavpack import WavPack
     from wavpack_numcodecs import (
-        WavPack,
         get_num_decoding_threads,
         get_num_encoding_threads,
         reset_num_decoding_threads,
