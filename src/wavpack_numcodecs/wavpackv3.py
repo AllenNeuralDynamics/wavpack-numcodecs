@@ -1,5 +1,5 @@
 from zarr.abc.codec import ArrayBytesCodec
-from zarr.core.buffer import Buffer, BufferPrototype
+from zarr.core.buffer import Buffer, BufferPrototype, NDBuffer
 from zarr.core.common import BytesLike
 from wavpack_numcodecs.wavpack import WavPack as WavPackV2
 import numpy as np
@@ -53,7 +53,7 @@ class WavPack(ArrayBytesCodec):
         self,
         chunk_bytes: Buffer,
         chunk_spec: "ArraySpec",
-    ) -> np.ndarray:
+    ) -> NDBuffer:
         """Decode a single chunk."""
         decoded = await asyncio.to_thread(self._codec.decode, chunk_bytes.to_bytes())
 
@@ -64,7 +64,8 @@ class WavPack(ArrayBytesCodec):
 
         # Ensure it's a numpy array with correct shape
         if isinstance(decoded, np.ndarray):
-            return decoded.reshape(chunk_spec.shape)
+            # zarr merges partial chunk writes into an NDBuffer, not a plain ndarray
+            return chunk_spec.prototype.nd_buffer.from_ndarray_like(decoded.reshape(chunk_spec.shape))
         else:
             raise TypeError(f"Expected numpy array from decode, got {type(decoded)}")
 

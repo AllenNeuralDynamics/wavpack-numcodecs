@@ -301,6 +301,26 @@ def test_wavpack_zarr_v3(generate_test_data, bps, dtype):
                 np.testing.assert_array_equal(z[:], test_sig)
 
 
+
+@pytest.mark.parametrize("shards", [None, (300, 4)])
+@pytest.mark.skipif(not ZARR_V3, reason="These are tests for Zarr V3")
+@pytest.mark.zarr
+def test_wavpack_zarr_v3_partial_write(shards):
+    # partial writes into an existing chunk decode it and merge the new values
+    z = zarr.create_array(
+        store=zarr.storage.MemoryStore(),
+        shape=(250, 4),
+        chunks=(100, 4),
+        shards=shards,
+        dtype="int16",
+        serializer=WavPack(),
+    )
+    expected = np.zeros((250, 4), dtype="int16")
+    for start, stop, value in [(0, 100, 1), (100, 150, 2), (150, 250, 3), (120, 130, 4)]:
+        z[start:stop] = value
+        expected[start:stop] = value
+    np.testing.assert_array_equal(z[:], expected)
+
 if __name__ == "__main__":
     test_wavpack_numcodecs()
     test_wavpack_multi_threading_enabled()
