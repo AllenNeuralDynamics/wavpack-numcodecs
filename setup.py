@@ -18,6 +18,38 @@ LATEST_WAVPACK_VERSION = "5.8.0"
 SRC_FOLDER = "src/wavpack_numcodecs"
 
 
+def _glibc_tuple(version):
+    return tuple(int(part) for part in version.split("."))
+
+
+def select_glibc_build(wavpack_libraries_folder):
+    """Return the bundled Linux build folder with the newest glibc not newer than the system's.
+
+    glibc is backward compatible, so a library linked against an older glibc runs on a newer one;
+    requiring an exact match breaks every distribution released after the newest bundled build.
+    """
+    prefix = f"linux-{platform.machine()}-glibc"
+    available = {
+        _glibc_tuple(p.name[len(prefix) :]): p.name
+        for p in wavpack_libraries_folder.iterdir()
+        if p.is_dir() and p.name.startswith(prefix)
+    }
+    libc, system_version = platform.libc_ver()
+    if libc != "glibc" or not system_version:
+        raise RuntimeError(
+            f"The shipped WavPack libraries need glibc, found {libc or 'an unknown libc'}. "
+            "Install WavPack system-wide so the `wavpack` executable is on PATH."
+        )
+    compatible = [version for version in available if version <= _glibc_tuple(system_version)]
+    if not compatible:
+        raise RuntimeError(
+            f"No shipped WavPack build for {platform.machine()} works with glibc {system_version}. "
+            f"Available builds: {sorted(available.values())}. "
+            "Install WavPack system-wide so the `wavpack` executable is on PATH."
+        )
+    return available[max(compatible)]
+
+
 def get_build_extensions():
     include_dirs = [f"{SRC_FOLDER}/include"]
     runtime_library_dirs = []
@@ -33,20 +65,7 @@ def get_build_extensions():
         else:
             print("Using shipped libraries")
             wavpack_libraries_folder = Path(f"{SRC_FOLDER}/libraries/{LATEST_WAVPACK_VERSION}")
-            available_glibc_builds = [
-                p.name for p in wavpack_libraries_folder.iterdir() if p.is_dir() and "linux" in p.name
-            ]
-            available_glibc_versions = [
-                p[p.find("glibc") + len("glibc") :] for p in available_glibc_builds
-            ]
-
-            glibc_version = platform.libc_ver()[1]
-            if glibc_version not in available_glibc_versions:
-                raise RuntimeError(
-                    f"Could not find a matching the system's glibc version {glibc_version}. "
-                    f"Available builds: {available_glibc_versions}"
-                )
-            distr_folder = f"linux-x86_64-glibc{glibc_version}"
+            distr_folder = select_glibc_build(wavpack_libraries_folder)
 
             extra_link_args = [f"-L{wavpack_libraries_folder}/{distr_folder}"]
             runtime_library_dirs = [
