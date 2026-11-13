@@ -1,16 +1,21 @@
-from zarr.abc.codec import ArrayBytesCodec
-from zarr.core.buffer import Buffer, BufferPrototype, NDBuffer
-from zarr.core.common import BytesLike
-from wavpack_numcodecs.wavpack import WavPack as WavPackV2
-import numpy as np
+"""WavPack as a zarr v3 array-to-bytes codec."""
+
 import asyncio
 from typing import TYPE_CHECKING
+
+import numpy as np
+from zarr.abc.codec import ArrayBytesCodec
+from zarr.core.buffer import Buffer, NDBuffer
+
+from wavpack_numcodecs.wavpack import WavPack as WavPackV2
 
 if TYPE_CHECKING:
     from zarr.core.array_spec import ArraySpec
 
 
 class WavPack(ArrayBytesCodec):
+    """Zarr v3 codec wrapping the numcodecs WavPack codec; use it as an array's serializer."""
+
     codec_id = "wavpack"
 
     def __init__(
@@ -70,8 +75,7 @@ class WavPack(ArrayBytesCodec):
             raise TypeError(f"Expected numpy array from decode, got {type(decoded)}")
 
     def compute_encoded_size(self, input_byte_length: int, chunk_spec: "ArraySpec") -> int:
-        # WavPack compression ratio is variable, so we can't predict the exact size
-        # Return a conservative estimate
+        """Return the input size, an upper bound, since WavPack's compression ratio varies with the data."""
         return input_byte_length
 
     def to_dict(self) -> dict:

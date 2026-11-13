@@ -71,7 +71,7 @@ def compress(source, int level, int num_samples, int num_chans, float bps, int d
     bps : float
         Bytes per sample
     dtype : int
-        Integer to indicat which dtype the data is ("int8": 0, "int16": 1, "int32": 2, "float32": 3)
+        Integer to indicate which dtype the data is ("int8": 0, "int16": 1, "int32": 2, "float32": 3)
     dynamic_noise_shaping : int
         Whether to use dynamic noise shaping
     shaping_weight : float

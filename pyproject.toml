@@ -29,6 +29,7 @@ dependencies = [
 [project.urls]
 Repository = "https://github.com/AllenNeuralDynamics/wavpack-numcodecs"
 Issues = "https://github.com/AllenNeuralDynamics/wavpack-numcodecs/issues"
+Changelog = "https://github.com/AllenNeuralDynamics/wavpack-numcodecs/blob/main/CHANGELOG.md"
 
 [project.entry-points."numcodecs.codecs"]
 wavpack = "wavpack_numcodecs.wavpack:WavPack"
@@ -37,7 +38,9 @@ wavpack = "wavpack_numcodecs.wavpack:WavPack"
 wavpack = "wavpack_numcodecs.wavpackv3:WavPack"
 
 [dependency-groups]
-dev = ["pytest", "zarr"]
+test = ["pytest", "zarr"]
+lint = ["codespell", "interrogate", "ruff"]
+dev = [{ include-group = "test" }, { include-group = "lint" }]
 
 [tool.scikit-build]
 minimum-version = "build-system.requires"
@@ -67,9 +70,37 @@ build = "cp311-*"
 skip = "*-musllinux_*"
 archs = ["auto64"]
 config-settings = { "cmake.define.WAVPACK_NUMCODECS_WAVPACK" = "BUNDLED" }
-test-groups = ["dev"]
+test-groups = ["test"]
 test-sources = ["tests"]
 test-command = "python -m pytest tests"
 
 [tool.pytest.ini_options]
+addopts = "--strict-markers"
 testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+extend-exclude = ["extern"]
+
+[tool.ruff.lint]
+extend-select = ["Q", "RUF100", "C90", "I", "F", "E", "W", "D"]
+per-file-ignores = { "tests/*.py" = ["D"] }
+mccabe = { max-complexity = 14 }
+pydocstyle = { convention = "numpy" }
+
+[tool.codespell]
+skip = ".git,./extern,./build,./dist,uv.lock"
+
+[tool.interrogate]
+ignore-init-method = true
+ignore-magic = true
+ignore-module = true
+fail-under = 80
+exclude = ["tests", "build", "dist", "extern"]
+
+[tool.commitizen]
+version_provider = "pep621"
+tag_format = "$version"
+update_changelog_on_bump = true
+major_version_zero = true
