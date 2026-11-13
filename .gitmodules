@@ -1,0 +1,3 @@
+[submodule "extern/wavpack"]
+	path = extern/wavpack
+	url = https://github.com/dbry/WavPack.git

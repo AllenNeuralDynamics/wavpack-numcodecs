@@ -1,4 +1,4 @@
-[![PyPI version](https://badge.fury.io/py/wavpack-numcodecs.svg)](https://badge.fury.io/py/wavpack-numcodecs) ![tests](https://github.com/AllenNeuralDynamics/wavpack-numcodecs/actions/workflows/python-package-cython.yml/badge.svg)
+[![PyPI version](https://badge.fury.io/py/wavpack-numcodecs.svg)](https://badge.fury.io/py/wavpack-numcodecs) ![tests](https://github.com/AllenNeuralDynamics/wavpack-numcodecs/actions/workflows/build.yml/badge.svg)
 
 
 # WavPack - numcodecs implementation
@@ -10,50 +10,39 @@ This implementation enables one to use WavPack as a compressor in
 [Zarr](https://zarr.readthedocs.io/en/stable/index.html).
 
 
-### Requirements
-
-To install `wavpack-numcodecs` on MacOS, you need to install `wavpack` with `brew`:
-
-```bash
-brew install wavpack
-```
-
-For Linux and Windows, the package comes with pre-built binaries of the most 
-[recent version Wavpack version](https://github.com/dbry/WavPack/releases/tag/5.8.0).
-
-On Windows, you need to have the "Microsoft C++ Build Tools" installed. You can download it and install it from [here](https://visualstudio.microsoft.com/visual-cpp-build-tools/).
-
-On Linux, if an existing `wavpack` installation is found, the package will use it. Otherwise, it will use the pre-built binaries available in the `wavpack_numcodecs/libraries` folder.
-
-> [!IMPORTANT]
-> The pre-built binaries for Linux are pre-compiled against ``glibc`` libraries that come with Ubuntu LTS recent versions 
-> (2.35 for LTS 22.04 and 2.39 for LTS 24.04). 
-> If your system has a different version of ``glibc``, you need to install `wavpack` manually with:
-
-```bash
-WAVPACK_VERSION=5.8.0
-wget "https://www.wavpack.com/wavpack-${WAVPACK_VERSION}.tar.bz2"
-tar -xf wavpack-$WAVPACK_VERSION.tar.bz2
-cd wavpack-$WAVPACK_VERSION
-./configure
-sudo make install
-cd ..
-```
-
 ## Installation
-
-Install via `pip`:
 
 ```
 pip install wavpack-numcodecs
 ```
 
-Or from sources:
+Wheels are published for Linux (x86_64 and aarch64, glibc 2.17 or newer), macOS (arm64 and x86_64) and Windows
+(x86_64), for CPython 3.11 and later. Each wheel has WavPack built in, so nothing else needs installing.
+
+### Building from source
+
+Where no wheel fits, pip builds the package from the source distribution, which needs a C compiler and CMake. The
+build links a system WavPack (5.6.4 or newer) if `pkg-config` finds one, and otherwise compiles the copy of WavPack
+included in the source distribution.
+
+To build from a clone, fetch the WavPack submodule first:
 
 ```
-git clone https://github.com/AllenNeuralDynamics/wavpack-numcodecs.git
-cd wavpack_numcodecs
+git clone --recurse-submodules https://github.com/AllenNeuralDynamics/wavpack-numcodecs.git
+cd wavpack-numcodecs
 pip install .
+```
+
+The CMake option `WAVPACK_NUMCODECS_WAVPACK` chooses the WavPack to link:
+
+| Value | Links |
+|---|---|
+| `AUTO` (default) | a system WavPack >= 5.6.4 found by `pkg-config`, otherwise the bundled one |
+| `SYSTEM` | the system WavPack of any version, failing if there is none |
+| `BUNDLED` | the bundled WavPack, which the published wheels use |
+
+```
+pip install . --config-settings=cmake.define.WAVPACK_NUMCODECS_WAVPACK=SYSTEM
 ```
 
 ## Usage
@@ -86,18 +75,28 @@ installed.
 
 > **_NOTE 2:_** The Zarr v3 implementation is an `ArrayBytesCodec`. The `zarr.create_array` function only supports `ArrayArrayCodec` objects for `filters` and `BytesBytesCodecs` for `compressors`. Hence, we need to use the `WavPack` codec as a `serializer`, which is expected to be an `ArrayBytesCodec` object.
 
-# Developmers guide
+# Developers guide
 
-## How to upgrade WavPack installation and make a new release
+The extension modules are built with [scikit-build-core](https://scikit-build-core.readthedocs.io) and CMake from the
+Cython sources in `src/wavpack_numcodecs`. WavPack is pinned as the git submodule `extern/wavpack`.
 
-To upgrade the WavPack installation, you need to:
+Run the tests against a local build with:
 
-1. Download the latest version of WavPack from the [official website](https://www.wavpack.com/downloads.html).
-2. Extract the content of the downloaded file.
-3. Create a new folder in the `src/wavpack_numcodecs/libraries` folder with the name of the version of the WavPack you are installing.
-4. Add the Windows .dll and .lib files to the `windows-x86_32` and `windows-x86_64` folders, respectievely.
-5. Update the version of the CI workflows in the `.github/wavpack_latest_version.txt` file and set the `LATEST_WAVPACK_VERSION` variable in the `setup.py` to match the version of the WavPack you are installing.
-6. Make a PR with the changes and merge it.
-7. Manually trigger the `Build wavpack binaries` workflow in the Actions tab of the repository. This will automatically build the binaries for different Linux versions and make PRs with the changes to the `main` branch.
-8. Merge the automated PRs to update the Linux binaries.
-9. Update the version of the package in the `pyproject.toml` file and tag the repo to automatically make a new release.
+```
+uv run pytest
+```
+
+## Upgrading WavPack
+
+Dependabot proposes new WavPack releases as submodule bumps. To upgrade by hand:
+
+```
+git -C extern/wavpack fetch --tags
+git -C extern/wavpack checkout <new tag>
+git add extern/wavpack
+```
+
+## Making a release
+
+Update the version in `pyproject.toml` and push a tag. The `Build, test and publish` workflow builds the sdist and
+the wheels, tests them, and uploads them to PyPI.

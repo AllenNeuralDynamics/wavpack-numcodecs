@@ -1,0 +1,140 @@
+name: Build, test and publish
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened, ready_for_review]
+  push:
+    branches: [main]
+    tags: ["*"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  sdist:
+    name: Build sdist
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          submodules: true
+      - uses: astral-sh/setup-uv@v10
+      - run: uv build --sdist
+      - uses: actions/upload-artifact@v7
+        with:
+          name: sdist
+          path: dist/*.tar.gz
+
+  wheels:
+    name: Build wheels on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, ubuntu-24.04-arm, macos-latest, macos-15-intel, windows-latest]
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          submodules: true
+      - uses: pypa/cibuildwheel@v4.3.5
+      - uses: astral-sh/setup-uv@v10
+      - name: Check the wheels use only the stable ABI
+        shell: bash
+        run: uvx abi3audit --strict --report wheelhouse/*.whl
+      - uses: actions/upload-artifact@v7
+        with:
+          name: wheels-${{ matrix.os }}
+          path: wheelhouse/*.whl
+
+  # cibuildwheel tests each abi3 wheel on Python 3.11 only; this installs the same wheels on the newest Python and on
+  # zarr 2.
+  test-wheels:
+    name: Test wheel on ${{ matrix.os }}, Python ${{ matrix.python-version }}, zarr ${{ matrix.zarr-version }}
+    needs: wheels
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, ubuntu-24.04-arm, macos-latest, macos-15-intel, windows-latest]
+        python-version: ["3.14"]
+        zarr-version: ["3.1.6"]
+        include:
+          - {os: ubuntu-latest, python-version: "3.11", zarr-version: "2.18.4"}
+          - {os: macos-latest, python-version: "3.11", zarr-version: "2.18.4"}
+          - {os: windows-latest, python-version: "3.11", zarr-version: "2.18.4"}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python-version }}
+      - uses: actions/download-artifact@v8
+        with:
+          pattern: wheels-*
+          merge-multiple: true
+          path: wheelhouse
+      # --no-index keeps pip from taking a same-versioned wheel from PyPI instead of the one just built.
+      - name: Install the wheel
+        shell: bash
+        run: |
+          numcodecs="numcodecs"
+          if [ "${{ matrix.zarr-version }}" = "2.18.4" ]; then numcodecs="numcodecs<0.16"; fi
+          pip install numpy packaging pytest "zarr==${{ matrix.zarr-version }}" "$numcodecs"
+          pip install --no-index --no-deps --only-binary :all: --find-links wheelhouse wavpack-numcodecs
+      - name: Test
+        run: pytest -v tests
+
+  # Builds from the sdist against the platform's WavPack, as a distribution or conda-forge build would.
+  test-system-wavpack:
+    name: Test against system WavPack on ${{ matrix.os }}
+    needs: sdist
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.13"
+      - name: Install WavPack
+        run: |
+          if [ "$RUNNER_OS" = "Linux" ]; then
+            sudo apt-get update && sudo apt-get install -y libwavpack-dev pkg-config
+          else
+            brew install wavpack pkg-config
+          fi
+          pkg-config --modversion wavpack
+      - uses: actions/download-artifact@v8
+        with:
+          name: sdist
+          path: dist
+      - name: Build and install from the sdist
+        run: |
+          pip install pytest zarr
+          pip install --no-binary wavpack-numcodecs \
+            --config-settings=cmake.define.WAVPACK_NUMCODECS_WAVPACK=SYSTEM dist/*.tar.gz
+      - name: Test
+        run: |
+          python -c "import wavpack_numcodecs; print(wavpack_numcodecs.wavpack_version)"
+          pytest -v tests
+
+  publish:
+    name: Publish to PyPI
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
+    needs: [sdist, wheels, test-wheels, test-system-wavpack]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          path: dist
+          merge-multiple: true
+      - uses: pypa/gh-action-pypi-publish@v1.14.3
+        with:
+          password: ${{ secrets.AIND_PYPI_TOKEN }}
