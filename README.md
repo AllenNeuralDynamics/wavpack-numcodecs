@@ -80,11 +80,17 @@ installed.
 The extension modules are built with [scikit-build-core](https://scikit-build-core.readthedocs.io) and CMake from the
 Cython sources in `src/wavpack_numcodecs`. WavPack is pinned as the git submodule `extern/wavpack`.
 
-Run the tests against a local build with:
+Run the tests against a local build, and the linters, with:
 
 ```
 uv run pytest
+uv run ruff format
+uv run ruff check
+uv run codespell
+uv run interrogate -v
 ```
+
+CI runs the same linters before it builds anything.
 
 ## Upgrading WavPack
 
@@ -98,5 +104,9 @@ git add extern/wavpack
 
 ## Making a release
 
-Update the version in `pyproject.toml` and push a tag. The `Build, test and publish` workflow builds the sdist and
-the wheels, tests them, and uploads them to PyPI.
+Commit messages follow [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/). After CI passes on
+`main`, the `Bump version` workflow runs [commitizen](https://commitizen-tools.github.io/commitizen/): a `fix` commit
+since the last release bumps the patch version, a `feat` bumps the minor version, and other types bump nothing.
+Commitizen updates `pyproject.toml` and `CHANGELOG.md` and pushes the tag, and the tag's `Build, test and publish` run
+uploads the release to PyPI. To release changes that bump nothing, such as `build` or `ci` commits, run `Bump version`
+from the Actions tab with an increment of PATCH, MINOR or MAJOR.

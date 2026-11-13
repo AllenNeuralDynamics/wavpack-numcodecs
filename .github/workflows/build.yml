@@ -4,6 +4,7 @@ on:
   pull_request:
     branches: [main]
     types: [opened, synchronize, reopened, ready_for_review]
+    paths-ignore: ["**.md", "LICENSE"]
   push:
     branches: [main]
     tags: ["*"]
@@ -17,8 +18,21 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  # Runs before the builds so that a lint failure doesn't spend the wheel matrix.
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10.3.3
+      - run: uv run --only-group lint ruff format --check --diff .
+      - run: uv run --only-group lint ruff check --output-format=github .
+      - run: uv run --only-group lint codespell
+      - run: uv run --only-group lint interrogate -v
+
   sdist:
     name: Build sdist
+    needs: lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -33,6 +47,7 @@ jobs:
 
   wheels:
     name: Build wheels on ${{ matrix.os }}
+    needs: lint
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
