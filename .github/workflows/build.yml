@@ -82,9 +82,7 @@ jobs:
       - name: Install the wheel
         shell: bash
         run: |
-          numcodecs="numcodecs"
-          if [ "${{ matrix.zarr-version }}" = "2" ]; then numcodecs="numcodecs<0.16"; fi
-          pip install numpy packaging pytest "zarr==${{ matrix.zarr-version }}.*" "$numcodecs"
+          pip install numpy numcodecs packaging pytest "zarr==${{ matrix.zarr-version }}.*"
           pip install --no-index --no-deps --only-binary :all: --find-links wheelhouse wavpack-numcodecs
       - name: Test
         run: pytest -v tests
