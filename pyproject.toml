@@ -1,3 +1,7 @@
+[build-system]
+requires = ["scikit-build-core>=0.11", "cython>=3.1", "cython-cmake>=0.2"]
+build-backend = "scikit_build_core.build"
+
 [project]
 name = "wavpack-numcodecs"
 version = "0.3.2"
@@ -7,61 +11,96 @@ authors = [
     {name = "David Bryant", email = "david@wavpack.com"},
 ]
 readme = "README.md"
-license = {text = "MIT"}
-keywords = ["example", "project"]
+license = "MIT AND BSD-3-Clause"
+license-files = ["LICENSE", "extern/wavpack/COPYING"]
+requires-python = ">=3.11"
+keywords = ["wavpack", "zarr", "numcodecs", "compression", "electrophysiology"]
 classifiers = [
     "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Cython",
     "Operating System :: OS Independent",
 ]
 dependencies = [
     "numpy",
     "numcodecs",
-    "packaging"
-]
-
-[project.optional-dependencies]
-test = [
-    "pytest",
-    "zarr",
-    "Cython"
-]
-
-test_no_cython = [
-    "pytest",
-    "zarr"
+    "packaging",
 ]
 
 [project.urls]
-"Homepage" = "https://github.com/AllenNeuralDynamics/wavpack-numcodecs"
+Repository = "https://github.com/AllenNeuralDynamics/wavpack-numcodecs"
+Issues = "https://github.com/AllenNeuralDynamics/wavpack-numcodecs/issues"
+Changelog = "https://github.com/AllenNeuralDynamics/wavpack-numcodecs/blob/main/CHANGELOG.md"
 
 [project.entry-points."numcodecs.codecs"]
 wavpack = "wavpack_numcodecs.wavpack:WavPack"
+
 [project.entry-points."zarr.codecs"]
 wavpack = "wavpack_numcodecs.wavpackv3:WavPack"
 
-[build-system]
-requires = ["setuptools>=62.0"]
-build-backend = "setuptools.build_meta"
+[dependency-groups]
+test = ["pytest", "zarr"]
+lint = ["codespell", "interrogate", "ruff"]
+dev = [{ include-group = "test" }, { include-group = "lint" }]
 
-[tool.setuptools]
-include-package-data = true
-package-data = {"wavpack_numcodecs" = ["**/*.pyx", "**/*.pxd", "**/*.c", "**/*.h", "**/*.so", "**/*.so.*", "**/*.dll", "**/*.lib"]}
+[tool.scikit-build]
+minimum-version = "build-system.requires"
+build-dir = "build/{wheel_tag}"
+# One wheel per platform for every CPython from 3.11 on (the buffer protocol joined the limited API in 3.11).
+wheel.py-api = "cp311"
+wheel.packages = ["src/wavpack_numcodecs"]
+wheel.exclude = ["**.pyx", "**.pxd", "wavpack_numcodecs/src/**"]
+install.components = ["python"]
+sdist.exclude = [
+    ".github",
+    "extern/wavpack/.github",
+    "extern/wavpack/audition",
+    "extern/wavpack/fuzzing",
+    "extern/wavpack/winamp",
+    "extern/wavpack/xmms",
+    "extern/wavpack/wavpackexe",
+    "extern/wavpack/wvgainexe",
+    "extern/wavpack/wvtagexe",
+    "extern/wavpack/wvtestexe",
+    "extern/wavpack/wvunpackexe",
+]
 
-[tool.setuptools.exclude-package-data]
-wavpack_numcodecs = ["**/tests/test_*"]
-
-[tool.setuptools.packages.find]
-where = ["src"]
-include = ["wavpack_numcodecs*"]
-namespaces = false
-exclude = ["wavpack_numcodecs.*.tests"]
-
-[tool.black]
-line-length = 120
+[tool.cibuildwheel]
+# The cp311 wheel is abi3 and serves every later CPython; platforms without a wheel build from the sdist.
+build = "cp311-*"
+skip = "*-musllinux_*"
+archs = ["auto64"]
+config-settings = { "cmake.define.WAVPACK_NUMCODECS_WAVPACK" = "BUNDLED" }
+test-groups = ["test"]
+test-sources = ["tests"]
+test-command = "python -m pytest tests"
 
 [tool.pytest.ini_options]
-markers = [
-    "numcodecs",
-    "zarr"
-]
+addopts = "--strict-markers"
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+extend-exclude = ["extern"]
+
+[tool.ruff.lint]
+extend-select = ["Q", "RUF100", "C90", "I", "F", "E", "W", "D"]
+per-file-ignores = { "tests/*.py" = ["D"] }
+mccabe = { max-complexity = 14 }
+pydocstyle = { convention = "numpy" }
+
+[tool.codespell]
+skip = ".git,./extern,./build,./dist,uv.lock"
+
+[tool.interrogate]
+ignore-init-method = true
+ignore-magic = true
+ignore-module = true
+fail-under = 80
+exclude = ["tests", "build", "dist", "extern"]
+
+[tool.commitizen]
+version_provider = "pep621"
+tag_format = "$version"
+update_changelog_on_bump = true
+major_version_zero = true

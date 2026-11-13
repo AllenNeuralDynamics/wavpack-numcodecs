@@ -1,0 +1,39 @@
+# After CI passes on main, commitizen bumps the version from the conventional commits since the last tag and pushes
+# the bump commit and tag; the tag runs build.yml again, which publishes to PyPI.
+name: Bump version
+
+on:
+  workflow_run:
+    workflows: ["Build, test and publish"]
+    branches: [main]
+    types: [completed]
+  workflow_dispatch:
+    inputs:
+      increment:
+        description: "auto infers the bump from the commits; force one to release ci or chore changes"
+        type: choice
+        options: [auto, PATCH, MINOR, MAJOR]
+        default: auto
+
+permissions:
+  contents: write
+
+concurrency:
+  group: bump-${{ github.workflow }}-${{ github.event.workflow_run.head_branch || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  bump:
+    if: >
+      (github.event_name == 'workflow_run' &&
+       github.event.workflow_run.event == 'push' &&
+       github.event.workflow_run.conclusion == 'success' &&
+       !startsWith(github.event.workflow_run.head_commit.message, 'bump:')) ||
+      (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main')
+    uses: AllenNeuralDynamics/galen-uv-workflows/.github/workflows/bump-version.yml@v2
+    with:
+      default-branch: main
+      increment: ${{ inputs.increment || 'auto' }}
+    secrets:
+      # A personal token, unlike GITHUB_TOKEN, lets the pushed tag trigger the publishing run.
+      repo-token: ${{ secrets.SERVICE_TOKEN }}

@@ -5,11 +5,10 @@ import pytest
 import zarr
 from packaging.version import parse
 
-from wavpack_numcodecs import wavpack_version
-
 # this is the numcodecs implementation
 from wavpack_numcodecs.wavpack import WavPack as WavPackNumcodecs
-from wavpack_numcodecs import WavPack
+
+from wavpack_numcodecs import WavPack, wavpack_version
 
 DEBUG = False
 
@@ -103,21 +102,21 @@ def test_wavpack_multi_threading_enabled():
     # Should NOT warn!
     with warnings.catch_warnings():
         warnings.simplefilter("error")
-        wv = WavPackNumcodecs(num_encoding_threads=4, num_decoding_threads=1)
-        wv = WavPackNumcodecs(num_encoding_threads=1, num_decoding_threads=4)
-        wv = WavPackNumcodecs(num_encoding_threads=4, num_decoding_threads=4)
+        WavPackNumcodecs(num_encoding_threads=4, num_decoding_threads=1)
+        WavPackNumcodecs(num_encoding_threads=1, num_decoding_threads=4)
+        WavPackNumcodecs(num_encoding_threads=4, num_decoding_threads=4)
 
 
 @pytest.mark.numcodecs
 @pytest.mark.skipif(parse(wavpack_version) >= parse("5.6.4"), reason="Multi-threading available")
 def test_wavpack_multi_threading_disabled():
     # Should warn!
-    with pytest.warns(UserWarning) as w:
-        wv = WavPackNumcodecs(num_encoding_threads=4, num_decoding_threads=1)
-    with pytest.warns(UserWarning) as w:
-        wv = WavPackNumcodecs(num_encoding_threads=1, num_decoding_threads=4)
-    with pytest.warns(UserWarning) as w:
-        wv = WavPackNumcodecs(num_encoding_threads=4, num_decoding_threads=4)
+    with pytest.warns(UserWarning):
+        WavPackNumcodecs(num_encoding_threads=4, num_decoding_threads=1)
+    with pytest.warns(UserWarning):
+        WavPackNumcodecs(num_encoding_threads=1, num_decoding_threads=4)
+    with pytest.warns(UserWarning):
+        WavPackNumcodecs(num_encoding_threads=4, num_decoding_threads=4)
 
 
 @pytest.mark.parametrize("dtype", dtypes)
@@ -301,7 +300,6 @@ def test_wavpack_zarr_v3(generate_test_data, bps, dtype):
                 np.testing.assert_array_equal(z[:], test_sig)
 
 
-
 @pytest.mark.parametrize("shards", [None, (300, 4)])
 @pytest.mark.skipif(not ZARR_V3, reason="These are tests for Zarr V3")
 @pytest.mark.zarr
@@ -320,6 +318,7 @@ def test_wavpack_zarr_v3_partial_write(shards):
         z[start:stop] = value
         expected[start:stop] = value
     np.testing.assert_array_equal(z[:], expected)
+
 
 if __name__ == "__main__":
     test_wavpack_numcodecs()

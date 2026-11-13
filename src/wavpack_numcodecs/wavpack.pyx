@@ -5,8 +5,8 @@
 # cython: language_level=3
 
 
-from cpython.buffer cimport PyBUF_ANY_CONTIGUOUS, PyBUF_WRITEABLE
-from cpython.bytes cimport PyBytes_FromStringAndSize, PyBytes_AS_STRING
+from cpython.buffer cimport PyBUF_ANY_CONTIGUOUS, PyBUF_WRITABLE
+from cpython.bytes cimport PyBytes_FromStringAndSize, PyBytes_AsString
 
 
 from .compat_ext cimport Buffer
@@ -71,7 +71,7 @@ def compress(source, int level, int num_samples, int num_chans, float bps, int d
     bps : float
         Bytes per sample
     dtype : int
-        Integer to indicat which dtype the data is ("int8": 0, "int16": 1, "int32": 2, "float32": 3)
+        Integer to indicate which dtype the data is ("int8": 0, "int16": 1, "int32": 2, "float32": 3)
     dynamic_noise_shaping : int
         Whether to use dynamic noise shaping
     shaping_weight : float
@@ -111,7 +111,7 @@ def compress(source, int level, int num_samples, int num_chans, float bps, int d
 
         # setup destination
         dest = PyBytes_FromStringAndSize(NULL, source_size)
-        dest_ptr = PyBytes_AS_STRING(dest)
+        dest_ptr = PyBytes_AsString(dest)
         dest_size = source_size
 
         compressed_size = WavpackEncodeFile(source_ptr, num_samples_c, num_chans_c, level_c, bps_c,
@@ -180,10 +180,10 @@ def decompress(source, dest=None, num_decoding_threads=1):
             # allocate memory
             dest_size = n_decompressed_samples * num_chans * bytes_per_sample
             dest = PyBytes_FromStringAndSize(NULL, dest_size)
-            dest_ptr = PyBytes_AS_STRING(dest)
+            dest_ptr = PyBytes_AsString(dest)
         else:
             arr = ensure_contiguous_ndarray(dest)
-            dest_buffer = Buffer(arr, PyBUF_ANY_CONTIGUOUS | PyBUF_WRITEABLE)
+            dest_buffer = Buffer(arr, PyBUF_ANY_CONTIGUOUS | PyBUF_WRITABLE)
             dest_ptr = dest_buffer.ptr
             dest_size = dest_buffer.nbytes
 
