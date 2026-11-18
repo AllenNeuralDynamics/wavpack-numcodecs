@@ -104,5 +104,9 @@ git add extern/wavpack
 
 ## Making a release
 
-Update the version in `pyproject.toml` and push a tag. The `Build, test and publish` workflow builds the sdist and
-the wheels, tests them, and uploads them to PyPI.
+Commit messages follow [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/). After CI passes on
+`main`, the `Bump version` workflow runs [commitizen](https://commitizen-tools.github.io/commitizen/): a `fix` commit
+since the last release bumps the patch version, a `feat` bumps the minor version, and other types bump nothing.
+Commitizen updates `pyproject.toml` and `CHANGELOG.md` and pushes the tag, and the tag's `Build, test and publish` run
+uploads the release to PyPI. To release changes that bump nothing, such as `build` or `ci` commits, run `Bump version`
+from the Actions tab with an increment of PATCH, MINOR or MAJOR.
