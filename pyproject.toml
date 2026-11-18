@@ -98,9 +98,3 @@ ignore-magic = true
 ignore-module = true
 fail-under = 80
 exclude = ["tests", "build", "dist", "extern"]
-
-[tool.commitizen]
-version_provider = "pep621"
-tag_format = "$version"
-update_changelog_on_bump = true
-major_version_zero = true
